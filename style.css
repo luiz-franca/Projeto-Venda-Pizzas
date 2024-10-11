@@ -41,6 +41,18 @@ header {
     font-size: 30px;
 }
 
+.pedidos-area{
+    width: calc(100% - 48px);
+
+}
+.pedidos-area .list{
+    display: flex;
+    flex-wrap: wrap;
+}
+.pedidos-area .list .pedido-item{
+margin: 8px 16px;
+}
+
 aside {
     background-color:#9ccbe6;
     width:0vw;
@@ -48,7 +60,11 @@ aside {
     transition:all ease .2s;
     overflow-x:hidden;
 }
-aside.show {
+
+.show  {
+    max-width:70vw;
+}
+.show + aside {
     width:30vw;
 }
 .cart--area {
@@ -329,6 +345,20 @@ h1 {
 .cart--finalizar:hover {
     background-color:#35af4a;
 }
+.cart--cancelar {
+    padding:20px 30px;
+    border-radius:20px;
+    background-color:#ff4500;
+    color:#FFF;
+    cursor:pointer;
+    text-align:center;
+    margin-top:20px;
+    border:2px solid #ff4500;
+    transition: all ease .2s;
+}
+.cart--cancelar:hover {
+    background-color:#cc1100;
+}
 
 @media (max-width:1000px) {
     .pizza-area {
@@ -427,7 +457,17 @@ h1 {
 }
 .pedido{
     background: #fff;
-    height: 48px;
-    width: 150px;
-    margin-right: 10px;
+    border-top: 5px solid red;
+    padding: 8px 16px ;
+    min-width: 150px;
 }
+
+.pizza-item--id{
+    font-size: 2em;
+    text-align: right;
+}
+.pedido .pizza-item--price{
+    font-size: .8em;
+    opacity: .7;
+    text-align: left;
+} 

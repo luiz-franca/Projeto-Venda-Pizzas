@@ -1,5 +1,6 @@
 //variável dos botões + e -
-let modalQt = 1
+let modalQt = 1;
+let id_pedido_aberto = null;
 
 let cart = db.get('cart');
 if (!cart) cart = [];
@@ -117,6 +118,7 @@ c('.pizzaInfo--addButton').addEventListener('click', () => {
     updateCart()
     closeModal()
 })
+
 //abrir carrinho
 c('.menu-openner').addEventListener('click', () => {
     if (cart.length > 0) {
@@ -133,7 +135,7 @@ function updateCart() {
     c('.menu-openner span').innerHTML = cart.length
 
     if (cart.length > 0) {
-        c('aside').classList.add('show')
+        c('main').classList.add('show')
         c('.cart').innerHTML = ''
 
         subTotal = 0
@@ -188,7 +190,7 @@ function updateCart() {
         c('.total span:last-child').innerHTML = `R$ ${total.toFixed(2)}`
 
     } else {
-        c('aside').classList.remove('show')
+        c('main').classList.remove('show')
         c('aside').style.left = '100vw'
     }
 
@@ -196,21 +198,35 @@ function updateCart() {
 }
 
 
-function renderPedidos  (){
+function renderPedidos() {
     // busca lista atualizada
     pedidosJson = db.get('pedidos');
     // limpa a exibição
     c('.pedidos-area .list').innerHTML = '';
-    
+
     // cria os cards de pedidos
     pedidosJson.map((item, index) => {
+        if(item.inativo) return;
+
         let pizzaItem = c('.models .pedido-item').cloneNode(true)
-    
-        pizzaItem.setAttribute('data-key', index)
-        pizzaItem.querySelector('.pizza-item--id').innerHTML = index;
+
+        pizzaItem.setAttribute('data-key', item.id)
+        pizzaItem.querySelector('.pizza-item--id').innerHTML = item.id;
         pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${item.total.toFixed(2)}`
         c('.pedidos-area .list').append(pizzaItem);
     });
+    c('.pedidos-area .list').addEventListener('click', (ev, obj) => {
+        let target = ev.target;
+        let id = +target.closest('.pedido-item').getAttribute('data-key');
+        let pedido = db.getById('pedidos', id);
+
+        if (pedido) {
+            cart = pedido.cart;
+            id_pedido_aberto = id;
+            updateCart();
+            c('main').classList.add('show'); // abre o carrinho
+        }
+    })
 }
 
 // FAZER PEDIDOS
@@ -218,18 +234,65 @@ c('.cart--finalizar').addEventListener('click', () => {
     let pedidos = db.get('pedidos');
     if (!pedidos) pedidos = [];
 
-    // CRIA OBJETO DE PEDIDO
-    let obj = {
-        id: pedidos.length,
-        cart: cart,
-        total: total,
-        desconto: desconto
+    if (id_pedido_aberto) {
+        // ATUALIZA O PEDIDO
+        pedidos = pedidos.map(p => {
+            if (p.id == id_pedido_aberto) {
+                p = {
+                    id: id_pedido_aberto,
+                    cart: cart,
+                    total: total,
+                    desconto: desconto
+                }
+            }
+            return p;
+        })
+        id_pedido_aberto = null;
+    } else {
+        let novo_id = pedidos.length;
+        while (pedidos.some(p => p.id == novo_id)) {
+            novo_id++;
+        }
+
+        // CRIA OBJETO DE PEDIDO
+        let obj = {
+            id: novo_id,
+            cart: cart,
+            total: total,
+            desconto: desconto
+        }
+        // PERSISTE O PEDIDO CRIADO
+        pedidos.push(obj);
     }
-    // PERSISTE O PEDIDO CRIADO
-    pedidos.push(obj);
     db.set('pedidos', pedidos);
 
-    
+
+    // ESVAZIA O CARRINHO
+    cart = [];
+    updateCart();
+    renderPedidos();
+})
+c('.cart--cancelar').addEventListener('click', () => {
+    let pedidos = db.get('pedidos');
+    if (!pedidos) pedidos = [];
+
+        // ATUALIZA O PEDIDO
+        // pedidos = pedidos.filter(p => p.id != id_pedido_aberto);
+        pedidos = pedidos.map(p => {
+        if (p.id == id_pedido_aberto) {
+            p = {
+                id: id_pedido_aberto,
+                inativo: true,
+                cart: cart,
+                total: total,
+                desconto: desconto
+            }
+        }
+            return p;
+        })
+        id_pedido_aberto = null;
+    db.set('pedidos', pedidos);
+
     // ESVAZIA O CARRINHO
     cart = [];
     updateCart();
@@ -239,7 +302,4 @@ c('.cart--finalizar').addEventListener('click', () => {
 updateCart();
 renderPedidos();
 
-//API SPRING BOOT/nestJS
-//BANCO DE DADOS/mongoDB
-//FINALIZAR COMPRAS
 
