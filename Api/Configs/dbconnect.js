@@ -1,31 +1,29 @@
 const mysql = require('mysql');
+const util  = require('util');
+const handleDatabaseErro = require('./utils')
+require('dotenv').config({path: '../.env'});
 
 const acessEnvs = {
-    userAcess: 'roo',
-    hostAcess: 'localhost',
-    passwordAcess: 'D@nidani1985',
-    databaseAcess: 'dbselfpaypizzas',
-    portaAcess: 3306
+    userAcess: process.env.USERACESS,
+    hostAcess: process.env.HOSTACESS,
+    passwordAcess: process.env.PASSWORDACESS,
+    databaseAcess: process.env.DATABASEACESS,
+    portaAcess: process.env.PORTACESS
 }
-
-try{
-    const conn = mysql.createConnection({
-        host: acessEnvs.hostAcess,
-        user: acessEnvs.userAcess,
-        password: acessEnvs.passwordAcess,
-        database: acessEnvs.databaseAcess,
-        port: acessEnvs.portaAcess
-    })
-    conn.connect( function(erro){
-        // erro.sqlMessage || erro.code ? console.error(erro.sqlMessage): console.log('Conectado');
-        console.log(erro)
-        switch(erro){
-            case erro.code = 1045:
-                throw new Error(`${erro}`)
-                break;
-        }
-    })
+const conn = mysql.createConnection({
+    host: acessEnvs.hostAcess,
+    user: acessEnvs.userAcess,
+    password: acessEnvs.passwordAcess,
+    database: acessEnvs.databaseAcess,
+    port: acessEnvs.portaAcess
+})
+const connectDb = util.promisify(conn.connect).bind(conn)
+const connectionToDataBase = async () =>{
+    try{
+        await  connectDb();
+        console.log('Conectado')
+    }catch (erro){
+        handleDatabaseErro(erro)
+    }
 }
-catch(error){
-    throw new Error(`Não conectou ao banco ${error}`);
-}
+module.exports = connectionToDataBase();
