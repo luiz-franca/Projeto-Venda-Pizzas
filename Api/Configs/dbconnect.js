@@ -18,12 +18,14 @@ const conn = mysql.createConnection({
     port: acessEnvs.portaAcess
 })
 const connectDb = util.promisify(conn.connect).bind(conn)
-const connectionToDataBase = async () =>{
-    try{
-        await  connectDb();
-        console.log('Conectado')
-    }catch (erro){
-        handleDatabaseErro(erro)
+const connectionToDataBase = async () => {
+    try {
+        await connectDb();
+        console.log('Conectado ao banco de dados.');
+        return conn;
+    } catch (erro) {
+        handleDatabaseErro(erro);
+        throw erro;
     }
-}
-module.exports = connectionToDataBase();
+};
+module.exports = connectionToDataBase;
