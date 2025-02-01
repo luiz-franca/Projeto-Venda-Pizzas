@@ -1,4 +1,6 @@
 const queryExecute = require('../Utils/queryExecute');
+const Entidade = require("../Utils/Entidade");
+const mappedRowUtils = require("./utils")
 
 class ClienteModel{
     constructor(idCliente = null, nomeClinte = null, telefone = null,endereco=null ,email = null, senha = null){ 
@@ -10,12 +12,22 @@ class ClienteModel{
         this.senha = senha;
     }
     static async getTodosClientes(){
-        const sql = "SELECT * FROM tbCliente;";
-        return await queryExecute(sql);
-    }
+        const sql = "SELECT * FROM tbCliente;"; 
+        const response = await queryExecute(sql);
+        const rows = response[0]
+
+        return mappedRowUtils(rows, row =>({
+            idCliente: row.idCliente,
+            nomeCliente: row.nomeCliente,
+            telefone: row.telefone,
+            endereco: row.endereco,
+            email: row.email,
+            senha: row.senha
+        }))
+    }    
     static async getId(id) {
-        const sql = `SELECT * FROM tbCliente WHERE idCliente = ${id};`; 
-        return await queryExecute(sql);
+        const sql = `SELECT * FROM tbCliente WHERE idCliente = (?);`; 
+        return await queryExecute(sql,[id]);
     }
     async insertCliente() {
         const sql = `INSERT INTO tbCliente (nomeCliente, telefone, endereco, email, senha) 
@@ -32,27 +44,8 @@ class ClienteModel{
     }
 }
 
-// (async () => {
-//     try {
-//         const novoCliente = new ClienteModel(null, 'Aslan Lilinho', 'telefone do papai', 'casa do papai','email@testew' ,'senhaPapaiSabe');
-//         const check = await novoCliente.insertCliente(); // Adicionado await
-//         console.log("Novo cliente inserido:", check);
-//     } catch (error) {
-//         console.error("Erro:", error.message);
-//     }
-// })();
-(async ()=>{
-    try{
-        const cliente = new ClienteModel(null, 'Gustavo', '20202020','casa', 'email@teste.com', 'prodasd');
-        // const check = cliente.insertCliente();
-        // const getcliente = await ClienteModel.getTodosClientes();
-        // console.log(getcliente)
-        cliente.nomeCliente = "Alsan";
-        const check = await cliente.updateCliente(1)
-        console.log(check)
-
-
-    }catch(error){
-        console.error(error)
-    }
+(async () => {
+    const getUsuarios = await ClienteModel.getTodosClientes();
+    console.log(getUsuarios); // Agora imprime corretamente o array de clientes
 })();
+module.exports = ClienteModel;
