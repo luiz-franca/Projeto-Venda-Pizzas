@@ -15,4 +15,10 @@ function mappedRowUtils(setRows, mappingFunction){
         throw new Error(`Error função mapped row ${error.messsage}`);
     }
 }
-module.exports = mappedRowUtils;
+function mappedEntidade(dataArray, Entidadeclass){
+    if(!Array.isArray(dataArray)){
+        throw new Error("A mapEntidade não detectou um array!")
+    }
+    return dataArray.map(data => new Entidadeclass(data))
+}
+module.exports = {mappedRowUtils,mappedEntidade};

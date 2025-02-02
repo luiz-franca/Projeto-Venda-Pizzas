@@ -1,7 +1,8 @@
 const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/Entidade");
-const mappedRowUtils = require("./utils")
+const Entidade = require("../Utils/entidadeUtils");
+const {mappedRowUtils,mappedEntidade} = require("./utils");
 
+const entidade = new Entidade();
 class ClienteModel{
     constructor(idCliente = null, nomeClinte = null, telefone = null,endereco=null ,email = null, senha = null){ 
         this.idCliente = idCliente;
@@ -15,8 +16,7 @@ class ClienteModel{
         const sql = "SELECT * FROM tbCliente;"; 
         const response = await queryExecute(sql);
         const rows = response[0]
-
-        return mappedRowUtils(rows, row =>({
+        const data = mappedRowUtils(rows, row =>({
             idCliente: row.idCliente,
             nomeCliente: row.nomeCliente,
             telefone: row.telefone,
@@ -24,6 +24,9 @@ class ClienteModel{
             email: row.email,
             senha: row.senha
         }))
+        const check = mappedEntidade(data, entidade.Cliente);
+        console.log(check);
+        return data;
     }    
     static async getId(id) {
         const sql = `SELECT * FROM tbCliente WHERE idCliente = (?);`; 
@@ -45,7 +48,6 @@ class ClienteModel{
 }
 
 (async () => {
-    const getUsuarios = await ClienteModel.getTodosClientes();
-    console.log(getUsuarios); // Agora imprime corretamente o array de clientes
+    const check = await ClienteModel.getTodosClientes();
 })();
 module.exports = ClienteModel;
