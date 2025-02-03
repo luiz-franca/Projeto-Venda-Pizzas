@@ -37,16 +37,29 @@ class ClienteModel{
                      VALUES (?,?,?,?,?);`;                   
         return await queryExecute(sql,[this.nomeCliente, this.telefone, this.endereco, this.email, this.senha]);
     }
-    async updateCliente(updadeIdCliente){
-        const sql = "CALL spUpdateCliente(?,?,?,?,?.?);";
-        const response = await queryExecute(sql, [updadeIdCliente, this.nomeCliente, this.telefone, this.endereco, this.email, this.senha]);
+    async updateCliente(updateIdCliente) {
+        const sql = "CALL spUpdateCliente(?,?,?,?,?,?)";
+        const response = await queryExecute(sql, [
+            updateIdCliente, 
+            this.nomeCliente, 
+            this.telefone, 
+            this.endereco, 
+            this.email, 
+            this.senha
+        ]);
+        return response;
+    }
+    async deleteCliente(deleteIdCliente){
+        const sql = "DELETE FROM tbCliente WHERE idCliente = ? ;";
+        const response = await queryExecute(sql,[deleteIdCliente])
         return response;
     }
 }
 
 (async () => {
     // const response = await ClienteModel.getTodosClientes();
-    const response = await new ClienteModel(null,"gustavo2","1234","ele","teste$com", "1223").insertCliente(1);
+    const response = await new ClienteModel(null,"gustavo2","1234","ele","teste$com", "1223");
+    const check = await response.deleteCliente(1);
     console.log(response)
 })();
 module.exports = ClienteModel;
