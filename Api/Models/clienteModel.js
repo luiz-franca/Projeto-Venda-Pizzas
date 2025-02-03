@@ -33,23 +33,20 @@ class ClienteModel{
         return  response[0];
     }
     async insertCliente() {
-        // precisa ter uma rotina para verficiar se ja existe para não causar redundancia
         const sql = `INSERT INTO tbCliente (nomeCliente, telefone, endereco, email, senha) 
                      VALUES (?,?,?,?,?);`;                   
         return await queryExecute(sql,[this.nomeCliente, this.telefone, this.endereco, this.email, this.senha]);
     }
     async updateCliente(updadeIdCliente){
-        if (!this.idCliente) throw new Error("ID do cliente é necessário para atualização.");
-
-        const sql = `UPDATE TbCliente 
-                     SET nomeCliente=?, telefone=?, email=?, senha=?
-                     WHERE idCliente=?;`;
-        return await queryExecute(sql,[this.nomeCliente, this.telefone, this.email, this.senha, updadeIdCliente]);
+        const sql = "CALL spUpdateCliente(?,?,?,?,?.?);";
+        const response = await queryExecute(sql, [updadeIdCliente, this.nomeCliente, this.telefone, this.endereco, this.email, this.senha]);
+        return response;
     }
 }
 
 (async () => {
-    const response = await ClienteModel.updadeIdCliente;
-    console.log(response[0])
+    // const response = await ClienteModel.getTodosClientes();
+    const response = await new ClienteModel(null,"gustavo2","1234","ele","teste$com", "1223").insertCliente(1);
+    console.log(response)
 })();
 module.exports = ClienteModel;
