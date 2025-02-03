@@ -67,4 +67,24 @@ create table tbPedidoItem
     subtotal     float not null
 );
 
+DELIMITER //
+create procedure spUpdateCliente(in spIdcliente int, in spNomeCliente varchar(60), in spTelefone varchar(40), in spEndereco varchar(40), spEmail varchar(40), spSenha varchar(60))
+begin
+    declare checkId int;
+    SELECT tc.idCliente into checkId FROM tbCliente tc where tc.idCliente = spIdcliente;
+    if checkId = spIdcliente then
+        UPDATE tbCliente set nomeCliente = spNomeCliente,
+                             telefone = spTelefone,
+                             endereco= spEndereco,
+                             email = spEmail,
+                             senha= spSenha
+            where idCliente = spIdcliente;
+            SELECT 'alteração client feita com sucesso';
+    else
+        SELECT 'idCLiente não existe';
+    end if;
+
+end;
+
+DELIMITER ;
 
