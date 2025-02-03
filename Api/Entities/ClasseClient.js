@@ -1,44 +1,44 @@
-class Cliente{
-    constructor(id= null, nome= null, telefone= null, endereco= null, email=null, senha=null){
-        this.id = id;
-        this.nome = nome;
-        this.telefone = telefone;
-        this.endereco = endereco;
-        this.email = email;
-        this.senha = senha;
+const BaseEntidade = require('./BaseEntidade');
+
+class Cliente extends BaseEntidade {
+    constructor(data = {}) {
+        super(data);
+        this._idCliente = data.idCliente || null;
+        this._nomeCliente = data.nomeCliente || '';
+        this._telefone = data.telefone || '';
+        this._email = data.email || '';
+        this._senha = data.senha || '';
     }
-    get Id(){
-        return this.Id;
+    get id() {
+        return this._idCliente;
     }
-    get Nome(){
-        return this.nome;
+    set id(value) {
+        this._idCliente = value;
     }
-    get Telefone(){
-        return this.telefone;
+    get nome() {
+        return this._nomeCliente;
     }
-    get Endereco(){
-        return this.endereco;
+    set nome(value) {
+        this._nomeCliente = value;
     }
-    get Email(){
-        return this.endereco;
+    get telefone() {
+        return this._telefone;
     }
-    get Senha(){
-        return this.senha;
+    set telefone(value) {
+        this._telefone = value;
     }
-    set Id(id){
-        this.id = id;
+    get email() {
+        return this._emailCliente;
     }
-    set Nome(nome){
-        this.nome = nome;
+    set email(value) {
+        this._email = value;
     }
-    set Telefone(telefone){
-        this.telefone = telefone;
+    get senha() {
+        return this._senha;
     }
-    set Endereco(endereco){
-        this.endereco = endereco;
-    }
-    set Senha(senha){
-        this.senha = senha;
+    set senha(value) {
+        this._senha = value;
     }
 }
+
 module.exports = Cliente;
