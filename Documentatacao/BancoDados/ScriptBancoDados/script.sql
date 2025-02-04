@@ -51,8 +51,9 @@ create table tbPedido
 (
     idPedido     int auto_increment
         primary key,
-    idClient     int                                                                              null,
-    dataPedido   datetime default CURRENT_TIMESTAMP                                               null,
+    idClient     int,
+    nomeItem     varchar(60),                                                                              null,
+    dataPedido   datetime default CURRENT_TIMESTAMP ,                                           null,
     valorTotal   float                                                                            not null,
     statusPedido enum ('pendente', 'em_preparação', 'saiu_para_entrega', 'entregue', 'cancelado') not null
 );
@@ -88,3 +89,79 @@ end;
 
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE spUpDateAdmin(
+    IN spIdAmin INT,
+    IN spNomeAdmin VARCHAR(60),
+    IN spEmailAdmin VARCHAR(40),
+    IN spLoginAdmin VARCHAR(40),
+    IN spSenhaAdmin VARCHAR(60)
+)
+BEGIN
+   DECLARE checkId INT;
+   SELECT tA.idAdmin INTO checkId FROM tbAdmin tA WHERE tA.idAdmin = spIdAmin;
+   IF checkId IS NOT NULL THEN
+        UPDATE tbAdmin
+        SET nomeAdmin = spNomeAdmin,
+            emailAdmin = spEmailAdmin,
+            loginAdmin = spLoginAdmin,
+            senhaAdmin = spSenhaAdmin
+        WHERE idAdmin = spIdAmin;
+        SELECT 'Alteração do Admin feita com sucesso' AS mensagem;
+   ELSE
+       SELECT 'ID do Admin não existe' AS mensagem;
+   END IF;
+END //
+DELIMITER ;
+
+ALTER TABLE tbPedido ADD COLUMN nomeItem VARCHAR(60) AFTER idClient;
+
+DELIMITER //
+
+CREATE PROCEDURE spInsertPedido(
+    IN spIdCliente INT,
+    IN spNomeItem VARCHAR(60),
+    IN spDataPedido DATETIME,
+    IN spValorTotal FLOAT,
+    IN spStatusProduto VARCHAR(20) -- Alterado de ENUM para VARCHAR
+)
+BEGIN
+
+    IF EXISTS (SELECT 1 FROM tbCliente WHERE idCliente = spIdCliente) THEN
+        INSERT INTO tbPedido (tbPedido.idClient, tbPedido.nomeItem, tbPedido.dataPedido, tbPedido.valorTotal, tbPedido.statusPedido)
+        VALUES (spIdCliente, spNomeItem, spDataPedido, spValorTotal, spStatusProduto);
+
+        SELECT 'Pedido adicionado' AS mensagem;
+    ELSE
+        SELECT 'idCliente não existente' AS mensagem;
+    END IF;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spUpdatePedito(IN spIdPedido INT,
+                                IN spIdClient INT,
+                                IN spDataPedido FLOAT ,
+                                IN spValorTotal FLOAT,
+                                IN spStatusPedido VARCHAR(40))
+BEGIN
+    IF EXISTS(SELECT 1 FROM tbPedido pE WHERE pE.idPedido = spIdPedido) THEN
+        UPDATE tbPedido pe SET pe.idClient = spIdClient,
+                               pe.dataPedido = spDataPedido,
+                               pe.valorTotal = spValorTotal,
+                               pe.statusPedido = spStatusPedido
+                            WHERE pe.idPedido = spIdPedido;
+        SELECT 'Pedido Alterado Com Sucesso' AS mensagem;
+    ELSE
+        SELECT 'idPedido não existe' AS mensagem;
+    end if ;
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spViewPedido(IN spIdPedido INT)
+BEGIN
+    SELECT * FROM vwPedido pe WHERE pe.idClient = spIdPedido;
+END ;
+DELIMITER ;

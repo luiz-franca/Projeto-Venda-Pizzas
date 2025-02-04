@@ -4,7 +4,13 @@ const {mappedRowUtils,mappedEntidade} = require("./utils");
 
 const entidade = new Entidade();
 class ClienteModel{
-    constructor(idCliente = null, nomeCliente = null, telefone = null,endereco=null ,email = null, senha = null){ 
+    constructor(
+        idCliente = null, 
+        nomeCliente = null, 
+        telefone = null,
+        endereco=null ,
+        email = null, 
+        senha = null){  
         this.idCliente = idCliente;
         this.nomeCliente = nomeCliente;
         this.telefone = telefone;
@@ -12,7 +18,7 @@ class ClienteModel{
         this.email = email;
         this.senha = senha;
     }
-    static async getTodosClientes(){
+    static async getAllClientes(){
         const sql = "SELECT * FROM tbCliente;"; 
         const response = await queryExecute(sql);
         const rows = response[0]
@@ -24,12 +30,12 @@ class ClienteModel{
             email: row.email,
             senha: row.senha
         }))
-        const check = mappedEntidade(data, entidade.Cliente);
+        mappedEntidade(data, entidade.Cliente);
         return data;
     }    
-    static async getIdCliente(id) {
+    static async getIdCliente(idParam) {
         const sql = `SELECT * FROM tbCliente WHERE idCliente = (?);`; 
-        const response  = await queryExecute(sql,[id]);
+        const response  = await queryExecute(sql,[idParam]);
         return  response[0];
     }
     async insertCliente() {
@@ -38,7 +44,7 @@ class ClienteModel{
         return await queryExecute(sql,[this.nomeCliente, this.telefone, this.endereco, this.email, this.senha]);
     }
     async updateCliente(updateIdCliente) {
-        const sql = "CALL spUpdateCliente(?,?,?,?,?,?)";
+        const sql = "CALL spUpdateCliente(?,?,?,?,?,?);";
         const response = await queryExecute(sql, [
             updateIdCliente, 
             this.nomeCliente, 
@@ -50,7 +56,7 @@ class ClienteModel{
         return response;
     }
     async deleteCliente(deleteIdCliente){
-        const sql = "DELETE FROM tbCliente WHERE idCliente = ? ;";
+        const sql = "DELETE FROM tbCliente WHERE idCliente = (? ;";
         const response = await queryExecute(sql,[deleteIdCliente])
         return response;
     }
