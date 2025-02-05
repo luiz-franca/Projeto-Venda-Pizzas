@@ -140,7 +140,7 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE spUpdatePedito(IN spIdPedido INT,
+CREATE PROCEDURE spUpdatePedido(IN spIdPedido INT,
                                 IN spIdClient INT,
                                 IN spDataPedido FLOAT ,
                                 IN spValorTotal FLOAT,
