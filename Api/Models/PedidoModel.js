@@ -21,8 +21,14 @@ class PedidoModel{
         const sql = "SELECT * FROM tbPedido;";
         const response = await queryExecute(sql);
         const rows = response[0];
-        const data = mappedRowUtils(rows, row =>{})
-        console.log("dentro", rows)
+        const data = mappedRowUtils(rows, row =>({
+            idPedido: row.idPedido,
+            idClient: row.idClient,
+            dataPedido: row.idClient,
+            valorTotal: row.valorTotal,
+            statusPedido: row.statusPedido
+        }))
+        mappedEntidade(data, entidade.Pedido)
         return data
     }
     async insertPedido(){
@@ -51,10 +57,17 @@ class PedidoModel{
     static async getIdPedidosUsuarios(paramIdPedidos){
         const sql = "CALL spViewPedido(?);";
         const response = await queryExecute(sql,[paramIdPedidos])
-        console.log(response);
+        const rows = response[0];
+        // está voltando underfined
+        const data  = mappedRowUtils(rows, row =>({
+            idClient: row.idClient,
+            nomeCliente: row.nomeCliente
+            
+        }))
+        console.log(data);
     }
 }
 (async()=>{
-    const response = await PedidoModel.getIdPedidosUsuarios(1);
+    const response = await PedidoModel.getIdPedidosUsuarios(7);
 })();
 module.exports = PedidoModel;
