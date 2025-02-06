@@ -54,7 +54,4 @@ class EstoqueModel{
     }   
 
 }
-(async()=>{
-     await EstoqueModel.deleteEstoque(4);
-    
-})();
+module.exports = EstoqueModel;
