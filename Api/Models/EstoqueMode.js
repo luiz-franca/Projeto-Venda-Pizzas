@@ -43,11 +43,18 @@ class EstoqueModel{
     }
     // escrever uma procedure, para fazer isso. CODIGO LIMPO!
     async updateEstoque(idEstoque){
-        const sql = `UPDATE`
+        const sql = `CALL spInsertEstoque(?, ?,?) ;`;
+        const response = await queryExecute(sql, [idEstoque, this.nomeInsumo,this.quantidade]);
+        return await response[0];
     }
+    static async deleteEstoque(idParam){
+        const sql = `DELETE FROM tbEstoque WHERE idEstoque = (?);`;
+        const response = await queryExecute(sql, [idParam]);
+        return response[0].affectedRows === 1? `isumoDeletado ${response}`:"idEstoque não encontrado" ;
+    }   
 
 }
 (async()=>{
-    const insumo = new EstoqueModel(null,"Molho de Alho",100).updateEstoque(1);
+     await EstoqueModel.deleteEstoque(4);
     
 })();
