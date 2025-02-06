@@ -7,7 +7,7 @@ class Item extends BaseEntidade {
         this._nomeItem = data.nomeItem || '';
         this._precoItem = data.precoItem || 0;
         this._descricaoItem = data.descricaoItem || '';
-        this._imagemItem = data.imagemItem || '';
+        this._imagemUrl = data.imagemUrl || '';
     }
     get id() {
         return this._idItem;
@@ -34,10 +34,10 @@ class Item extends BaseEntidade {
         this._descricaoItem = value;
     }
     get imagem() {
-        return this._imagemItem;
+        return this._imagemUrl;
     }
     set imagem(value) {
-        this._imagemItem = value;
+        this._imagemUrl = value;
     }
 }
 // const teste = new Item({idItem:1, nomeItem: 'teste', precoItem:"2.2", descricaoItem:"testedasd", imagemItem: "caominha"})
