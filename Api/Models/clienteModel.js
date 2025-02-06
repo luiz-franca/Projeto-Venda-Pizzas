@@ -56,7 +56,7 @@ class ClienteModel{
         return response;
     }
     async deleteCliente(deleteIdCliente){
-        const sql = "DELETE FROM tbCliente WHERE idCliente = (? ;";
+        const sql = "DELETE FROM tbCliente WHERE idCliente = (?) ;";
         const response = await queryExecute(sql,[deleteIdCliente])
         return response;
     }
@@ -64,8 +64,7 @@ class ClienteModel{
 
 (async () => {
     // const response = await ClienteModel.getTodosClientes();
-    const response = await new ClienteModel(null,"gustavo2","1234","ele","teste$com", "1223");
-    const check = await response.deleteCliente(1);
+    const response = await ClienteModel.getIdCliente(7)
     console.log(response)
 })();
 module.exports = ClienteModel;
