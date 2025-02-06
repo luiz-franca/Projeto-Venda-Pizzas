@@ -158,10 +158,23 @@ BEGIN
     end if ;
 end //
 DELIMITER ;
-
+#   essa visão não está em uso.
 DELIMITER //
 CREATE PROCEDURE spViewPedido(IN spIdPedido INT)
 BEGIN
     SELECT * FROM vwPedido pe WHERE pe.idClient = spIdPedido;
 END ;
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spInsertEstoque(in spIdEstoque int, in spNomeEstoque varchar(40), in spQuantidade int)
+BEGIN
+    IF EXISTS(SELECT 1 FROM tbEstoque tE WHERE tE.idEstoque = spIdEstoque) THEN
+        UPDATE tbEstoque tE SET tE.nomeInsumo= spNomeEstoque,
+                                tE.quantidade= spQuantidade WHERE tE.idEstoque = spIdEstoque;
+        SELECT 'Estoque alterado com sucesso' as messagem;
+    ELSE
+        SELECT 'idEsto não existe' As mensagem;
+    end if ;
+end //
 DELIMITER ;
