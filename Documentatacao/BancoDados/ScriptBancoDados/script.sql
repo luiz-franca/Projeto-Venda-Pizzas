@@ -1,94 +1,31 @@
-create table tbAdmin
-(
-    idAdmin    int auto_increment
-        primary key,
-    nomeAdmin  varchar(60) not null,
-    emailAdmin varchar(40) not null,
-    loginAdmin varchar(40) not null,
-    senhaAdmin varchar(60) not null
-);
-
-create table tbCliente
-(
-    idCliente   int auto_increment
-        primary key,
-    nomeCliente varchar(60) not null,
-    telefone    varchar(40) not null,
-    endereco    varchar(40) not null,
-    email       varchar(40) not null,
-    senha       varchar(60) not null
-);
-
-create table tbEstoque
-(
-    idEstoque  int auto_increment
-        primary key,
-    nomeInsumo varchar(50) not null,
-    quantidade int         not null
-);
-
-create table tbItem
-(
-    idItem        int auto_increment
-        primary key,
-    nomeItem      varchar(60)  not null,
-    precoItem     float        not null,
-    descricaoItem varchar(60)  not null,
-    imagemUrl     varchar(500) null
-);
-
-create table tbPagamento
-(
-    idPagamento    int auto_increment
-        primary key,
-    idPedido       int                                                     null,
-    valor          float                                                   not null,
-    formaPagamento enum ('PENDENTE', 'APROVADO', 'CANCELADO', 'ESTORNADO') not null,
-    dataPagametno  datetime default CURRENT_TIMESTAMP                      null
-);
-
-create table tbPedido
-(
-    idPedido     int auto_increment
-        primary key,
-    idClient     int,
-    nomeItem     varchar(60),                                                                              null,
-    dataPedido   datetime default CURRENT_TIMESTAMP ,                                           null,
-    valorTotal   float                                                                            not null,
-    statusPedido enum ('pendente', 'em_preparação', 'saiu_para_entrega', 'entregue', 'cancelado') not null
-);
-
-create table tbPedidoItem
-(
-    idPedidoItem int auto_increment
-        primary key,
-    pedidoIdItem int   null,
-    itemId       int   null,
-    quantidade   int   not null,
-    subtotal     float not null
-);
-
+use dbselfpaypizzas;
 DELIMITER //
-create procedure spUpdateCliente(in spIdcliente int, in spNomeCliente varchar(60), in spTelefone varchar(40), in spEndereco varchar(40), spEmail varchar(40), spSenha varchar(60))
-begin
-    declare checkId int;
-    SELECT tc.idCliente into checkId FROM tbCliente tc where tc.idCliente = spIdcliente;
-    if checkId = spIdcliente then
-        UPDATE tbCliente set nomeCliente = spNomeCliente,
-                             telefone = spTelefone,
-                             endereco= spEndereco,
-                             email = spEmail,
-                             senha= spSenha
-            where idCliente = spIdcliente;
-            SELECT 'alteração client feita com sucesso';
-    else
-        SELECT 'idCLiente não existe';
-    end if;
+CREATE PROCEDURE spUpdateCliente(
+    IN spIdcliente INT,
+    IN spNomeCliente VARCHAR(60),
+    IN spTelefone VARCHAR(40),
+    IN spEndereco VARCHAR(40),
+    IN spEmail VARCHAR(40),
+    IN spSenha VARCHAR(60)
+)
+BEGIN
+    DECLARE checkId INT;
+    SELECT idCliente INTO checkId FROM tbCliente WHERE idCliente = spIdcliente;
 
-end;
-
+    IF checkId IS NOT NULL THEN
+        UPDATE tbCliente
+        SET nomeCliente = spNomeCliente,
+            telefone = spTelefone,
+            endereco = spEndereco,
+            email = spEmail,
+            senha = spSenha
+        WHERE idCliente = spIdcliente;
+        SELECT 'Alteração do cliente feita com sucesso' AS mensagem;
+    ELSE
+        SELECT 'ID do cliente não existe' AS mensagem;
+    END IF;
+END //
 DELIMITER ;
-
 DELIMITER //
 CREATE PROCEDURE spUpDateAdmin(
     IN spIdAmin INT,
@@ -114,7 +51,8 @@ BEGIN
 END //
 DELIMITER ;
 
-ALTER TABLE tbPedido ADD COLUMN nomeItem VARCHAR(60) AFTER idClient;
+SELECT * FROM tbAdmin;
+CALL spUpDateAdmin(1,"ADANYELE", "aslan@email.com","mebebe","gustavo");
 
 DELIMITER //
 
@@ -126,8 +64,9 @@ CREATE PROCEDURE spInsertPedido(
     IN spStatusProduto VARCHAR(20) -- Alterado de ENUM para VARCHAR
 )
 BEGIN
-
+    -- Verifica se o cliente existe na tabela correta
     IF EXISTS (SELECT 1 FROM tbCliente WHERE idCliente = spIdCliente) THEN
+        -- Insere o pedido na tabela corretamente
         INSERT INTO tbPedido (tbPedido.idClient, tbPedido.nomeItem, tbPedido.dataPedido, tbPedido.valorTotal, tbPedido.statusPedido)
         VALUES (spIdCliente, spNomeItem, spDataPedido, spValorTotal, spStatusProduto);
 
@@ -139,31 +78,67 @@ END //
 
 DELIMITER ;
 
+ALTER TABLE tbPedido ADD COLUMN nomeItem VARCHAR(60) AFTER idClient;
+ALTER TABLE tbPedido DROP COLUMN nomeItem;
+
+INSERT INTO tbPedido(idClient, dataPedido, valorTotal, statusPedido)
+VALUES (7,'2024-02-04', 30.0, 'em_preparação');
+
+SELECT pE.idClient, tC.nomeCliente FROM tbPedido pE JOIN tbCliente tC ON tC.idCliente = pE.idClient;
+SELECT * FROM tbPedido;
+CALL spInsertPedido(7,'pizza','2024-02-04', 30.0,'em_preparação');
+
 DELIMITER //
-CREATE PROCEDURE spUpdatePedido(IN spIdPedido INT,
-                                IN spIdClient INT,
-                                IN spDataPedido FLOAT ,
-                                IN spValorTotal FLOAT,
-                                IN spStatusPedido VARCHAR(40))
+
+CREATE PROCEDURE spUpdatePedido(
+    IN spIdPedido INT,
+    IN spIdClient INT,
+    IN spDataPedido DATETIME,
+    IN spValorTotal FLOAT,
+    IN spStatusPedido VARCHAR(40)
+)
 BEGIN
-    IF EXISTS(SELECT 1 FROM tbPedido pE WHERE pE.idPedido = spIdPedido) THEN
-        UPDATE tbPedido pe SET pe.idClient = spIdClient,
-                               pe.dataPedido = spDataPedido,
-                               pe.valorTotal = spValorTotal,
-                               pe.statusPedido = spStatusPedido
-                            WHERE pe.idPedido = spIdPedido;
+    -- Verifica se o pedido existe
+    IF EXISTS (SELECT 1 FROM tbPedido WHERE idPedido = spIdPedido) THEN
+        -- Atualiza o pedido
+        UPDATE tbPedido
+        SET idClient = spIdClient,
+            dataPedido = spDataPedido,
+            valorTotal = spValorTotal,
+            statusPedido = spStatusPedido
+        WHERE idPedido = spIdPedido;
+
         SELECT 'Pedido Alterado Com Sucesso' AS mensagem;
     ELSE
         SELECT 'idPedido não existe' AS mensagem;
-    end if ;
-end //
+    END IF;
+END //
+
 DELIMITER ;
-#   essa visão não está em uso.
+
+CALL spUpdatePedido(1, 7, '2024-02-04 15:00:00', 45.50, 'em_preparação');
+
+SELECT pE.idClient, tC.nomeCliente FROM tbPedido pE JOIN tbCliente tC ON tC.idCliente = pE.idClient WHERE pE.idPedido = 2;
+CREATE VIEW vwPedido AS
+    SELECT pE.idClient, tC.nomeCliente FROM tbPedido pE JOIN tbCliente tC ON tC.idCliente;
+
 DELIMITER //
 CREATE PROCEDURE spViewPedido(IN spIdPedido INT)
 BEGIN
     SELECT * FROM vwPedido pe WHERE pe.idClient = spIdPedido;
 END ;
+DELIMITER ;
+CALL spViewPedido(7);
+select * from tbPedido;;
+INSERT INTO tbPedido(idClient, dataPedido, valorTotal, statusPedido) VALUES (7, "2024-02-06",33.0,'em_preparação');
+INSERT INTO tbEstoque( nomeInsumo, quantidade) VALUES ('Molho de tormante',100),
+                                                      ('Mussarela',200),
+                                                      ('chedda', 100),
+                                                      ('oregano', 10);
+SELECT * FROM tbEstoque;
+
+DELIMITER //
+CREATE PROCEDURE spUpade
 DELIMITER ;
 
 DELIMITER //
@@ -186,14 +161,19 @@ BEGIN
        UPDATE tbPedidoItem tPII SET tPII.pedidoIdItem = spIdPedido,
                                     tPII.itemId = spIdItem,
                                     tPII.quantidade = spQuantidade,
-                                    tPII.subtotal = spSubTotal
-                                    WHERE   tPII.idPedidoItem = spIdPedidoItem;
+                                    tPII.subtotal = spSubTotal WHERE   tPII.idPedidoItem = spIdPedidoItem;
        SELECT 'PedidoItem alterado com sucesso' as messagem;
    ELSE
        SELECT 'idPedidoItem não existe' as messagem;
    end if ;
 END //
 DELIMITER ;
+
+SELECT * FROM tbPedidoItem
+SELECT * FROM tbPedido;
+SELECT * FROM tbItem;
+SELECT tI.nomeItem FROM tbItem tI INNER JOIN tbPedido tP ON tI.idItem = tP.idPedido WHERE idPedido = 2;
+INSERT INTO tbItem( nomeItem, precoItem, descricaoItem, imagemUrl) VALUES ('catchup', 21.4, 'molho heinz','www.link.ka');
 
 DELIMITER //
 CREATE PROCEDURE spUpdateItem(IN spIdItem INT, IN spNomeItem varchar(50), IN spPrecoItem FLOAT, IN spDescricao VARCHAR(100), IN spImagemUrl VARCHAR(500))
@@ -209,7 +189,6 @@ BEGIN
     end if ;
 end //
 DELIMITER ;
-
 DELIMITER //
 CREATE PROCEDURE spUpdatePedidoItem(IN spIdPedidoItem INT,IN spPedidoIdItem INT ,IN spItemId INT, IN spQuantidade INT, IN spSubTotal FLOAT)
 BEGIN
@@ -224,4 +203,127 @@ BEGIN
         SELECT 'idPedidoItem não existente' as mensagem;
     END IF ;
 end //
+DELIMITER ;
+SELECT * FROM tbPedido;
+SELECT * FROM tbItem;
+SELECT * FROM tbPedidoItem;
+INSERT INTO tbPedidoItem( pedidoIdItem, itemId, quantidade, subtotal)
+VALUES (2,2,100,1000.50)
+
+SELECT tC.nomeCliente,
+       tI.nomeItem,
+       tI.descricaoItem,
+       tP.dataPedido,
+       tI.precoItem,
+       tP.statusPedido,
+       tPi.subtotal,
+       tP.valorTotal
+FROM tbPedidoItem tPi
+INNER JOIN tbPedido tP ON tPi.pedidoIdItem = tP.idPedido
+INNER JOIN tbCliente tC ON tP.idClient = tC.idCliente
+INNER JOIN tbItem tI ON tPi.itemId = tI.idItem;
+;
+SELECT * FROM tbItem;
+SELECT tC.nomeCliente,
+        tI.nomeItem,
+        tI.descricaoItem,
+        tP.dataPedido,
+        tI.precoItem,
+        tP.statusPedido,
+        tPi.subtotal,
+        tP.valorTotal
+        FROM tbPedidoItem tPi
+        INNER JOIN tbPedido tP ON tPi.pedidoIdItem = tP.idPedido
+        INNER JOIN tbCliente tC ON tP.idClient = tC.idCliente
+        INNER JOIN tbItem tI ON tPi.itemId = tI.idItem
+        WHERE tPi.idPedidoItem = 2;
+SELECT * FROM tbPedido;
+SELECT * FROM tbPagamento;
+SELECT * FROM tbPagamento tPa INNER JOIN tbPedido tPe ON tPa.idPedido = tPe.idPedido ;
+
+SELECT * FROM tbPedido;
+
+ALTER TABLE tbPagamento ADD CONSTRAINT fk_tbpagamento FOREIGN KEY (idPedido) REFERENCES tbPedido(idPedido);
+
+ALTER TABLE tbPedido
+ADD CONSTRAINT fk_tbPedido_cliente FOREIGN KEY (idClient) REFERENCES tbCliente(idCliente);
+
+ALTER TABLE tbPagamento
+ADD CONSTRAINT fk_tbPagamento_pedido FOREIGN KEY (idPedido) REFERENCES tbPedido(idPedido);
+
+
+ALTER TABLE tbPedidoItem
+ADD CONSTRAINT fk_tbPedidoItem_pedido FOREIGN KEY (pedidoIdItem) REFERENCES tbPedido(idPedido);
+
+ALTER TABLE tbPedidoItem
+ADD CONSTRAINT fk_tbPedidoItem_item FOREIGN KEY (itemId) REFERENCES tbItem(idItem);
+
+ALTER TABLE tbPedidoItem
+ADD CONSTRAINT fk_tbPedidoItem_pedido FOREIGN KEY (pedidoIdItem) REFERENCES tbPedido(idPedido);
+
+ALTER TABLE tbPedidoItem MODIFY pedidoIdItem INT NULL;
+ALTER TABLE tbPedidoItem ADD COLUMN pedidoIdItem INT not null AFTER idPedidoItem;
+ALTER TABLE tbPedidoItem MODIFY pedidoIdItem INT NULL;
+
+CREATE TABLE tbItemEstoque (
+    idItem INT,
+    idEstoque INT,
+    quantidade INT,
+    PRIMARY KEY (idItem, idEstoque),
+    FOREIGN KEY (idItem) REFERENCES tbItem(idItem),
+    FOREIGN KEY (idEstoque) REFERENCES tbEstoque(idEstoque)
+);
+
+CREATE TABLE tbLogEstoque (
+    idLogEstoque INT PRIMARY KEY AUTO_INCREMENT,
+    idAdmin INT,
+    idEstoque INT,
+    quantidadeAlterada INT,
+    dataAlteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idAdmin) REFERENCES tbAdmin(idAdmin),
+    FOREIGN KEY (idEstoque) REFERENCES tbEstoque(idEstoque)
+);
+
+CREATE TABLE tbLogPedido (
+    idLogPedido INT PRIMARY KEY AUTO_INCREMENT,
+    idAdmin INT,
+    idPedido INT,
+    statusAlteradoPara VARCHAR(50),  -- Exemplo: "Aprovado", "Cancelado"
+    dataAlteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idAdmin) REFERENCES tbAdmin(idAdmin),
+    FOREIGN KEY (idPedido) REFERENCES tbPedido(idPedido)
+);
+SELECT * FROM tbItem;
+INSERT INTO tbEstoque(nomeInsumo, quantidade)
+VALUES ("teste", 100),
+       ("teste1", 200),
+       ("modelo",300)
+SELECT * FROM tbItem;
+SELECT * FROM tbItemEstoque;
+
+DELIMITER //
+
+CREATE PROCEDURE spInsertLogPedido(
+    IN spIdAdmin INT,
+    IN spIdPedido INT,
+    IN spStatusAlteradoPara VARCHAR(100)
+)
+BEGIN
+    DECLARE adminExists INT;
+    DECLARE pedidoExists INT;
+    SELECT COUNT(*) INTO adminExists FROM tbAdmin WHERE idAdmin = spIdAdmin;
+    SELECT COUNT(*) INTO pedidoExists FROM tbPedido WHERE idPedido = spIdPedido;
+    IF adminExists > 0 AND pedidoExists > 0 THEN
+        INSERT INTO tbLogPedido (idAdmin, idPedido, statusAlteradoPara)
+        VALUES (spIdAdmin, spIdPedido, spStatusAlteradoPara);
+        SELECT 'LogPedido adicionado' AS mensagem;
+    ELSE
+        IF adminExists = 0 THEN
+            SELECT 'Erro: idAdmin não existe na tabela tbAdmin.' AS mensagem;
+        ELSE
+            SELECT 'Erro: idPedido não existe na tabela tbPedido.' AS mensagem;
+        END IF;
+    END IF;
+END //
+
 DELIMITER ;

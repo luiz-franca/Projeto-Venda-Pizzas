@@ -51,7 +51,6 @@ class PedidoModel{
     static async deletePedido(deleteIdPedido){
         const sql = "DELETE FROM tbPedido WHERE idPedido=(?);";
         const response = await queryExecute(sql,[deleteIdPedido])
-        console.log(response);
         return response;
     }
     static async getIdPedidosUsuarios(IdParam){
