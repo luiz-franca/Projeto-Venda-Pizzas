@@ -167,7 +167,7 @@ END ;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE spInsertEstoque(in spIdEstoque int, in spNomeEstoque varchar(40), in spQuantidade int)
+CREATE PROCEDURE spUpdateEstoque(in spIdEstoque int, in spNomeEstoque varchar(40), in spQuantidade int)
 BEGIN
     IF EXISTS(SELECT 1 FROM tbEstoque tE WHERE tE.idEstoque = spIdEstoque) THEN
         UPDATE tbEstoque tE SET tE.nomeInsumo= spNomeEstoque,
@@ -176,5 +176,52 @@ BEGIN
     ELSE
         SELECT 'idEsto não existe' As mensagem;
     end if ;
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE  PROCEDURE  spUpdatePedidosItem(IN spIdPedidoItem INT,IN spIdPedido INT, IN spIdItem INT, IN spQuantidade INT, IN spSubTotal float)
+BEGIN
+   IF EXISTS(SELECT 1 FROM tbPedidoItem tPI WHERE tPI.idPedidoItem = spIdPedidoItem) THEN
+       UPDATE tbPedidoItem tPII SET tPII.pedidoIdItem = spIdPedido,
+                                    tPII.itemId = spIdItem,
+                                    tPII.quantidade = spQuantidade,
+                                    tPII.subtotal = spSubTotal
+                                    WHERE   tPII.idPedidoItem = spIdPedidoItem;
+       SELECT 'PedidoItem alterado com sucesso' as messagem;
+   ELSE
+       SELECT 'idPedidoItem não existe' as messagem;
+   end if ;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spUpdateItem(IN spIdItem INT, IN spNomeItem varchar(50), IN spPrecoItem FLOAT, IN spDescricao VARCHAR(100), IN spImagemUrl VARCHAR(500))
+BEGIN
+    IF EXISTS(SELECT 1 FROM tbItem tI WHERE tI.idItem= spIdItem) THEN
+        UPDATE tbItem tIt SET tIt.nomeItem = spNomeItem,
+                             tIt.precoItem = spPrecoItem,
+                             tIt.descricaoItem = spDescricao,
+                             tIt.imagemUrl = spImagemUrl WHERE tIt.idItem = spIdItem;
+        SELECT 'idItem alteredo com sucesso' as messagem;
+    ELSE
+        SELECT 'idItem não existe' as messagem;
+    end if ;
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spUpdatePedidoItem(IN spIdPedidoItem INT,IN spPedidoIdItem INT ,IN spItemId INT, IN spQuantidade INT, IN spSubTotal FLOAT)
+BEGIN
+    IF EXISTS(SELECT 1 FROM tbPedidoItem tPi WHERE tPi.idPedidoItem = spIdPedidoItem) THEN
+        UPDATE tbPedidoItem tPI2 SET tPI2.pedidoIdItem = spPedidoIdItem,
+                                     tPI2.itemId = spItemId,
+                                     tPI2.quantidade = spQuantidade,
+                                     tPI2.subtotal = spSubTotal
+                                    WHERE tPI2.idPedidoItem = spIdPedidoItem;
+        SELECT 'idPedidoItem alterado com sucesso' as mensagem;
+    ELSE
+        SELECT 'idPedidoItem não existente' as mensagem;
+    END IF ;
 end //
 DELIMITER ;

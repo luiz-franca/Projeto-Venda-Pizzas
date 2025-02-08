@@ -63,6 +63,7 @@ class PedidoModel{
         if(rows.length === 0){
             console.log('idPedido não existe')
         }
+        const classPedido = mappedEntidade(rows, entidade.Pedido)
         const data = mappedRowUtils(rows, row=>({
             idClient: row.idClient,
             nomeCliente: row.nomeCliente,
@@ -71,7 +72,7 @@ class PedidoModel{
             statusPedido: row.statusPedido
 
         }))
-        return rows;
+        return data;
     }
     static async deletePedido(idPedido){
         const sql = "DELETE FROM tbPedido WHERE idPedido = (?);";

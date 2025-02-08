@@ -42,8 +42,9 @@ class EstoqueModel{
         return await queryExecute(sql,[this.nomeInsumo, this.quantidade])
     }
     // escrever uma procedure, para fazer isso. CODIGO LIMPO!
+    // não é um insert é um update
     async updateEstoque(idEstoque){
-        const sql = `CALL spInsertEstoque(?, ?,?) ;`;
+        const sql = `CALL spUpdateEstoque(?, ?,?) ;`;
         const response = await queryExecute(sql, [idEstoque, this.nomeInsumo,this.quantidade]);
         return await response[0];
     }

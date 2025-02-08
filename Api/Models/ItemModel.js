@@ -44,6 +44,9 @@ class ItemModel{
         const sql = `SELECT * FROM tbItem WHERE idItem = (?);`;
         const response = await queryExecute(sql,[idItem]);
         const rows = response[0];
+        if(rows.length === 0){
+            console.log('idItem não existe');
+        }
         const data = mappedRowUtils(rows, row =>({
             idItem: row.idItem,
             nomeItem: row.nomeItem,
@@ -55,10 +58,18 @@ class ItemModel{
         const classItem = mappedEntidade(rows, entidade.Item)
         return data;
     }
-    // parei aqui
-    
+    async updateItem(idItem){
+        const sql = `CALL spUpdateItem(?,?,?,?,?);`;
+        const response = await queryExecute(sql,[idItem,this.nomeItem, this.precoItem, this.descricaoItem, this.imagemUrl]);
+        return response[0];
+    }
+    static async deleteItem(idItem){
+        const sql = "DELETE FROM tbItem WHERE idItem = (?);";
+        const response = await queryExecute(sql, [idItem]);
+        if(response[0].affectedRows == 1){
+            return {"usuário removido": response};
+        }
+        return {"não houve alteração na tabela": response};
+    }
 }
-(async()=>{
-    const check = await ItemModel.getIdItem(1);
-    console.log(check)
-})()
+module.exports = ItemModel;
