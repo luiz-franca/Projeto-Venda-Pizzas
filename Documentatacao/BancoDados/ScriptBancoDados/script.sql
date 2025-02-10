@@ -327,3 +327,42 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spInsertTbPagamento(
+    IN spIdPedido INT,
+    IN spValor FLOAT,
+    IN spFormaPagamento VARCHAR(30)
+)
+BEGIN
+    IF EXISTS(SELECT 1 FROM tbPedido WHERE idPedido = spIdPedido) THEN
+        INSERT INTO tbPagamento(idPedido, valor, formaPagamento)
+            VALUES (spIdPedido,spValor,spFormaPagamento);
+        SELECT 'Pagamento adicionado' AS mensagem;
+    ELSE
+        SELECT 'Pagamento não foi adicionado' AS mensagem;
+    end if ;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spUpdatePagamento(
+    IN spIdPagamento INT,
+    IN spIdPedido INT,
+    IN spValor FLOAT,
+    IN spFormaPagamento VARCHAR(30)
+
+)
+BEGIN
+   IF EXISTS(SELECT 1 FROM tbPagamento WHERE idPagamento = spIdPagamento) THEN
+       UPDATE tbPagamento tP SET tP.idPedido = spIdPedido,
+                                 tP.valor = spValor,
+                                 tP.formaPagamento = spFormaPagamento
+                                WHERE tP.idPagamento= spIdPagamento;
+       SELECT 'Pagamento Alterado com sucesso' as mensagem;
+   ELSE
+       SELECT 'IdPagamento existe' as messagem;
+   END IF ;
+END //
+
+DELIMITER ;
