@@ -1,8 +1,6 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const {mappedRowUtils,mappedEntidade} = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
 
-const entidade = new Entidade();
 class ItemModel{
     constructor(idItem=null,nomeItem=null, precoItem=null , descricaoItem=null, imagemUrl=null){
         this.nomeItem = idItem;
@@ -26,8 +24,6 @@ class ItemModel{
             imagemUrl: row.imagemUrl
 
         }));
-        // verificar o pq dessa class não está carregando, ela ficará para o login
-        mappedEntidade(rows, entidade.Item)
         return data;
     }
     async insertItem(){
@@ -55,7 +51,6 @@ class ItemModel{
             imagemUrl: row.imagemUrl
         }))
         // tenho que ver alguma função pra pegar esse class fora;
-        const classItem = mappedEntidade(rows, entidade.Item)
         return data;
     }
     async updateItem(idItem){

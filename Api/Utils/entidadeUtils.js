@@ -1,4 +1,4 @@
-const importEntidades = require('../Entities/utils')
+const importEntidades = require('@entidades/utils')
 
 class Entidade{
     constructor(){
@@ -11,7 +11,4 @@ class Entidade{
         this.PedidoItem = importEntidades.PedidoItem;
     }
 }
-// const entidade = new Entidade();
-// const cliente = new entidade.Admin({idAdmin: 1, nomeAdmin:"Gustavo", loginAdmin:"12345@teste", senha:"teste"});
-// console.log(cliente)
 module.exports = Entidade;

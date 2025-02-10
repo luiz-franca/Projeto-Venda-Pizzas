@@ -1,9 +1,7 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const {mappedRowUtils,mappedEntidade} = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
 
 
-const entidade = new Entidade();
 class PagamentoModel{
     constructor(
         idPagamento = null,
@@ -29,11 +27,10 @@ class PagamentoModel{
             formaPagamento: row.formaPagamento,
             dataPagamento: row.dataPagametno
         }))
-        mappedEntidade(data, entidade.Pagamento);
-        return data;
+        return response[0].length === 0? {"Não existe pagamentos": response[0]}: {"Pagamentos": response[0]}
 
     }
-    static async getAllPagamentoNome(paramId){
+    static async getPagamentoNome(paramId){
         const sql  = `SELECT * FROM tbPagamento tP WHERE tP.idPagamento = (?);
                         `;
         const response = await queryExecute(sql,[paramId]);
@@ -44,20 +41,23 @@ class PagamentoModel{
         return rows;     
     }
     async insertPagamento() {
-        const sql = `INSERT INTO tbPagamento(idPedido, valor, formaPagamento)
-                     VALUES (?, ?, ?);`;
+        const sql = `CALL spInsertTbPagamento(?,?,?);`;
         const response = await queryExecute(sql, [
             this.idPedido,
             this.valor,
             this.formaPagamento
         ]);
-        if(response[0].affectedRows === 1){
-            return {"Pagamento Adicionado": response[0]}
-        }
-        return {"Pagamento não foi adicionado": response[0]};
+        return await response.length === 2? {"Insert Response": response[0][0]}: {"Insert Erro": response};
+    }
+    async updatePagamento(idPagamentoParam){
+        const sql = "CALL spUpdatePagamento(?,?,?,?);";
+        const response = await queryExecute(sql,[idPagamentoParam,this.idPedido, this.valor, this.formaPagamento]);
+        return response[0];
+    }
+    static async deletePagamento(idPagamentoParam){
+        const sql = "DELETE FROM tbPagamento WHERE idPagamento = (?);";
+        const response = (await queryExecute(sql,[idPagamentoParam]));
+        return response[0].affectedRows === 1? {"delete sucesso": response[0]}: {"Erro ao deletar": response[0]}
     }
 }
-(async ()=>{
-    const resposta = await PagamentoModel.getAllPagamentoNome(1);
-    console.log(resposta);
-})();
+module.exports = PagamentoModel;

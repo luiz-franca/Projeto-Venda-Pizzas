@@ -1,6 +1,6 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const { mappedRowUtils, mappedEntidade } = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const Entidade = require("@utilidades/entidadeUtils");
+
 
 const entidade = new Entidade();
 
@@ -30,7 +30,6 @@ class LogPedidoModel {
             statusAlteradoPara: row.statusAlteradoPara,
             dataAlteracao: row.dataAlteracao
         }));
-        // mappedEntidade(data, entidade.LogPedido); // Descomente se necessário
         return data;
     }
 

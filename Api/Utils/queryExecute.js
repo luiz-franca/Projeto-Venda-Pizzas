@@ -1,4 +1,4 @@
-const connectionToDataBase = require('../Configs/dbconnect');
+const connectionToDataBase = require( '@configs/dbconnect');
 
 async function queryExecute(sql, params = []) {
     try {
@@ -9,5 +9,4 @@ async function queryExecute(sql, params = []) {
         throw new Error(`Erro na consulta SQL: ${error.message}`);
     }
 }
-
 module.exports = queryExecute;

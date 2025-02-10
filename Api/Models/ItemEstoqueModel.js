@@ -1,8 +1,6 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const { mappedRowUtils, mappedEntidade } = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
 
-const entidade = new Entidade();
 class ItemEstoqueModel {
     constructor(
         idItem = null,
@@ -22,7 +20,6 @@ class ItemEstoqueModel {
             idEstoque: row.idEstoque,
             quantidade: row.quantidade
         }));
-        // mappedEntidade(data, entidade.ItemEstoque); quebrou
         return data;
     }
     async insertItemEstoque() {

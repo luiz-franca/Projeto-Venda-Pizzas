@@ -1,7 +1,6 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const {mappedRowUtils,mappedEntidade} = require("./utils");
-const entidade = new Entidade();
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
+
 class PedidoItemModel{
     constructor(
         idPedidoItem=null,
@@ -28,7 +27,6 @@ class PedidoItemModel{
             quantidade:row.quantidade,
             subtotal: row.subtotal
         }))
-        mappedEntidade(data, entidade.PedidoItem);
         return data;
     }
     static async getAllPedidoItemNomes(){

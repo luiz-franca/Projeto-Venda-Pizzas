@@ -1,8 +1,7 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const {mappedRowUtils,mappedEntidade} = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
 
-const entidade  = new Entidade();
+
 class AdminModel{
     constructor(
         idAdmin = null,
@@ -27,7 +26,6 @@ class AdminModel{
             emailAdmin: row.emailAdmin,
             senhaAdmin: row.senhaAdmin
         }))
-        mappedEntidade(data, entidade.Admin);
         return data;
     }
     static async getIdAdmin(idParam){
@@ -57,6 +55,12 @@ class AdminModel{
         const response = await queryExecute(sql, [deleteIdAdmin])
         return response;
     }
+    static async findLogin(loginAdmin) {
+        const sql = "SELECT * FROM tbAdmin WHERE loginAdmin = ? LIMIT 1;";
+        const response = await queryExecute(sql, [loginAdmin]);
+        return response[0] || null;
+    }
+    
 
 }
 module.exports = AdminModel;

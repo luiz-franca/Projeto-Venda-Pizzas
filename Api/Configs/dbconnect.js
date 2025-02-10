@@ -1,5 +1,4 @@
 const mysql = require('mysql2');
-const util  = require('util');
 const {acessEnvs, handleDatabaseErro} = require('./utils')
 
 const credenciaisDB = mysql.createPool({

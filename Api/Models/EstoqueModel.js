@@ -1,8 +1,6 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const {mappedRowUtils,mappedEntidade} = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
 
-const entidade = new Entidade();
 class EstoqueModel{
     constructor(idEstoque=null, nomeInsumo=null, quantidade=null){
         this.idEstoque = idEstoque;
@@ -18,7 +16,6 @@ class EstoqueModel{
             nomeInsumo: row.nomeInsumo,
             quantidade: row.quantidade
         }))
-        mappedEntidade(data, entidade.Estoque);
         return data;
     }
     static async getIdEstoque(idParam){

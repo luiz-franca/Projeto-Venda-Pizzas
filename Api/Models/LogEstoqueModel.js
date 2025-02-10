@@ -1,11 +1,9 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const { mappedRowUtils, mappedEntidade } = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
 
-const entidade = new Entidade();
 class LogEstoqueModel {
     constructor(
-        idLogEstoque = null,
+        idLogEstoque = null, 
         idAdmin = null,
         idEstoque = null,
         quantidadeAlterada = null,
@@ -29,7 +27,6 @@ class LogEstoqueModel {
             quantidadeAlterada: row.quantidadeAlterada,
             dataAlteracao: row.dataAlteracao
         }));
-        // mappedEntidade(data, entidade.LogEstoque); // Descomente se necessário
         return data;
     }
 

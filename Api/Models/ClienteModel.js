@@ -1,8 +1,6 @@
-const queryExecute = require('../Utils/queryExecute');
-const Entidade = require("../Utils/entidadeUtils");
-const {mappedRowUtils,mappedEntidade} = require("./utils");
+const queryExecute = require('@utilidades/queryExecute');
+const mappedRowUtils = require('./mappedRowUtils');
 
-const entidade = new Entidade();
 class ClienteModel{
     constructor(
         idCliente = null, 
@@ -30,7 +28,6 @@ class ClienteModel{
             email: row.email,
             senha: row.senha
         }))
-        mappedEntidade(data, entidade.Cliente);
         return data;
     }    
     static async getIdCliente(idParam) {
@@ -61,10 +58,4 @@ class ClienteModel{
         return response;
     }
 }
-
-(async () => {
-    // const response = await ClienteModel.getTodosClientes();
-    const response = await ClienteModel.getIdCliente(7)
-    console.log(response)
-})();
 module.exports = ClienteModel;
