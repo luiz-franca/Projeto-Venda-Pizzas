@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const queryExecute = require('@utilidades/queryExecute');
 const mappedRowUtils = require('./mappedRowUtils');
 
@@ -34,9 +35,15 @@ class AdminModel{
         return response[0]
     }
     async insertAdmin(){
+        const hashSenha = await bcrypt.hash(this.senhaAdmin,10)
         const sql = `INSERT INTO tbAdmin( nomeAdmin, emailAdmin, loginAdmin, senhaAdmin) 
         VALUES (?,?,?,?);`;
-        return await queryExecute(sql,[this.nomeAdmin,this.emailAdmin, this.loginAdmin, this.senhaAdmin])
+        return await queryExecute(sql,[
+            this.nomeAdmin,
+            this.emailAdmin, 
+            this.loginAdmin, 
+            hashSenha
+        ])
     }
     async updateAdmin(updateIdAdmin){
         const sql = " CALL spUpDateAdmin(?,?,?,?,?);";

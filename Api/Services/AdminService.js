@@ -1,24 +1,23 @@
+require('dotenv').config({path: '../.env'});
 // const AdminModel = require('@models/utils');
+const {JWTSECRET, TOKENEXPIRATION} = process.env
 const AdminModel = require('./../Models/AdminModel');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 class AdminService{
-    static async loginAdmin(login, senha){
-        if(!login || !senha){
+    static async loginAdmin(loginAdmin, senhaAdmin){
+        if(!loginAdmin || !senhaAdmin){
             throw new Error("Login e Senha são Obrigatórios")
         }
-        const checkAdmin = await AdminModel.findLogin(login);
+        const checkAdmin = await AdminModel.findLogin(loginAdmin);
         if(checkAdmin === null){
              return "usuário não encotrado";
         }
-        const senhaValida = await bcrypt.compare(senha, checkAdmin.senhaAdmin);
-        return senhaValida
+        const senhaValida = await bcrypt.compare(senhaAdmin, checkAdmin[0].senhaAdmin)
+        console.log("checando ",checkAdmin[0].senhaAdmin, " ==", senhaAdmin)
         
+        return senhaValida
     }
 }
-(async()=>{
-    // const teste = await AdminService.loginAdmin('loign', 1);
-    // console.log(teste);
-})()
 module.exports = AdminService;
