@@ -35,7 +35,7 @@ class AdminModel{
         return response[0]
     }
     async insertAdmin(){
-        const hashSenha = await bcrypt.hash(this.senhaAdmin,10)
+        const hashSenha = await bcrypt.hash(this.senhaAdmin,10);
         const sql = `INSERT INTO tbAdmin( nomeAdmin, emailAdmin, loginAdmin, senhaAdmin) 
         VALUES (?,?,?,?);`;
         return await queryExecute(sql,[
@@ -46,21 +46,21 @@ class AdminModel{
         ])
     }
     async updateAdmin(updateIdAdmin){
+        const hashSenha = await bcrypt.hash(this.senhaAdmin,10)
         const sql = " CALL spUpDateAdmin(?,?,?,?,?);";
         const response = await queryExecute(sql, [
             updateIdAdmin,
             this.nomeAdmin,
             this.emailAdmin,
             this.loginAdmin,
-            this.senhaAdmin
+            hashSenha
         ])
-        console.log(response)
-        return response;
+        return response[0];
     }
-    static async deleteADmin(deleteIdAdmin){
+    static async deleteAdmin(deleteIdAdmin){
         const sql = "DELETE FROM tbAdmin WHERE idAdmin = (?)"
         const response = await queryExecute(sql, [deleteIdAdmin])
-        return response;
+        return response[0].affectedRows === 1? "admin deletado": "admin não deletado";
     }
     static async findLogin(loginAdmin) {
         const sql = "SELECT * FROM tbAdmin WHERE loginAdmin = ? LIMIT 1;";
