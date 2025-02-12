@@ -58,7 +58,7 @@ class AdminModel{
     static async findLogin(loginAdmin) {
         const sql = "SELECT * FROM tbAdmin WHERE loginAdmin = ? LIMIT 1;";
         const response = await queryExecute(sql, [loginAdmin]);
-        return response[0] || null;
+        return response[0].length === 0? null : response[0] ;
     }
     
 
