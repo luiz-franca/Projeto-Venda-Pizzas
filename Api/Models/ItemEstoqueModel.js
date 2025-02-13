@@ -22,6 +22,35 @@ class ItemEstoqueModel {
         }));
         return data;
     }
+    static async getAllNomesItensEstoque(){
+        const sql = `SELECT tI.nomeItem, tI.descricaoItem, tI.imagemUrl, tI.precoItem FROM tbItemEstoque tIe
+                    INNER JOIN tbItem tI ON tIe.idItem = tI.idItem
+                    INNER JOIN tbEstoque tE ON tIe.idEstoque = tE.idEstoque;`;
+        const response = await queryExecute(sql);
+        const rows = response[0];
+        const data = mappedRowUtils(rows, row =>({
+            nomeItem: row.nomeItem,
+            descricaoItem: row.descricaoItem,
+            imagemUrl: row.imagemUrl,
+            precoItem: row.precoItem
+        }))
+        return data;
+        
+    }
+    static async getIdNomeItemEstoque(idItem){
+        const sql = `SELECT tI.nomeItem, tI.descricaoItem, tI.imagemUrl, tI.precoItem FROM tbItemEstoque tIe
+                    INNER JOIN tbItem tI ON tIe.idItem = tI.idItem
+                    INNER JOIN tbEstoque tE ON tIe.idEstoque = tE.idEstoque WHERE tIe.idItem = (?);`;
+        const response = await queryExecute(sql,[idItem]);
+        const rows = response[0];
+        const data = mappedRowUtils(rows, row=>({
+            nomeItem: row.nomeItem,
+            descricaoItem: row.descricaoItem,
+            imagemUrl: row.imagemUrl,
+            precoItem: row.precoItem
+        }))
+        return data.length === 0? "idItem não existe": data[0];
+    }
     async insertItemEstoque() {
         const sql = `INSERT INTO tbItemEstoque (idItem, idEstoque, quantidade)
                      VALUES (?, ?, ?);`;
@@ -33,14 +62,14 @@ class ItemEstoqueModel {
                      SET quantidade = ?
                      WHERE idItem = ? AND idEstoque = ?;`;
         const response = await queryExecute(sql, [this.quantidade, paramIdItem, paramIdEstoque]);
-        return response[0].affectedRows === 1?{"Update realizado": response[0]} : {"Updade falhou": response[0]};
+        return response[0].affectedRows === 1? "Update realizado" : "Updade falhou";
     }
     static async deleteItemEstoque(idItem, idEstoque) {
         const sql = "DELETE FROM tbItemEstoque WHERE idItem = ? AND idEstoque = ?;";
         const response = await queryExecute(sql, [idItem, idEstoque]);
-        return await response[0].affectedRows ===1? {"itemEstoque deletado": response[0]}: {"ação falhow": response[0]};
+        return await response[0].affectedRows ===1? response[0]: "ação falhou";
     }
-    static async getItemEstoqueById(idItem, idEstoque) {
+    static async getItemEstoqueId(idItem, idEstoque) {
         const sql = `SELECT * FROM tbItemEstoque 
                      WHERE idItem = ? AND idEstoque = ?;`;
         const response = await queryExecute(sql, [idItem, idEstoque]);

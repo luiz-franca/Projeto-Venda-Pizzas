@@ -37,7 +37,7 @@ class LogEstoqueModel {
         return response[0].affectedRows === 1 ? { "log adicionado": response[0] } : { "log não adicionado": response[0] };
     }
 
-    static async getLogEstoqueById(idLogEstoque) {
+    static async getLogEstoqueId(idLogEstoque) {
         const sql = `SELECT * FROM tbLogEstoque 
                      WHERE idLogEstoque = ?;`;
         const response = await queryExecute(sql, [idLogEstoque]);
@@ -62,7 +62,7 @@ class LogEstoqueModel {
         return response[0].affectedRows === 1 ? { "log deletado": response[0] } : { "ação falhou": response[0] };
     }
 
-    static async getLogsByEstoqueId(idEstoque) {
+    static async getLogsEstoqueId(idEstoque) {
         const sql = `SELECT * FROM tbLogEstoque 
                      WHERE idEstoque = ?;`;
         const response = await queryExecute(sql, [idEstoque]);
@@ -81,7 +81,7 @@ class LogEstoqueModel {
         return {"Estoque Id sucess": data};
     }
 
-    static async getLogsByAdminId(idAdmin) {
+    static async getLogsAdminId(idAdmin) {
         const sql = `SELECT * FROM tbLogEstoque 
                      WHERE idAdmin = ?;`;
         const response = await queryExecute(sql, [idAdmin]);

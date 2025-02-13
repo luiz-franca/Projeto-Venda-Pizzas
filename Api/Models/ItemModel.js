@@ -30,11 +30,7 @@ class ItemModel{
         const sql = `INSERT INTO tbItem ( nomeItem, precoItem, descricaoItem, imagemUrl)
                     VALUES (?,?,?,?);`;
         const response = await queryExecute(sql,[this.nomeItem, this.precoItem, this.descricaoItem, this.imagemUrl]);
-        if(response[0].insertId){
-            console.log('item adicionado');
-            return response;
-        }
-        console.error('não conseguiu inserir um novo item');
+        return response[0].affectedRows === 1? "item adicionado": "item não adicionado"
     }
     static async getIdItem(idItem){
         const sql = `SELECT * FROM tbItem WHERE idItem = (?);`;

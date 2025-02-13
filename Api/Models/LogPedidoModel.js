@@ -1,8 +1,5 @@
 const queryExecute = require('@utilidades/queryExecute');
-const Entidade = require("@utilidades/entidadeUtils");
-
-
-const entidade = new Entidade();
+const mappedRowUtils = require('./mappedRowUtils');
 
 class LogPedidoModel {
     constructor(
@@ -36,11 +33,10 @@ class LogPedidoModel {
     async insertLogPedido() {
         const sql = `CALL spInsertLogPedido(?,?,?);`;
         const response = await queryExecute(sql, [this.idAdmin, this.idPedido, this.statusAlteradoPara]);
-        console.log(response)
-        return response[0]? { "log adicionado": response[0] } : { "log não adicionado": response[0] };
+        return response[0]? response[0] : "log não adicionado";
     }
 
-    static async getLogPedidoById(idLogPedido) {
+    static async getLogPedidoId(idLogPedido) {
         const sql = `SELECT * FROM tbLogPedido 
                      WHERE idLogPedido = ?;`;
         const response = await queryExecute(sql, [idLogPedido]);
@@ -65,7 +61,7 @@ class LogPedidoModel {
         return response[0].affectedRows === 1 ? { "log deletado": response[0] } : { "ação falhou": response[0] };
     }
 
-    static async getLogsByAdminId(idAdmin) {
+    static async getLogsAdminId(idAdmin) {
         const sql = `SELECT * FROM tbLogPedido 
                      WHERE idAdmin = ?;`;
         const response = await queryExecute(sql, [idAdmin]);
@@ -84,7 +80,7 @@ class LogPedidoModel {
         return {"detAdmin success": data};
     }
 
-    static async getLogsByPedidoId(idPedido) {
+    static async getLogsPedidoId(idPedido) {
         const sql = `SELECT * FROM tbLogPedido 
                      WHERE idPedido = ?;`;
         const response = await queryExecute(sql, [idPedido]);

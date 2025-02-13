@@ -366,3 +366,9 @@ BEGIN
 END //
 
 DELIMITER ;
+
+ALTER TABLE tbPedido DROP FOREIGN KEY fk_tbPedido_cliente,
+    ADD CONSTRAINT  fk_idclient FOREIGN KEY (idClient) REFERENCES tbCliente(idCliente) ON DELETE CASCADE;
+
+ALTER TABLE tbPagamento DROP FOREIGN KEY fk_tbPagamento_pedido,
+ADD CONSTRAINT fk_idPedido_pagamento FOREIGN KEY (idPedido) REFERENCES  tbPedido(idPedido) ON DELETE CASCADE ;

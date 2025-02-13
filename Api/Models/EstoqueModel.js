@@ -36,7 +36,8 @@ class EstoqueModel{
     async insertInsumoEstoque(){
         const sql = `INSERT INTO tbEstoque (nomeInsumo,quantidade)
                      VALUES(?,?);`;
-        return await queryExecute(sql,[this.nomeInsumo, this.quantidade])
+        const response = await queryExecute(sql,[this.nomeInsumo, this.quantidade])
+        return response[0].affectedRows === 1? "item adicionado ao estoque": "erro ao adicionar o item"
     }
     // escrever uma procedure, para fazer isso. CODIGO LIMPO!
     // não é um insert é um update
@@ -48,7 +49,7 @@ class EstoqueModel{
     static async deleteEstoque(idParam){
         const sql = `DELETE FROM tbEstoque WHERE idEstoque = (?);`;
         const response = await queryExecute(sql, [idParam]);
-        return response[0].affectedRows === 1? `isumoDeletado ${response}`:"idEstoque não encontrado" ;
+        return response[0].affectedRows === 1? "insumo deletado":"idEstoque não encontrado" ;
     }   
 
 }

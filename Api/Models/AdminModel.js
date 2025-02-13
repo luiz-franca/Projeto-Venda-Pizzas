@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const queryExecute = require('@utilidades/queryExecute');
 const mappedRowUtils = require('./mappedRowUtils');
 
-
 class AdminModel{
     constructor(
         idAdmin = null,

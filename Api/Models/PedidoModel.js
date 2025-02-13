@@ -29,10 +29,10 @@ class PedidoModel{
         return data
     }
     async insertPedido(){
-        const sql = `INSERT INTO tbPedido (idClient, nomeItem, dataPedido, valorTotal, statusPedido)
-        VALUES (?,?,?,?,?)`;
-        const response = await queryExecute(sql,[this.idClient, this.nomeItem ,this.dataPedido, this.valorTotal, this.statusPedido])
-        console.log(response)
+        const sql = `INSERT INTO tbPedido (idClient, dataPedido, valorTotal, statusPedido)
+        VALUES (?,?,?,?);`;
+        const response = await queryExecute(sql,[this.idClient,this.dataPedido, this.valorTotal, this.statusPedido])
+        return response[0].affectedRows === 1? "pedido adicionado": "erro pedido não foi adicionado";
     }
     async updatePedido(paramId){
         const sql = `CALL spUpdatePedido(?,?,?,?,?);`;
@@ -43,7 +43,7 @@ class PedidoModel{
             this.valorTotal, 
             this.statusPedido
         ]);
-        return response;
+        return response[0];
     }
     static async deletePedido(deleteIdPedido){
         const sql = "DELETE FROM tbPedido WHERE idPedido=(?);";
