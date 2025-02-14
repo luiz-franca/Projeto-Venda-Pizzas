@@ -13,7 +13,7 @@ app.use(express.json());
 app.get('/', async (req, res) => {
     res.send({"API OK":200});
 });
-app.get('/v1',AdminRoute);
+app.use('/v1',AdminRoute);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
