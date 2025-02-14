@@ -55,12 +55,12 @@ class AdminService{
             throw new Error("Erro ao deletar administrador" + error.message);
         }
     }
-    static async loginUserAdmin(login, senhaAdmin){
+    static async loginAdmin(loginAdmin, senhaAdmin){
         try{
-            if(!login || !senhaAdmin){
+            if(!loginAdmin || !senhaAdmin){
                 throw new Error("Login e Senha são Obrigatórios")
             }
-            const checkAdmin = await AdminModel.findLogin(login);
+            const checkAdmin = await AdminModel.findLogin(loginAdmin);
             if(checkAdmin === null){
                  return "usuário não encotrado";
             }
@@ -70,7 +70,7 @@ class AdminService{
             }
             const token = jwt.sign(
                 {id: checkAdmin.idAmin, 
-                login: checkAdmin.login
+                login: checkAdmin.loginAdmin
                 }, process.env.JWTSECRET,
                 {expiresIn: process.env.TOKENEXPIRATION
                 })  

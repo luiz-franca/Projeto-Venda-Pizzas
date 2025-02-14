@@ -52,5 +52,14 @@ class AdminController {
             res.status(400).json({ success: false, message: error.message });
         }
     }
+    static async deleteAdmin(req, res) {
+        try {
+            const { id } = req.params;
+            const result = await AdminService.deleteAdmin(id);
+            res.status(200).json({ success: true, message: result });
+        } catch (error) {
+            res.status(400).json({ success: false, message: error.message });
+        }
+    }
 }
 module.exports = AdminController;

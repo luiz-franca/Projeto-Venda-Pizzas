@@ -11,6 +11,14 @@ class ClienteService{
             throw new Error("Erro ao registar novo cliente"+error);
         }
     }
+    static async getAllClientes() {
+        try {
+            const clientes = await ClienteModel.getAllClientes();
+            return clientes;
+        } catch (error) {
+            throw new Error("Erro ao buscar todos os clientes: " + error.message);
+        }
+    }
     static async getClienteId(idCliente){
         try{
             if(!idCliente) throw new Error("IdCliente não encontrado");

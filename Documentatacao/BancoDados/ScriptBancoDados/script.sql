@@ -372,3 +372,7 @@ ALTER TABLE tbPedido DROP FOREIGN KEY fk_tbPedido_cliente,
 
 ALTER TABLE tbPagamento DROP FOREIGN KEY fk_tbPagamento_pedido,
 ADD CONSTRAINT fk_idPedido_pagamento FOREIGN KEY (idPedido) REFERENCES  tbPedido(idPedido) ON DELETE CASCADE ;
+
+
+ALTER TABLE tbLogEstoque DROP FOREIGN KEY tbLogEstoque_ibfk_1,
+ADD CONSTRAINT tbAdmin_logEstoque FOREIGN KEY (idAdmin) REFERENCES  tbAdmin(idAdmin) ON DELETE CASCADE ;

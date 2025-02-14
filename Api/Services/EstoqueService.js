@@ -18,6 +18,23 @@ class EstoqueService{
             throw new Error("erro getAllEstoque "+error);
         }
     }
+    static async getIdEstoque(idEstoque) {
+        try {
+            if (!idEstoque) {
+                throw new Error("ID do estoque é obrigatório");
+            }
+
+            const itemEstoque = await EstoqueModel.getIdEstoque(idEstoque);
+
+            if (!itemEstoque || itemEstoque.length === 0) {
+                return "Item do estoque não encontrado";
+            }
+
+            return itemEstoque;
+        } catch (error) {
+            throw new Error("Erro ao buscar item do estoque: " + error.message);
+        }
+    }
     static async updateEstoque(idEstoque, nomeInsumo, quantidade){
         try{
             if(!idEstoque || !nomeInsumo || quantidade === undefined) throw new Error("todos os campo são Obrigatórios");
