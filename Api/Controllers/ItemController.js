@@ -1,0 +1,1 @@
+const utilsService = require("@servicos/utils");

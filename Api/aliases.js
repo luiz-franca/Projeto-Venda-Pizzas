@@ -6,6 +6,7 @@ moduleAlias.addAliases({
     '@entidades': __dirname + '/Entities',
     '@configs': __dirname + '/Configs',
     '@utilidades': __dirname + '/Utils',
+    '@rotas': __dirname + '/Routes',
     '@servicos': __dirname + '/Services',
     '@views': __dirname + '/Views'
 });

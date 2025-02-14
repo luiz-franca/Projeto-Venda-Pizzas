@@ -1,16 +1,24 @@
-const ControleAdmin = require('./AdminController');
-const ControleCliente = require('./ClienteController');
-const ControleItem = require('./ItemController');
-const ControlePagamento = require('./PagamentoController');
-const ControlePedido = require('./PedidoController');
-const ControlePedidoItem = require('./PedidoItemController');
+const adminController = require("./AdminController");
+// const clienteController = require("./ClienteController");
+// const estoqueController = require("./EstoqueController");
+// const itemController = require("./ItemController");
+// const itemEstoqueController = require("./ItemEstoqueController");
+// const logEstoqueController = require("./LogEstoqueController");
+// const logPedidoController = require("./LogPedidoController");
+// const pagamentoController = require("./PagamentoController");
+// const pedidoController = require("./PedidoController");
+// const pedidoItemController = require("./PedidoItemController");
 
-const importControllers = {
-    admin: ControleAdmin,
-    cliente: ControleCliente,
-    item: ControleItem,
-    pagamento: ControlePagamento,
-    pedido: ControlePedido,
-    pedidoItem: ControlePedidoItem
-};
-module.exports = importControllers;
+const utilsController = {
+     adminController,
+    // cliente: clienteController,
+    // estoque: estoqueController,
+    // item: itemController,
+    // itemEstoque: itemEstoqueController,
+    // logEstoque: logEstoqueController,
+    // logPedido: logPedidoController,
+    // pagamento: pagamentoController,
+    // pedido: pedidoController,
+    // pedidoItem: pedidoItemController
+}
+module.exports = utilsController;

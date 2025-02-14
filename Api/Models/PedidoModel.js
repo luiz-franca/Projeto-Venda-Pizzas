@@ -74,7 +74,7 @@ class PedidoModel{
         const sql = "DELETE FROM tbPedido WHERE idPedido = (?);";
         const response = await queryExecute(sql, [idPedido])
         console.log(response);
-        return response;
+        return response[0].affectedRows === 1? "pedido deletado": "pedido não deletado";
     }
 }
 module.exports = PedidoModel;

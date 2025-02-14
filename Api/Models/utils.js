@@ -20,7 +20,5 @@ const exportModels = {
     pagamento: PagamentoModel,
     pedido: PedidoModel,
     pedidoItem: PedidoItemModel
-
-
 }
 module.exports = exportModels;
