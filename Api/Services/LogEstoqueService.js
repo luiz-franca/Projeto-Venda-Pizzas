@@ -38,19 +38,19 @@ class LogEstoqueService {
         }
     }
 
-    static async getLogsEstoqueId(idEstoque) {
+    static async getLogEstoqueId(idEstoque) {
         try {
             if (!idEstoque) throw new Error("ID do estoque é obrigatório");
-            return await LogEstoqueModel.getLogsEstoqueId(idEstoque);
+            return await LogEstoqueModel.getLogEstoqueId(idEstoque);
         } catch (error) {
             throw new Error("Erro ao buscar logs por ID do estoque: " + error.message);
         }
     }
 
-    static async getLogsAdminId(idAdmin) {
+    static async getLogAdminId(idAdmin) {
         try {
             if (!idAdmin) throw new Error("ID do admin é obrigatório");
-            return await LogEstoqueModel.getLogsAdminId(idAdmin);
+            return await LogEstoqueModel.getLogAdminId(idAdmin);
         } catch (error) {
             throw new Error("Erro ao buscar logs por ID do admin: " + error.message);
         }

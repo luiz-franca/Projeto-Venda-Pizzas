@@ -50,7 +50,7 @@ class PedidoModel{
         const response = await queryExecute(sql,[deleteIdPedido])
         return response;
     }
-    static async getIdPedidosUsuarios(IdParam){
+    static async getIdPedidosCliente(IdParam){
         const sql = `SELECT * FROM tbPedido tP INNER JOIN tbCliente tC 
                     ON tP.idClient = tC.idCliente
                     WHERE idClient=(?);`;
@@ -59,7 +59,6 @@ class PedidoModel{
         if(rows.length === 0){
             console.log('idPedido não existe')
         }
-        const classPedido = mappedEntidade(rows, entidade.Pedido)
         const data = mappedRowUtils(rows, row=>({
             idClient: row.idClient,
             nomeCliente: row.nomeCliente,
@@ -73,7 +72,6 @@ class PedidoModel{
     static async deletePedido(idPedido){
         const sql = "DELETE FROM tbPedido WHERE idPedido = (?);";
         const response = await queryExecute(sql, [idPedido])
-        console.log(response);
         return response[0].affectedRows === 1? "pedido deletado": "pedido não deletado";
     }
 }

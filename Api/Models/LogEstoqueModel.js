@@ -34,7 +34,7 @@ class LogEstoqueModel {
         const sql = `INSERT INTO tbLogEstoque (idAdmin, idEstoque, quantidadeAlterada)
                      VALUES (?, ?, ?);`;
         const response = await queryExecute(sql, [this.idAdmin, this.idEstoque, this.quantidadeAlterada]);
-        return response[0].affectedRows === 1 ? { "log adicionado": response[0] } : { "log não adicionado": response[0] };
+        return response[0].affectedRows === 1 ? "log adicionado":  "log não adicionado";
     }
 
     static async getLogEstoqueIdLogEstoque(idLogEstoque) {
@@ -62,32 +62,34 @@ class LogEstoqueModel {
         return response[0].affectedRows === 1 ? { "log deletado": response[0] } : { "ação falhou": response[0] };
     }
 
-    static async getLogsEstoqueId(idEstoque) {
-        const sql = `SELECT * FROM tbLogEstoque 
-                     WHERE idEstoque = ?;`;
+    static async getLogEstoqueId(idEstoque) {
+        const sql = `SELECT tA.nomeAdmin,
+                    tE.nomeInsumo,
+                    tE.quantidade,
+                    tLE.quantidadeAlterada  FROM tbLogEstoque tLE
+                    INNER JOIN tbAdmin tA ON tLE.idAdmin = tA.idAdmin
+                    INNER JOIN tbEstoque tE ON tLE.idEstoque = tE.idEstoque
+                    WHERE tE.idEstoque= ?`;
         const response = await queryExecute(sql, [idEstoque]);
         const rows = response[0];
         if (rows.length === 0) {
-            console.log('Nenhum log encontrado para o estoque especificado');
             return null;
         }
         const data = mappedRowUtils(rows, row => ({
-            idLogEstoque: row.idLogEstoque,
-            idAdmin: row.idAdmin,
-            idEstoque: row.idEstoque,
-            quantidadeAlterada: row.quantidadeAlterada,
-            dataAlteracao: row.dataAlteracao
+            nomeAdmin: row.nomeAdmin,
+            nomeInsumo: row.nomeInsumo,
+            quantidade: row.quantidade,
+            quantidadeAlterada: row.quantidadeAlterada
         }));
-        return data.length === 0? data: "idEstoque não encontrado";
+        return !data.length === 0? null: data;
     }
 
-    static async getLogsAdminId(idAdmin) {
-        const sql = `SELECT * FROM tbLogEstoque 
-                     WHERE idAdmin = ?;`;
+    static async getLogAdminId(idAdmin) {
+        const sql = "SELECT * FROM tbLogEstoque tL WHERE tL.idAdmin = ?;";
         const response = await queryExecute(sql, [idAdmin]);
+        console.log(response)
         const rows = response[0];
         if (rows.length === 0) {
-            console.log('Nenhum log encontrado para o admin especificado');
             return null;
         }
         const data = mappedRowUtils(rows, row => ({
@@ -97,6 +99,7 @@ class LogEstoqueModel {
             quantidadeAlterada: row.quantidadeAlterada,
             dataAlteracao: row.dataAlteracao
         }));
+        console.log(data)
         return data;
     }
 }
