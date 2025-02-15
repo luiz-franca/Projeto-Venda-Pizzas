@@ -11,6 +11,7 @@ const LogEstoqueRoute = require('./Routes/LogEstoqueRoute');
 const LogPedidoRoute = require('./Routes/LogPedidoRoute');
 const PedidoRoute = require('./Routes/PedidoRoute');
 const PedidoItemRoute = require('./Routes/PedidoItemRoute');
+const PagamentoRoute = require('./Routes/PagamentoRoute');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/v1', LogEstoqueRoute);
 app.use('/v1', LogPedidoRoute);
 app.use('/v1', PedidoRoute);
 app.use('/v1', PedidoItemRoute);
+app.use('/v1', PagamentoRoute);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

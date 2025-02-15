@@ -1,5 +1,5 @@
 const express = require('express');
-const PedidoController = require('./../Controllers/PedidoController');
+const PedidoController = require('@controllers/PedidoController');
 
 const pedidoRoute = express.Router();
 
