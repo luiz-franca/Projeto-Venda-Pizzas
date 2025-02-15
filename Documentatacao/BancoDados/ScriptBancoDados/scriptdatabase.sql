@@ -104,10 +104,10 @@ create table tbPagamento
 (
     idPagamento    int auto_increment
         primary key,
-    idPedido       int                                                     null,
-    valor          float                                                   not null,
-    formaPagamento enum ('PENDENTE', 'APROVADO', 'CANCELADO', 'ESTORNADO') not null,
-    dataPagametno  datetime default CURRENT_TIMESTAMP                      null,
+    idPedido       int                                                    null,
+    valor          float                                                  not null,
+    formaPagamento enum ('pix', 'dinheiro', 'debito', 'credito', 'cupom') null,
+    dataPagametno  datetime default CURRENT_TIMESTAMP                     null,
     constraint fk_idPedido_pagamento
         foreign key (idPedido) references tbPedido (idPedido)
             on delete cascade
@@ -164,9 +164,7 @@ create
                                                       IN spDataPedido datetime, IN spValorTotal float,
                                                       IN spStatusProduto varchar(20))
 BEGIN
-    -- Verifica se o cliente existe na tabela correta
     IF EXISTS (SELECT 1 FROM tbCliente WHERE idCliente = spIdCliente) THEN
-        -- Insere o pedido na tabela corretamente
         INSERT INTO tbPedido (tbPedido.idClient, tbPedido.nomeItem, tbPedido.dataPedido, tbPedido.valorTotal, tbPedido.statusPedido)
         VALUES (spIdCliente, spNomeItem, spDataPedido, spValorTotal, spStatusProduto);
 
@@ -275,9 +273,7 @@ create
     definer = root@localhost procedure spUpdatePedido(IN spIdPedido int, IN spIdClient int, IN spDataPedido datetime,
                                                       IN spValorTotal float, IN spStatusPedido varchar(40))
 BEGIN
-    -- Verifica se o pedido existe
     IF EXISTS (SELECT 1 FROM tbPedido WHERE idPedido = spIdPedido) THEN
-        -- Atualiza o pedido
         UPDATE tbPedido
         SET idClient = spIdClient,
             dataPedido = spDataPedido,
@@ -327,5 +323,4 @@ create
 BEGIN
     SELECT * FROM vwPedido pe WHERE pe.idClient = spIdPedido;
 END;
-
 
