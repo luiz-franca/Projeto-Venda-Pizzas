@@ -20,10 +20,10 @@ class LogEstoqueService {
         }
     }
 
-    static async getLogEstoqueId(idLogEstoque) {
+    static async getLogEstoqueIdLogEstoque(idLogEstoque) {
         try {
             if (!idLogEstoque) throw new Error("ID do log de estoque é obrigatório");
-            return await LogEstoqueModel.getLogEstoqueId(idLogEstoque);
+            return await LogEstoqueModel.getLogEstoqueIdLogEstoque(idLogEstoque);
         } catch (error) {
             throw new Error("Erro ao buscar log de estoque por ID: " + error.message);
         }

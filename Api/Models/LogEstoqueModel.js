@@ -37,7 +37,7 @@ class LogEstoqueModel {
         return response[0].affectedRows === 1 ? { "log adicionado": response[0] } : { "log não adicionado": response[0] };
     }
 
-    static async getLogEstoqueId(idLogEstoque) {
+    static async getLogEstoqueIdLogEstoque(idLogEstoque) {
         const sql = `SELECT * FROM tbLogEstoque 
                      WHERE idLogEstoque = ?;`;
         const response = await queryExecute(sql, [idLogEstoque]);
@@ -78,7 +78,7 @@ class LogEstoqueModel {
             quantidadeAlterada: row.quantidadeAlterada,
             dataAlteracao: row.dataAlteracao
         }));
-        return {"Estoque Id sucess": data};
+        return data.length === 0? data: "idEstoque não encontrado";
     }
 
     static async getLogsAdminId(idAdmin) {
@@ -97,7 +97,7 @@ class LogEstoqueModel {
             quantidadeAlterada: row.quantidadeAlterada,
             dataAlteracao: row.dataAlteracao
         }));
-        return {"getAdmin sucess": data};
+        return data;
     }
 }
 module.exports = LogEstoqueModel;
