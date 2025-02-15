@@ -1,7 +1,7 @@
 const ClienteService = require('./../Services/ClienteService');
 
 class ClienteController {
-    // Método para registrar um novo cliente
+
     static async registerCliente(req, res) {
         try {
             const { nomeCliente, telefone, endereco, email } = req.body;
@@ -11,8 +11,6 @@ class ClienteController {
             res.status(400).json({ success: false, message: error.message });
         }
     }
-
-    // Método para buscar todos os clientes
     static async getAllClientes(req, res) {
         try {
             const clientes = await ClienteService.getAllClientes();
