@@ -8,6 +8,8 @@ const EstoqueRoute = require('./Routes/EstoqueRoute');
 const ItemEstoqueRoute = require('./Routes/ItemEstoqueRoute');
 const ItemRoute = require('./Routes/ItemRoute');
 const LogEstoqueRoute = require('./Routes/LogEstoqueRoute');
+const LogPedidoRoute = require('./Routes/LogPedidoRoute');
+const PedidoRoute = require('./Routes/PedidoRoute');
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use('/v1', EstoqueRoute);
 app.use('/v1', ItemEstoqueRoute);
 app.use('/v1', ItemRoute);
 app.use('/v1', LogEstoqueRoute);
+app.use('/v1', LogPedidoRoute);
+app.use('/v1', PedidoRoute);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

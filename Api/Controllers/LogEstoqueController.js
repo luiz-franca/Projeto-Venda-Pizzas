@@ -21,28 +21,31 @@ class LogEstoqueController{
     static async getLogEstoqueIdLogEstoque(req, res) {
         try {
             const { id } = req.params;
-            const log = await LogEstoqueService.getLogEstoqueIdLogEstoque(id);
-            res.status(200).json({ success: true, data: log });
+            const logEstoque = await LogEstoqueService.getLogEstoqueIdLogEstoque(id);
+            if(logEstoque === null){
+                return res.status(404).json({success: false, message: "idLog não existe"})
+            }
+            res.status(200).json({ success: true, data: logEstoque });
         } catch (error) {
             res.status(400).json({ success: false, message: error.message });
         }
     }
-    static async getLogsIdEstoque(req, res){
+    static async getLogIdEstoque(req, res){
         try{
-            const {id} = req.params;
-            const idEstoque = await LogEstoqueService.getLogsEstoqueId(id);
-            if(!idEstoque){
+            const {idEstoque} = req.params;
+            const logs = await LogEstoqueService.getLogEstoqueId(idEstoque);
+            if(logs == null){
                 return res.status(404).json({success: false, message: "Log Estoque não encontrado"});
             }
-            res.status(200).json({success: true, data: idEstoque});
+            res.status(200).json({success: true, data: logs});
         }catch(error){
             res.status(400).json({success: false, message: error.message});
         }
     }
-    static async getLogsEstoqueIdAdmin(req, res){
+    static async getLogEstoqueIdAdmin(req, res){
         try{
             const idAdmin = req.params;
-            const idAdminLogs = await LogEstoqueService.getLogsAdminId(idAdmin);
+            const idAdminLogs = await LogEstoqueService.getLogAdminId(idAdmin);
             if(!idAdmin){
                 res.status(404).json({success: false, message: "idAdmin não encontrado"});
             }

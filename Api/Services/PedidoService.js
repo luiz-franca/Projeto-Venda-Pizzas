@@ -39,10 +39,10 @@ class PedidoService {
         }
     }
 
-    static async getPedidosByUsuarioId(idClient) {
+    static async getPedidosClienteId(idClient) {
         try {
             if (!idClient) throw new Error("ID do cliente é obrigatório");
-            return await PedidoModel.getIdPedidosUsuarios(idClient);
+            return await PedidoModel.getIdPedidosCliente(idClient);
         } catch (error) {
             throw new Error("Erro ao buscar pedidos por ID do cliente: " + error.message);
         }
