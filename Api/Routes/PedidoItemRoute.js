@@ -1,5 +1,5 @@
 const express = require('express');
-const PedidoController = require('./../Controllers/PedidoItemController');
+const PedidoController = require('@controllers/PedidoItemController');
 
 const pedidoItenRoute = express.Router();
 pedidoItenRoute.get('/pedidos-item', PedidoController.getAllPedidoItens);

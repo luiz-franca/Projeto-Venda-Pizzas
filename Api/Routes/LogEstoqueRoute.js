@@ -1,5 +1,5 @@
 const express = require('express');
-const LogEstoqueController = require("./../Controllers/LogEstoqueController");
+const LogEstoqueController = require("@controllers/LogEstoqueController");
 const logEstoqueRoute = express.Router();
 logEstoqueRoute.get("/log-estoque", LogEstoqueController.getAllLogEstoque);
 logEstoqueRoute.post("/log-estoque", LogEstoqueController.insertLogEstoque);

@@ -1,5 +1,5 @@
 const express = require('express');
-const ItemEstoqueController = require('./../Controllers/ItemEstoqueController');
+const ItemEstoqueController = require('@controllers/ItemEstoqueController');
 
 const itemEstoqueRoute = express.Router();
 
