@@ -47,6 +47,13 @@ class PagamentoService {
             throw new Error("Erro ao deletar pagamento: " + error.message);
         }
     }
+    static async getAllPagamentosStatusPedido(){
+        try{
+            return await PagamentoModel.getAllPagamentosStatusPedido();
+        }catch(error){
+            throw new Error(" Erro ao buscar todos os PagamentosStatus");
+        }
+    }
 }
 
 module.exports = PagamentoService;

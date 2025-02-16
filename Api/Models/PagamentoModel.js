@@ -30,6 +30,34 @@ class PagamentoModel{
         return response[0].length === 0? {"Não existe pagamentos": response[0]}: {"Pagamentos": response[0]}
 
     }
+    static async getAllPagamentosStatusPedido(){
+        const sql = `SELECT tc.nomeCliente, tp.valor, 
+                    tp2.valorTotal, 
+                    tc.endereco, 
+                    tc.telefone, 
+                    tc.email, 
+                    tp2.dataPedido ,
+                    tp2.statusPedido, 
+                    tp.dataPagametno, 
+                    tp.formaPagamento FROM tbPagamento tp
+                    INNER JOIN tbPedido tp2 ON tp.idPedido = tp2.idPedido
+                    INNER JOIN tbCliente tc ON tp2.idClient = tc.idCliente;`;
+        const response = await queryExecute(sql);
+        const rows = response[0];
+        const data = mappedRowUtils(rows, row =>({
+            nomeCliente: row.nomeCliente,
+            valor: row.valor,
+            valorTotal: row.valorTotal,
+            endereco: row.endereco,
+            telefone: row.telefone,
+            email: row.email,
+            dataPedido: row.dataPedido,
+            statusPedido: row.statusPedido,
+            dataPagamento: row.dataPagamento,
+            formaPagamento: row.formaPagamento
+        }))
+        return data;
+    }
     static async getPagamentoNome(paramId){
         const sql  = `SELECT * FROM tbPagamento tP WHERE tP.idPagamento = (?);
                         `;

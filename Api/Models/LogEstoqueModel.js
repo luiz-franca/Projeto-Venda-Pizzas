@@ -83,24 +83,5 @@ class LogEstoqueModel {
         }));
         return !data.length === 0? null: data;
     }
-
-    static async getLogAdminId(idAdmin) {
-        const sql = "SELECT * FROM tbLogEstoque tL WHERE tL.idAdmin = ?;";
-        const response = await queryExecute(sql, [idAdmin]);
-        console.log(response)
-        const rows = response[0];
-        if (rows.length === 0) {
-            return null;
-        }
-        const data = mappedRowUtils(rows, row => ({
-            idLogEstoque: row.idLogEstoque,
-            idAdmin: row.idAdmin,
-            idEstoque: row.idEstoque,
-            quantidadeAlterada: row.quantidadeAlterada,
-            dataAlteracao: row.dataAlteracao
-        }));
-        console.log(data)
-        return data;
-    }
 }
 module.exports = LogEstoqueModel;

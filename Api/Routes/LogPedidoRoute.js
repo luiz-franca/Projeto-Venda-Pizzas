@@ -1,5 +1,5 @@
 const express = require('express');
-const LogPedidoController = require('./../Controllers/LogPedidoController');
+const LogPedidoController = require('@controllers/LogPedidoController');
 
 const logPedidoRoute = express.Router();
 logPedidoRoute.post('/logs-pedido', LogPedidoController.insertLogPedido); 

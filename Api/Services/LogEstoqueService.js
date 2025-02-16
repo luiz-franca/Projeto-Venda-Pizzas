@@ -46,15 +46,6 @@ class LogEstoqueService {
             throw new Error("Erro ao buscar logs por ID do estoque: " + error.message);
         }
     }
-
-    static async getLogAdminId(idAdmin) {
-        try {
-            if (!idAdmin) throw new Error("ID do admin é obrigatório");
-            return await LogEstoqueModel.getLogAdminId(idAdmin);
-        } catch (error) {
-            throw new Error("Erro ao buscar logs por ID do admin: " + error.message);
-        }
-    }
 }
 
 module.exports = LogEstoqueService;

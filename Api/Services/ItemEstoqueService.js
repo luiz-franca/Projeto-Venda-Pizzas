@@ -1,5 +1,4 @@
 require('dotenv').config({ path: '../.env' });
-// const ItemEstoqueModel = require('@models/ItemEstoqueModel')
 const ItemEstoqueModel = require('./../Models/ItemEstoqueModel')
 class ItemEstoqueService{
     static async insertItemEstoque(idItem, idEstoque, quantidade){

@@ -42,18 +42,6 @@ class LogEstoqueController{
             res.status(400).json({success: false, message: error.message});
         }
     }
-    static async getLogEstoqueIdAdmin(req, res){
-        try{
-            const idAdmin = req.params;
-            const idAdminLogs = await LogEstoqueService.getLogAdminId(idAdmin);
-            if(!idAdmin){
-                res.status(404).json({success: false, message: "idAdmin não encontrado"});
-            }
-            res.status(200).json({success: true, data: idAdminLogs});
-        }catch(error){
-            res.status(400).json({success: false, message: error.message});
-        }
-    }
     static async deleteLogEstoque(req, res){
         try{
             const {id} = req.params;
