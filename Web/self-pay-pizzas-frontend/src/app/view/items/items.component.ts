@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import {CommonModule,CurrencyPipe} from '@angular/common';
 import {Router,RouterModule} from '@angular/router';
-import * as bootstrap from 'bootstrap';
 import {ItemDto} from '../../dto/item.dto';
 import {AuthService} from '../../services/auth.service';
 import {StockService} from '../../services/stock.service';
 import {PaymentComponent} from '../payment/payment.component';
 import {CustomersComponent} from './../customers/customers.component';
 import { OrdersDetailsComponent } from './../orders/orders-details/orders-details.component';
+import { BootstrapUtil } from '../../util/bootstrap.util';
 
 @Component({
   selector: 'app-items',
@@ -22,25 +22,22 @@ export class ItemsComponent {
     nome!: string;
     idCliente!: string;
     statusCompra!: string;
+    bootstrap!: BootstrapUtil;
 
     constructor(private authService: AuthService, private stockService: StockService,private router: Router){
-      this.startBootstrap();
+      this.bootstrap = new BootstrapUtil();
+      this.bootstrap.startBootstrap();
       this.itens = [];
     }
 
     ngOnInit(){
       this.getItem();
-      this.startBootstrap();
+      this.bootstrap.startBootstrap();
       let usuarioLogado = localStorage.getItem('usuarioLogado') || '{}';
       let usuarioObj = JSON.parse(usuarioLogado);
       this.idCliente = usuarioObj[0].idCliente;
       this.nome = usuarioObj[0].nomeCliente;
       this.statusCompra = localStorage.getItem('compra') || "";
-    }
-
-    startBootstrap(){
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-      const tooltipList = Array.from(tooltipTriggerList).map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     }
 
     getItem(){
@@ -76,7 +73,6 @@ export class ItemsComponent {
     voltar():void{
       let pedido = document.getElementById('orders-details') as HTMLElement;
       pedido.style.display = "none";
-      // this.location.back();
     }
 
     verPedidos(){

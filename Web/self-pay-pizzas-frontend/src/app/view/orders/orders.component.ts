@@ -1,7 +1,6 @@
 import {CommonModule,CurrencyPipe} from '@angular/common';
 import {Component} from '@angular/core';
 import {Router,RouterModule} from '@angular/router';
-import * as bootstrap from 'bootstrap';
 import {ItemDto} from '../../dto/item.dto';
 import {AuthService} from '../../services/auth.service';
 import {StockService} from '../../services/stock.service';
@@ -12,11 +11,13 @@ import {OrdersService} from './../../services/orders.service';
 import {CustomersComponent} from './../customers/customers.component';
 import {ItemsDetailComponent} from './../items/items-detail/items-detail.component';
 import {OrdersDetailsComponent} from './orders-details/orders-details.component';
+import { BootstrapUtil } from '../../util/bootstrap.util';
+
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [RouterModule,OrdersDetailsComponent,CustomersComponent,CurrencyPipe,CommonModule,PaymentComponent,ItemsDetailComponent],
+  imports: [RouterModule,CommonModule,ItemsDetailComponent],
 templateUrl: './orders.component.html',
   styleUrl: './orders.component.css'
 })
@@ -32,6 +33,7 @@ export class OrdersComponent {
   valorComDesconto!:number;
   pedidosFinalizados!: any[];
   item!: any;
+  bootstrap!: BootstrapUtil;
 
   constructor(
     private authService: AuthService,
@@ -40,7 +42,8 @@ export class OrdersComponent {
     private ordersService: OrdersService,
     private ordersUpdateService: OrdersUpdateService
   ){
-    this.startBootstrap();
+    this.bootstrap = new BootstrapUtil();
+    this.bootstrap.startBootstrap();
     this.itens = [];
     this.pedidos = [];
     this.pedidosFinalizados = [];
@@ -49,7 +52,7 @@ export class OrdersComponent {
 
   ngOnInit(){
     this.getItem();
-    this.startBootstrap();
+    this.bootstrap.startBootstrap();
     let usuarioLogado = localStorage.getItem('usuarioLogado') || '{}';
     let usuarioObj = JSON.parse(usuarioLogado);
     this.idCliente = usuarioObj[0].idCliente;
@@ -59,11 +62,6 @@ export class OrdersComponent {
     this.ordersUpdateService.pedidosFinalizados$.subscribe((pedidos:any) => {
       this.pedidosFinalizados = pedidos;
     });
-  }
-
-  startBootstrap(){
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = Array.from(tooltipTriggerList).map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
   }
 
   getItem(){
@@ -92,7 +90,6 @@ export class OrdersComponent {
   voltar():void{
     let pedido = document.getElementById('orders-details') as HTMLElement;
     pedido.style.display = "none";
-    // this.location.back();
   }
 
   verPedidos(){
@@ -109,7 +106,6 @@ export class OrdersComponent {
     pedidos.forEach(element => {
       this.valorTotal += element.valorTotal;
     });
-    // this.valorTotal = +(this.valorTotal * this.quantidade).toFixed(2);
     this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
     this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
   }

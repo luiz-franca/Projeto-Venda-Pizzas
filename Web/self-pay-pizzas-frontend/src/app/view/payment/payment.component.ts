@@ -2,10 +2,14 @@ import {CommonModule} from '@angular/common';
 import {Component} from '@angular/core';
 import {FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-import {PaymentMethod} from '../../enum/PaymentMethod.enum';
+import {ClienteInfoCard} from '../../dto/cliente-info-card';
+import {ItemDto} from '../../dto/item.dto';
 import {PaymentService} from '../../services/payment.service';
 import {OrdersService} from './../../services/orders.service';
 import {StockService} from './../../services/stock.service';
+import { OrdersDto } from '../../dto/orders.dto';
+import { StockDto } from '../../dto/stock.dto';
+import { SweetalertUtil } from '../../util/sweetalert.util';
 
 @Component({
   selector: 'app-payment',
@@ -17,28 +21,23 @@ templateUrl: './payment.component.html',
 
 
 export class PaymentComponent {
-  paymentMethod: string = '';
-  deliveryMethod: string = '';
-  pixKey: string = '00020126330014BR.GOV.BCB.PIX0111+5511999999995520400005303986540540.005802BR5920Fulano de Tal6009SAO PAULO62070503***6304F9B3';
-  qrCodeUrl: string = '';
-  method =  PaymentMethod.Pix;
-  pedidos!: any[];
+  paymentMethod: string;
+  deliveryMethod: string;
+  pixKey: string;
+  qrCodeUrl: string;
+  pedidos!: OrdersDto[];
   desconto!: number;
   valorTotal!: number;
   quantidade!: number;
   valorComDesconto!: number;
   idCliente!: number;
   stock!: any;
-  item!: any;
+  item!: ItemDto[];
   stockbyId!: any;
   stockList!: any[];
   paymentForm: FormGroup;
-  clienteInfo = {
-    cardName: 'Nome cliente',
-    cardNumber: '4785985636521452',
-    cardExpiry: '10/30',
-    cardCvv: '123'
-  };
+  clienteInfo!: ClienteInfoCard;
+  swal!: SweetalertUtil;
 
   constructor(
   private paymentService: PaymentService,
@@ -52,6 +51,14 @@ export class PaymentComponent {
     this.quantidade = 0;
     this.valorTotal = 0;
     this.valorTotal = +(this.valorTotal * this.quantidade).toFixed(2);
+    this.clienteInfo = new ClienteInfoCard();
+    this.swal = new SweetalertUtil();
+    this.clienteInfo = {
+      cardName: 'Nome cliente',
+      cardNumber: '4785985636521452',
+      cardExpiry: '10/30',
+      cardCvv: '123'
+    };
     this.paymentForm = this.fb.group({
       deliveryMethod: ['retirada', Validators.required],
       paymentOnDelivery: [''],
@@ -61,6 +68,10 @@ export class PaymentComponent {
       cardExpiry: ['', [Validators.required, Validators.pattern('(0[1-9]|1[0-2])/[0-9]{2}')]],
       cardCvv: ['', [Validators.required, Validators.pattern('[0-9]{3}')]]
     });
+    this.paymentMethod = '';
+    this.deliveryMethod = '';
+    this.pixKey = '00020126330014BR.GOV.BCB.PIX0111+5511999999995520400005303986540540.005802BR5920Fulano de Tal6009SAO PAULO62070503***6304F9B3';
+    this.qrCodeUrl = '';
   }
 
   ngOnInit(){
@@ -162,7 +173,7 @@ export class PaymentComponent {
   updateOrder(id:number,idClient:number, dataPedido:string, valorTotal:number, statusPedido:string, quantidade:number){
     this.ordersService.updateOrder(id,idClient, dataPedido, valorTotal, statusPedido, quantidade).subscribe({
       next: (res:any)=>{
-        
+
       }
     })
   }
@@ -195,63 +206,13 @@ export class PaymentComponent {
     })
   }
 
-  removeStock(id:number){
-    this.stockService.removeStock(id).subscribe({
-      next: ()=>{
-
-      }
-    })
-  }
-
-  getItems(){
-    this.stockService.getItems().subscribe({
-      next: (res:any)=>{
-        this.item = res.data;
-      }
-    })
-  }
-
   onSubmit(idPedido:number, valor:number, formaPagamento:any){
     if (this.paymentForm.invalid) {
-      return; // Impede o envio caso o formulário seja inválido
+      return;
     }
     this.efetuarPagamento(idPedido, valor, formaPagamento);
-    this.carregandoDados();
-  }
-
-  carregandoDados(){
-    let timerInterval:any;
-    (window as any).Swal.fire({
-      title: "Carregando...",
-      html: "Efetuando pagamento",
-      timer: 1000,
-      timerProgressBar: true,
-      didOpen: () => {
-        (window as any).Swal.showLoading();
-        const timer = (window as any).Swal.getPopup().querySelector("b");
-        timerInterval = setInterval(() => {
-          timer.textContent = `${(window as any).Swal.getTimerLeft()}`;
-        }, 100);
-      },
-      willClose: () => {
-        clearInterval(timerInterval);
-      }
-    }).then((result:any) => {
-      if (result.dismiss === (window as any).Swal.DismissReason.timer) {
-        this.sucessoItem();
-      }
-    });
-  }
-
-  sucessoItem(){
-    (window as any).Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Pgamento feito com sucesso.",
-      showConfirmButton: false,
-      timer: 1500
-    });
     this.voltar();
+    this.swal.carregandoDados("Efetuando pagamento","Pagamento feito com sucesso.");
   }
 
 }

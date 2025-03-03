@@ -4,14 +4,14 @@ import {ActivatedRoute,RouterModule} from '@angular/router';
 import {ItemDto} from '../../../dto/item.dto';
 import {OrdersDto} from '../../../dto/orders.dto';
 import {StockService} from '../../../services/stock.service';
+import {SweetalertUtil} from '../../../util/sweetalert.util';
 import {OrdersUpdateService} from './../../../services/order-update.service';
 import {OrdersService} from './../../../services/orders.service';
-import {CustomersComponent} from './../../customers/customers.component';
 
 @Component({
   selector: 'app-orders-details',
   standalone: true,
-  imports: [RouterModule,CustomersComponent,CurrencyPipe],
+  imports: [RouterModule,CurrencyPipe],
 templateUrl: './orders-details.component.html',
   styleUrl: './orders-details.component.css'
 })
@@ -27,6 +27,7 @@ export class OrdersDetailsComponent implements OnChanges{
   precoItem!: number;
   adminLogado!: string;
   @Input() id!: string;
+  swal!: SweetalertUtil;
   constructor(
     private active: ActivatedRoute,
     private location: Location,
@@ -47,7 +48,8 @@ export class OrdersDetailsComponent implements OnChanges{
     };
     this.pedidos = [];
     this.precoItem = this.pedido.precoItem;
-    this.dataAtual = JSON.stringify(new Date());
+    this.dataAtual = new Date().toLocaleString('en-CA', { hour12: false }).replace(',', '');
+    this.swal = new SweetalertUtil();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -79,46 +81,38 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         this.pedido = res.data[0];
         this.precoItem = this.pedido.precoItem;
+      }, error: (err: Error)=>{
+    this.swal.erroItem(`Erro. Causa: ${err}`)
       }
     })
   }
 
-getOrderById(id:number,quantidade:number){
+  getOrderById(id:number,quantidade:number){
     this.ordersService.getOrderById(id).subscribe({
       next: (res) => {
         this.pedidos = res.data;
         this.addLogOrder(+this.adminLogado,this.pedidos[this.pedidos.length - 1].idPedido,"em producao");
         let meuPedido = this.pedidos[this.pedidos.length - 1];
         this.addItemToOrder(meuPedido.idPedido,+this.id, quantidade,meuPedido.valorTotal);
-        this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);  // Atualiza os outros componentes
-      }, error: ()=>{
-        console.log("Não existe pedidos");
+        this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
+      }, error: (err: Error)=>{
+        this.swal.erroItem(`Erro. Causa: ${err}`)
       }
     })
   }
 
   addItemToOrder(pedidoIdItem:number, itemId:number, quantidade:number, subtotal:number){
-    // console.log(this.idPedido)
-    // if(this.idPedido === undefined){
-      this.ordersService.addItemToOrder(pedidoIdItem, itemId, quantidade, subtotal).subscribe({
-        next: (res:any)=>{
-          localStorage.setItem('novoPedido', JSON.stringify(res.data));
-          // localStorage.setItem('compra','finalizada')
-          // this.statusCompra = localStorage.getItem('compra') || "";
-          // this.getOrderById(this.idCliente);
-        }
-      })
-    // }else{
-    //   this.ordersService.updateItemToOrder(10, pedidoIdItem, itemId, quantidade, subtotal).subscribe({
-    //     next: (res:any)=>{
-    //       console.log(res);
-    //     }
-    //   })
-    // }
-    // this.voltar();
+    this.ordersService.addItemToOrder(pedidoIdItem, itemId, quantidade, subtotal).subscribe({
+      next: (res:any)=>{
+        localStorage.setItem('novoPedido', JSON.stringify(res.data));
+      }, error: (err: Error)=>{
+        this.swal.erroItem(`Erro. Causa: ${err}`)
+      }
+    })
   }
 
   voltar():void{
+    this.quantidade = 1;
     let pedido = document.getElementById('orders-details') as HTMLElement;
     pedido.style.display = "none";
   }
@@ -137,61 +131,24 @@ getOrderById(id:number,quantidade:number){
     }
   }
 
-  adicionarAoCarrinho(){
-    let pedido = document.getElementById('customers') as HTMLElement;
-    pedido.style.display = "block";
-    this.voltar();
-  }
-
   addOrder(idClient:number, dataPedido:string, valorTotal:number, quantidade:number,statusPedido:string){
     this.ordersService.addOrder(idClient, dataPedido, valorTotal, statusPedido, quantidade).subscribe({
       next: (res:any)=>{
         this.getOrderById(this.idCliente, quantidade);
         this.getOrders();
-        // this.getItemOrderById(this.idCliente);
+      }, error: (err: Error)=>{
+        this.swal.erroItem(`Erro. Causa: ${err}`)
       }
     })
     this.voltar();
   }
 
-  carregandoDados(){
-    let timerInterval:any;
-    (window as any).Swal.fire({
-      title: "Carregando...",
-      html: "Adicionando novo item ao pedido",
-      timer: 1000,
-      timerProgressBar: true,
-      didOpen: () => {
-        (window as any).Swal.showLoading();
-        const timer = (window as any).Swal.getPopup().querySelector("b");
-        timerInterval = setInterval(() => {
-          timer.textContent = `${(window as any).Swal.getTimerLeft()}`;
-        }, 100);
-      },
-      willClose: () => {
-        clearInterval(timerInterval);
-      }
-    }).then((result:any) => {
-      if (result.dismiss === (window as any).Swal.DismissReason.timer) {
-        this.sucessoItem();
-      }
-    });
-  }
-
-  sucessoItem(){
-    (window as any).Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Item adicionado ao pedido.",
-      showConfirmButton: false,
-      timer: 1500
-    });
-  }
-
   getOrders(){
     this.ordersService.getOrder().subscribe({
       next:()=>{
-        this.carregandoDados();
+        this.swal.carregandoDados("Adicionando novo item ao pedido","Item adicionado ao pedido.");
+      }, error: (err: Error)=>{
+        this.swal.erroItem(`Erro. Causa: ${err}`)
       }
     })
   }
@@ -201,14 +158,8 @@ getOrderById(id:number,quantidade:number){
     this.ordersService.addLogOrder(idAdmin, idPedido, statusAlteradoPara).subscribe({
       next: (res:any)=>{
         //
-      }
-    })
-  }
-
-  getItemOrderById(id: number){
-    this.ordersService.getItemOrderById(id).subscribe({
-      next: (res:any)=>{
-        console.log(res.data);
+      }, error: (err: Error)=>{
+        this.swal.erroItem(`Erro. Causa: ${err}`)
       }
     })
   }
