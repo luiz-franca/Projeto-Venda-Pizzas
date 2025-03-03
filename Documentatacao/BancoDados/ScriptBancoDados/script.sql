@@ -95,7 +95,8 @@ CREATE PROCEDURE spUpdatePedido(
     IN spIdClient INT,
     IN spDataPedido DATETIME,
     IN spValorTotal FLOAT,
-    IN spStatusPedido VARCHAR(40)
+    IN spStatusPedido VARCHAR(40),
+    IN spQUantidade INT
 )
 BEGIN
     -- Verifica se o pedido existe
@@ -105,7 +106,8 @@ BEGIN
         SET idClient = spIdClient,
             dataPedido = spDataPedido,
             valorTotal = spValorTotal,
-            statusPedido = spStatusPedido
+            statusPedido = spStatusPedido,
+            quantidade = spQuantidade
         WHERE idPedido = spIdPedido;
 
         SELECT 'Pedido Alterado Com Sucesso' AS mensagem;

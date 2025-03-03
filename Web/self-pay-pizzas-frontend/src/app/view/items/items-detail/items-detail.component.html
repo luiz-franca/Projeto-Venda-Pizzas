@@ -1,0 +1,50 @@
+<!-- Modal -->
+<div class="modal" id="pizzaOrderModal" tabindex="-1" aria-labelledby="pizzaOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="pizzaOrderModalLabel">Suas Pizzas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="cart">
+          <div class="cart--item">
+            <div class="d-flex align-items-center mb-3">
+              <div class="mx-2"><strong>Status do pedido: </strong>{{statusPedido}}</div>
+            </div>
+            @for (pedido of item; track $index) {
+              <div class="d-flex align-items-center mb-3">
+                <div class="mx-2">{{pedido.quantidade}}</div>
+                <img src="images/pizza3.png" class="me-3" style="width: 50px; height: 50px;">
+                <div class="flex-grow-1">
+                  <div class="cart--item-nome">{{pedido.valorTotal | currency:'BRL'}}</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <hr>
+        <div class="cart--details">
+          <div class="d-flex justify-content-between">
+            <span>Subtotal</span>
+            <span>{{valorTotal | currency:'BRL'}}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Desconto (-10%)</span>
+            <span>{{desconto | currency:'BRL'}}</span>
+          </div>
+          <div class="d-flex justify-content-between fw-bold">
+            <span>Total</span>
+            <span>{{valorComDesconto | currency:'BRL'}}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Botão para abrir o modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pizzaOrderModal">
+  Ver Carrinho
+</button>

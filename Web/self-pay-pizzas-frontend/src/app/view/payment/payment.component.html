@@ -1,0 +1,99 @@
+
+<div class="modal-overlay">
+  <div class="modal-container">
+
+      <div class="container card">
+        <h2 class="mb-4 mt-3 text-center">Pagamento</h2>
+
+        <form [formGroup]="paymentForm" (ngSubmit)="onSubmit( idCliente,valorComDesconto,paymentMethod)">
+          <div class="payment-card card p-4 d-grid">
+            <div class="mx-2 p-2 card mt-2">
+              <label class="form-label">
+                <strong>
+                  Itens do Pedido
+                </strong>
+              </label>
+              <hr>
+              <ul class="mb-3">
+                @for (pedido of pedidos; track $index) {
+                  <li style="list-style:none;">{{pedido.nomeItem}} - {{pedido.valorTotal | currency:'BRL'}}</li>
+                }
+              </ul>
+              <hr>
+
+              <h5>{{valorComDesconto | currency:'BRL' }}</h5>
+
+              <div class="mb-3">
+                <label class="form-label">
+                  <strong>
+                    Forma de Entrega
+                  </strong>
+                </label>
+                <select  formControlName="deliveryMethod" class="form-select" [(ngModel)]="deliveryMethod" (change)="onDeliveryMethodChange()">
+                  <option value="retirada">Retirada no Local</option>
+                  <option value="entrega">Entrega</option>
+                </select>
+              </div>
+
+              <div *ngIf="deliveryMethod === 'entrega'" class="mb-3">
+                <label class="form-label">
+                  <strong>
+                    Pagamento pela Entrega
+                  </strong>
+                </label>
+                <select formControlName="paymentOnDelivery" class="form-select">
+                  <option value="online">Online</option>
+                  <option value="na_entrega">Durante a Entrega</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mx-2 p-2 card mt-2">
+              <div class="mb-3">
+                <label class="form-label">
+                  <strong>
+                    Forma de Pagamento
+                  </strong>
+                </label>
+                <select  formControlName="paymentMethod"  class="form-select" [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange()">
+                  <option value="pix">Pix</option>
+                  <option value="debito">Cartão de Débito</option>
+                  <option value="credito">Cartão de Crédito</option>
+                  <option value="dinheiro">Dinheiro</option>
+                </select>
+              </div>
+
+              <div *ngIf="paymentMethod === 'credito' || paymentMethod === 'debito'" class="mb-3">
+                <label class="form-label">
+                  <strong>
+                    Dados do Cartão
+                  </strong>
+                </label>
+                <input formControlName="cardName" type="text" class="form-control mb-2" placeholder="Nome no Cartão">
+                <input formControlName="cardNumber" type="text" class="form-control mb-2" placeholder="Número do Cartão">
+                <input formControlName="cardExpiry" type="text" class="form-control mb-2" placeholder="Validade (MM/AA)">
+                <input formControlName="cardCvv" type="text" class="form-control" placeholder="CVV">
+              </div>
+
+              <div *ngIf="paymentMethod === 'pix'" class="mb-3">
+                <label class="form-label">
+                  <strong>
+                    Pagamento via Pix
+                  </strong>
+                </label>
+                <img [src]="qrCodeUrl" alt="QR Code Pix" class="d-block mx-auto mb-2">
+                <textarea class="form-control" readonly>{{ pixKey }}</textarea>
+              </div>
+            </div>
+
+          </div>
+          <div class="d-flex flex-column align-items-center" >
+            <button [disabled]="paymentForm.invalid" type="submit" class="btn btn-primary mb-2 rounded-pill mt-2 w-50">Confirmar Pagamento</button>
+            <button (click)="cancelarPagamento()" class="btn btn-danger rounded-pill mb-2 w-50 text-center">Cancelar</button>
+          </div>
+        </form>
+
+      </div>
+
+  </div>
+</div>

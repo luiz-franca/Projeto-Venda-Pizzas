@@ -1,0 +1,51 @@
+
+<div class="pizzaWindowArea">
+    <div class="pizzaWindowBody">
+        <div class="pizzaBig">
+            <img [src]="pedido.imagemUrl" />
+        </div>
+        <div class="pizzaInfo">
+            <h1>--{{ pedido.nomeItem }}</h1>
+            <div class="pizzaInfo--desc">--{{ pedido.descricaoItem }}</div>
+            <div class="pizzaInfo--sizearea">
+                <div class="pizzaInfo--sector">Tamanho</div>
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
+                  <label class="btn btn-outline-info"  for="btnradio1">PEQUENO
+                    <span class="text-secondary">
+                      {{sizes[0]}}
+                    </span>
+                  </label>
+
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                  <label class="btn btn-outline-info" for="btnradio2">MÉDIO
+                    <span class="text-secondary">
+                      {{sizes[1]}}
+                    </span>
+                  </label>
+
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked>
+                  <label class="btn btn-outline-info" for="btnradio3">GRANDE
+                    <span class="text-secondary">
+                      {{sizes[2]}}
+                    </span>
+                  </label>
+                </div>
+            </div>
+            <div class="pizzaInfo--pricearea">
+                <div class="pizzaInfo--sector">Preço</div>
+                <div class="pizzaInfo--price">
+                    <div class="pizzaInfo--actualPrice">{{ precoItem | currency:'BRL':'symbol':'1.2-2':'pt-BR'}}</div>
+                    <div class="pizzaInfo--qtarea">
+                        <button (click)="diminuirQuantidade(precoItem)" class="pizzaInfo--qtmenos">-</button>
+                        <div class="pizzaInfo--qt">{{quantidade}}</div>
+                        <button (click)="aumentarQuantidade(precoItem)" class="pizzaInfo--qtmais">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="btn btn-success m-1 p-3 rounded-pill" (click)="addOrder(idCliente,dataAtual,precoItem,quantidade,'pendente')">Adicionar ao carrinho</div>
+            <button (click)="voltar()" class="btn btn-danger m-1 p-3 rounded-pill">Cancelar</button>
+        </div>
+    </div>
+</div>
+

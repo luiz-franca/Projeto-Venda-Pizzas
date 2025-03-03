@@ -62,7 +62,7 @@ class AdminService{
             }
             const checkAdmin = await AdminModel.findLogin(loginAdmin);
             if(checkAdmin === null){
-                 return "usuário não encotrado";
+                 return "usuário não encontrado";
             }
             const senhaValida = await bcrypt.compare(senhaAdmin, checkAdmin[0].senhaAdmin)
             if(!senhaValida){
@@ -71,8 +71,8 @@ class AdminService{
             const token = jwt.sign(
                 {id: checkAdmin.idAmin, 
                 login: checkAdmin.loginAdmin
-                }, process.env.JWTSECRET,
-                {expiresIn: process.env.TOKENEXPIRATION
+                }, process.env.JWT_SECRET,
+                {expiresIn: process.env.TOKEN_EXPIRATION || "1h"
                 })  
             return {token,checkAdmin}
         }catch(error){

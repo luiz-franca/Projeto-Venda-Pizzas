@@ -73,7 +73,7 @@ class PagamentoModel{
         const response = await queryExecute(sql, [
             this.idPedido,
             this.valor,
-            this.formaPagamento
+            String(this.formaPagamento)
         ]);
         return await response.length === 2? {"Insert Response": response[0][0]}: {"Insert Erro": response};
     }

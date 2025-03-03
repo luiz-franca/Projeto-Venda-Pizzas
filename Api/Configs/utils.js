@@ -1,11 +1,11 @@
 require('dotenv').config({path: '../.env'});
 
 const acessEnvs = {
-    userAcess: process.env.USERACESS,
-    hostAcess: process.env.HOSTACESS,
-    passwordAcess: process.env.PASSWORDACESS,
-    databaseAcess: process.env.DATABASEACESS,
-    portaAcess: process.env.PORTACESS
+    userAcess: process.env.DB_USER,
+    hostAcess: process.env.DB_HOST,
+    passwordAcess: process.env.DB_PASSWORD,
+    databaseAcess: process.env.DB_NAME,
+    portaAcess: process.env.PORT
 }
 
 function handleDatabaseErro(erro){

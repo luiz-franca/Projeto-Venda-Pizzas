@@ -37,7 +37,8 @@ class PedidoItemModel{
         tI.precoItem,
         tP.statusPedido,
         tPi.subtotal,
-        tP.valorTotal
+        tP.valorTotal,
+        tP.quantidade
         FROM tbPedidoItem tPi
         INNER JOIN tbPedido tP ON tPi.pedidoIdItem = tP.idPedido
         INNER JOIN tbCliente tC ON tP.idClient = tC.idCliente
@@ -51,7 +52,8 @@ class PedidoItemModel{
             precotItem: row.precoItem,
             statusPedido: row.statusPedido,
             subtotal: row.subtotal,
-            valorTotal: row.valorTotal
+            valorTotal: row.valorTotal,
+            quantidade: row.quantidade
         }))
         return data;
     }
@@ -68,7 +70,8 @@ class PedidoItemModel{
         tI.precoItem,
         tP.statusPedido,
         tPi.subtotal,
-        tP.valorTotal
+        tP.valorTotal,
+        tP.quantidade
         FROM tbPedidoItem tPi
         INNER JOIN tbPedido tP ON tPi.pedidoIdItem = tP.idPedido
         INNER JOIN tbCliente tC ON tP.idClient = tC.idCliente

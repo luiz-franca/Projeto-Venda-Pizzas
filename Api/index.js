@@ -33,7 +33,7 @@ app.use('/v1', PedidoRoute);
 app.use('/v1', PedidoItemRoute);
 app.use('/v1', PagamentoRoute);
 
-const PORT = process.env.PORT || 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Servidor iniciado na porta => ${PORT}`);
 });

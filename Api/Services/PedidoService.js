@@ -10,20 +10,20 @@ class PedidoService {
         }
     }
 
-    static async insertPedido(idClient, dataPedido, valorTotal, statusPedido) {
+    static async insertPedido(idClient, dataPedido, valorTotal, statusPedido, quantidade) {
         try {
-            if (!idClient || !dataPedido || !valorTotal || !statusPedido) throw new Error("Todos os campos são obrigatórios");
-            const newPedido = new PedidoModel(null, idClient, dataPedido, valorTotal, statusPedido);
+            if (!idClient || !dataPedido || !valorTotal || !statusPedido || !quantidade) throw new Error("Todos os campos são obrigatórios");
+            const newPedido = new PedidoModel(null, idClient, dataPedido, valorTotal, statusPedido, quantidade);
             return await newPedido.insertPedido();
         } catch (error) {
             throw new Error("Erro ao inserir pedido: " + error.message);
         }
     }
 
-    static async updatePedido(idPedido, idClient, dataPedido, valorTotal, statusPedido) {
+    static async updatePedido(idPedido, idClient, dataPedido, valorTotal, statusPedido, quantidade) {
         try {
-            if (!idPedido || !idClient || !dataPedido || !valorTotal || !statusPedido) throw new Error("Todos os campos são obrigatórios");
-            const pedido = new PedidoModel(null, idClient, dataPedido, valorTotal, statusPedido);
+            if (!idPedido || !idClient || !dataPedido || !valorTotal || !statusPedido || !quantidade) throw new Error("Todos os campos são obrigatórios");
+            const pedido = new PedidoModel(null, idClient, dataPedido, valorTotal, statusPedido,quantidade);
             return await pedido.updatePedido(idPedido);
         } catch (error) {
             throw new Error("Erro ao atualizar pedido: " + error.message);

@@ -1,0 +1,91 @@
+
+<body>
+  <main>
+    <nav class="navbar navbar-danger sticky-top bg-danger shadow">
+      <div class="container-fluid">
+        <div class="navbar-brand text-white">
+           <img src="images\self-crop.png" alt="draw" width="30" class="d-inline-block align-text-top rounded-pill">
+          Self Pay Pizzas
+        </div>
+        <div>
+          <a class="text-white me-4"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            data-bs-title="Sair"
+            (click)="logout()"
+          >
+            <i class="bi bi-door-open-fill"></i>
+          </a>
+          <a class="text-white me-4 position-relative"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            data-bs-title="Pedidos"
+            (click)="verPedidos()"
+          >
+            <i class="bi bi-cart-fill"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+              1
+              <span class="visually-hidden">unread messages</span>
+            </span>
+        </a>
+        <a class="text-white me-4 position-relative"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="Minha conta"
+        (click)="verConta()"
+      >
+        <i class="bi bi-person"></i>
+    </a>
+        </div>
+      </div>
+    </nav>
+    <div class="pedidos-area">
+
+    </div>
+    <!-- <h2 class="m-3">Pizzas - Sabores</h2> -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="m-3 h2">Pizzas - Sabores</h1>
+    </div>
+    <div class="models pizza-area">
+      @for (item of itens; track $index) {
+
+          <div class="pizza-item">
+              <!-- <a [routerLink]="['/orders',buscarOrderPorId(item.id)]"> -->
+              <a (click)="adicionarPedido(item.idItem)"
+              [attr.disabled]="statusCompra =='finalizada'"
+              [ngStyle]="{ 'pointer-events': statusCompra =='finalizada' ? 'none' : 'auto', 'opacity': statusCompra =='finalizada' ? '0.5' : '1' }"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                data-bs-title="Adicionar ao pedido"
+              >
+                  <div class="pizza-item--img"><img [src]="item.imagemUrl"  alt="{{ item.nomeItem }}"/></div>
+                  <div class="pizza-item--add btn btn-primary">
+                    <i class="bi bi-plus"></i>
+                  </div>
+              </a>
+              <div class="pizza-item--price">{{item.precoItem | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
+              <div class="pizza-item--name">--{{item.nomeItem}}</div>
+              <div class="pizza-item--desc">--{{item.descricaoItem}}</div>
+          </div>
+
+        } @empty {
+        <li>There are no items.</li>
+        }
+    </div>
+    <div id="orders-details" style="display: none;">
+      <app-orders-details [id]="id"></app-orders-details>
+    </div>
+  </main>
+
+    <div id="customers" style="display: none;">
+      <app-customers></app-customers>
+    </div>
+
+    <div id="payment" style="display: none;">
+      <app-payment></app-payment>
+    </div>
+
+</body>
+
+
+

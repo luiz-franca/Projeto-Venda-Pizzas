@@ -1,0 +1,50 @@
+<section class="mb-5">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="images/self.png" class="img-fluid rounded-pill" alt="Self Pay Pizza" width="500">
+      </div>
+
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0">Acesse sua conta</p>
+          </div>
+
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="email" id="email" class="form-control form-control-lg"
+              placeholder="Digite seu email" formControlName="email" />
+            <label class="form-label" for="email">Email</label>
+            @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+              <div class="text-danger">Email inválido!</div>
+            }
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+            <input type="password" id="password" class="form-control form-control-lg"
+              placeholder="Digite sua senha" formControlName="password" />
+            <label class="form-label" for="password">Senha</label>
+            @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+              <div class="text-danger">A senha deve ter pelo menos 6 caracteres.</div>
+            }
+          </div>
+
+          @if (errorMessage) {
+            <div class="text-danger">{{ errorMessage }}</div>
+          }
+
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-danger btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;" [disabled]="loginForm.invalid">
+              Entrar
+            </button>
+            <p class="small fw-bold mt-2 pt-1 mb-0">É cliente? <a routerLink="/auth/customers"
+              class="link-danger">Entrar</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

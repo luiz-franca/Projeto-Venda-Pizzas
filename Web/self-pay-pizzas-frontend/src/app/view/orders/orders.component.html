@@ -1,0 +1,58 @@
+
+<body>
+  <main>
+    <nav class="navbar navbar-danger sticky-top bg-danger shadow">
+      <div class="container-fluid">
+        <div class="navbar-brand text-white">
+           <img src="images\self-crop.png" alt="draw" width="30" class="d-inline-block align-text-top rounded-pill">
+          Self Pay Pizzas
+        </div>
+        <div>
+          <a class="text-white me-4"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            data-bs-title="Sair"
+            (click)="logout()"
+          >
+            <i class="bi bi-door-open-fill"></i>
+          </a>
+
+        <a class="text-white me-4 position-relative"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="Pedidos"
+        (click)="verItems()"
+      >
+        <i class="bi bi-list"></i>
+       </a>
+        </div>
+      </div>
+    </nav>
+    <div class="pedidos-area">
+
+    </div>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="m-3 h2">Meus Pedidos</h1>
+    </div>
+    <div class="models pizza-area">
+      @for (item of pedidosFinalizados; track $index) {
+          <div class="pizza-item container card p-5 rounded-pill">
+              <a (click)="verPedido(item.idItem)"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                data-bs-title="Adicionar ao pedido"
+              >
+                  Pedido Nº {{$index + 1}}
+              </a>
+              <app-items-detail [item]="item"></app-items-detail>
+          </div>
+        } @empty {
+        <li>Sem pedidos</li>
+        }
+    </div>
+
+  </main>
+
+</body>
+
+

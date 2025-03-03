@@ -11,8 +11,8 @@ class PedidoController {
     }
     static async insertPedido(req, res) {
         try {
-            const { idClient, dataPedido, valorTotal, statusPedido } = req.body;
-            const newPedido = await PedidoService.insertPedido(idClient, dataPedido, valorTotal, statusPedido);
+            const { idClient, dataPedido, valorTotal, statusPedido, quantidade } = req.body;
+            const newPedido = await PedidoService.insertPedido(idClient, dataPedido, valorTotal, statusPedido, quantidade);
             res.status(201).json({ success: true, data: newPedido });
         } catch (error) {
             res.status(400).json({ success: false, message: error.message });
@@ -21,8 +21,8 @@ class PedidoController {
     static async updatePedido(req, res) {
         try {
             const { id } = req.params;
-            const { idClient, dataPedido, valorTotal, statusPedido } = req.body;
-            const updatedPedido = await PedidoService.updatePedido(id, idClient, dataPedido, valorTotal, statusPedido);
+            const { idClient, dataPedido, valorTotal, statusPedido , quantidade } = req.body;
+            const updatedPedido = await PedidoService.updatePedido(id, idClient, dataPedido, valorTotal, statusPedido, quantidade);
             res.status(200).json({ success: true, data: updatedPedido });
         } catch (error) {
             res.status(400).json({ success: false, message: error.message });

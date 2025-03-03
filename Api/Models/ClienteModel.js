@@ -32,11 +32,17 @@ class ClienteModel{
         const response  = await queryExecute(sql,[idParam]);
         return  response[0];
     }
+    async findLogin(nomeCliente) {
+        const sql = "SELECT * FROM tbCliente WHERE nomeCliente = ? LIMIT 1;";
+        const response = await queryExecute(sql, [nomeCliente]);
+        return response[0].length === 0? null : response[0] ;
+    }
     async insertCliente() {
         const sql = `INSERT INTO tbCliente (nomeCliente, telefone, endereco, email) 
                      VALUES (?,?,?,?);`;
         const response  = await  queryExecute(sql,[this.nomeCliente, this.telefone, this.endereco, this.email]);
-        return await response[0].affectedRows === 1? "Cliente adicionado": "Erro ao adicionar cliente";
+        const cliente = await this.findLogin(this.nomeCliente);
+        return await response[0].affectedRows === 1? ["Cliente adicionado",cliente]: "Erro ao adicionar cliente";
     }
     async updateCliente(updateIdCliente) {
         const sql = "CALL spUpdateCliente(?,?,?,?,?);";

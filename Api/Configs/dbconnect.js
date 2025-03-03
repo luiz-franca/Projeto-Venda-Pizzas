@@ -6,7 +6,7 @@ const credenciaisDB = mysql.createPool({
     user: acessEnvs.userAcess,
     password: acessEnvs.passwordAcess,
     database: acessEnvs.databaseAcess,
-    port: acessEnvs.portaAcess
+    port: acessEnvs.portaAcess,
 })
 const connectionToDataBase = async () => {
     try {
