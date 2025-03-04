@@ -10,37 +10,21 @@ create table tbAdmin
 
 create table tbCliente
 (
-    idCliente   int auto_increment
-        primary key,
-    nomeCliente varchar(60) not null,
-    telefone    varchar(40) not null,
-    endereco    varchar(40) not null,
-    email       varchar(40) not null
+    primary key (idCliente)
 );
 
 create table tbEstoque
 (
-    idEstoque  int auto_increment
-        primary key,
-    nomeInsumo varchar(50) not null,
-    quantidade int         not null
+    primary key (idEstoque)
 );
 
 create table tbItem
 (
-    idItem        int auto_increment
-        primary key,
-    nomeItem      varchar(60)  not null,
-    precoItem     float        not null,
-    descricaoItem varchar(60)  not null,
-    imagemUrl     varchar(500) null
+    primary key (idItem)
 );
 
 create table tbItemEstoque
 (
-    idItem     int not null,
-    idEstoque  int not null,
-    quantidade int null,
     primary key (idItem, idEstoque),
     constraint tbItemEstoque_ibfk_1
         foreign key (idItem) references tbItem (idItem),
@@ -53,12 +37,7 @@ create index idEstoque
 
 create table tbLogEstoque
 (
-    idLogEstoque       int auto_increment
-        primary key,
-    idAdmin            int                                 null,
-    idEstoque          int                                 null,
-    quantidadeAlterada int                                 null,
-    dataAlteracao      timestamp default CURRENT_TIMESTAMP null,
+    primary key (idLogEstoque),
     constraint tbAdmin_logEstoque
         foreign key (idAdmin) references tbAdmin (idAdmin)
             on delete cascade,
@@ -71,12 +50,7 @@ create index idEstoque
 
 create table tbPedido
 (
-    idPedido     int auto_increment
-        primary key,
-    idClient     int                                                                              null,
-    dataPedido   datetime default CURRENT_TIMESTAMP                                               null,
-    valorTotal   float                                                                            not null,
-    statusPedido enum ('pendente', 'em_preparação', 'saiu_para_entrega', 'entregue', 'cancelado') not null,
+    primary key (idPedido),
     constraint fk_idclient
         foreign key (idClient) references tbCliente (idCliente)
             on delete cascade
@@ -84,12 +58,7 @@ create table tbPedido
 
 create table tbLogPedido
 (
-    idLogPedido        int auto_increment
-        primary key,
-    idAdmin            int                                 null,
-    idPedido           int                                 null,
-    statusAlteradoPara varchar(50)                         null,
-    dataAlteracao      timestamp default CURRENT_TIMESTAMP null,
+    primary key (idLogPedido),
     constraint fk_pedido_logpedido
         foreign key (idPedido) references tbPedido (idPedido)
             on delete cascade,
@@ -102,12 +71,7 @@ create index idAdmin
 
 create table tbPagamento
 (
-    idPagamento    int auto_increment
-        primary key,
-    idPedido       int                                                    null,
-    valor          float                                                  not null,
-    formaPagamento enum ('pix', 'dinheiro', 'debito', 'credito', 'cupom') null,
-    dataPagametno  datetime default CURRENT_TIMESTAMP                     null,
+    primary key (idPagamento),
     constraint fk_idPedido_pagamento
         foreign key (idPedido) references tbPedido (idPedido)
             on delete cascade
@@ -115,48 +79,66 @@ create table tbPagamento
 
 create table tbPedidoItem
 (
-    idPedidoItem int auto_increment
-        primary key,
-    pedidoIdItem int   null,
-    itemId       int   null,
-    quantidade   int   not null,
-    subtotal     float not null,
+    primary key (idPedidoItem),
     constraint fk_tbPedidoItem_item
         foreign key (itemId) references tbItem (idItem),
     constraint fk_tbPedidoItem_pedido
         foreign key (pedidoIdItem) references tbPedido (idPedido)
 );
 
-create definer = root@localhost view vwPedido as
-select `pE`.`idClient` AS `idClient`, `tC`.`nomeCliente` AS `nomeCliente`
-from (`dbselfpaypizzas`.`tbPedido` `pE` join `dbselfpaypizzas`.`tbCliente` `tC` on ((0 <> `tC`.`idCliente`)));
+create definer = root@localhost view vwpedido as
+select `pe`.`idClient` AS `idClient`, `tc`.`nomeCliente` AS `nomeCliente`
+from (`dbselfpaypizzas`.`tbpedido` `pe` join `dbselfpaypizzas`.`tbcliente` `tc` on ((0 <> `tc`.`idCliente`)));
 
 create
     definer = root@localhost procedure spInsertLogPedido(IN spIdAdmin int, IN spIdPedido int,
                                                          IN spStatusAlteradoPara varchar(100))
 BEGIN
+
     DECLARE adminExists INT;
+
     DECLARE pedidoExists INT;
 
+
+
     -- Verifica se o idAdmin existe na tabela tbAdmin
+
     SELECT COUNT(*) INTO adminExists FROM tbAdmin WHERE idAdmin = spIdAdmin;
 
+
+
     -- Verifica se o idPedido existe na tabela tbPedido
+
     SELECT COUNT(*) INTO pedidoExists FROM tbPedido WHERE idPedido = spIdPedido;
 
+
+
     -- Se ambos existirem, insere o log
+
     IF adminExists > 0 AND pedidoExists > 0 THEN
+
         INSERT INTO tbLogPedido (idAdmin, idPedido, statusAlteradoPara)
+
         VALUES (spIdAdmin, spIdPedido, spStatusAlteradoPara);
+
         SELECT 'LogPedido adicionado' AS mensagem;
+
     ELSE
+
         -- Retorna uma mensagem de erro se o idAdmin ou idPedido não existir
+
         IF adminExists = 0 THEN
+
             SELECT 'Erro: idAdmin não existe na tabela tbAdmin.' AS mensagem;
+
         ELSE
+
             SELECT 'Erro: idPedido não existe na tabela tbPedido.' AS mensagem;
+
         END IF;
+
     END IF;
+
 END;
 
 create
@@ -179,7 +161,7 @@ create
 BEGIN
     IF EXISTS(SELECT 1 FROM tbPedido WHERE idPedido = spIdPedido) THEN
         INSERT INTO tbPagamento(idPedido, valor, formaPagamento)
-            VALUES (spIdPedido,spValor,spFormaPagamento);
+        VALUES (spIdPedido,spValor,spFormaPagamento);
         SELECT 'Pagamento adicionado' AS mensagem;
     ELSE
         SELECT 'Pagamento não foi adicionado' AS mensagem;
@@ -191,19 +173,33 @@ create
                                                      IN spEmailAdmin varchar(40), IN spLoginAdmin varchar(40),
                                                      IN spSenhaAdmin varchar(60))
 BEGIN
-   DECLARE checkId INT;
-   SELECT tA.idAdmin INTO checkId FROM tbAdmin tA WHERE tA.idAdmin = spIdAmin;
-   IF checkId IS NOT NULL THEN
+
+    DECLARE checkId INT;
+
+    SELECT tA.idAdmin INTO checkId FROM tbAdmin tA WHERE tA.idAdmin = spIdAmin;
+
+    IF checkId IS NOT NULL THEN
+
         UPDATE tbAdmin
+
         SET nomeAdmin = spNomeAdmin,
+
             emailAdmin = spEmailAdmin,
+
             loginAdmin = spLoginAdmin,
+
             senhaAdmin = spSenhaAdmin
+
         WHERE idAdmin = spIdAmin;
+
         SELECT 'Alteração do Admin feita com sucesso' AS mensagem;
-   ELSE
-       SELECT 'ID do Admin não existe' AS mensagem;
-   END IF;
+
+    ELSE
+
+        SELECT 'ID do Admin não existe' AS mensagem;
+
+    END IF;
+
 END;
 
 create
@@ -211,20 +207,35 @@ create
                                                        IN spTelefone varchar(40), IN spEndereco varchar(40),
                                                        IN spEmail varchar(40))
 BEGIN
+
     DECLARE checkId INT;
+
     SELECT idCliente INTO checkId FROM tbCliente WHERE idCliente = spIdcliente;
 
+
+
     IF checkId IS NOT NULL THEN
+
         UPDATE tbCliente
+
         SET nomeCliente = spNomeCliente,
+
             telefone = spTelefone,
+
             endereco = spEndereco,
+
             email = spEmail
+
         WHERE idCliente = spIdcliente;
+
         SELECT 'Alteração do cliente feita com sucesso' AS mensagem;
+
     ELSE
+
         SELECT 'ID do cliente não existe' AS mensagem;
+
     END IF;
+
 END;
 
 create
@@ -237,6 +248,15 @@ BEGIN
     ELSE
         SELECT 'idEsto não existe' As mensagem;
     end if ;
+    create table tbAdmin
+    (
+        idAdmin    int auto_increment
+            primary key,
+        nomeAdmin  varchar(60) not null,
+        emailAdmin varchar(40) not null,
+        loginAdmin varchar(40) not null,
+        senhaAdmin varchar(60) not null
+    );
 end;
 
 create
@@ -245,9 +265,9 @@ create
 BEGIN
     IF EXISTS(SELECT 1 FROM tbItem tI WHERE tI.idItem= spIdItem) THEN
         UPDATE tbItem tIt SET tIt.nomeItem = spNomeItem,
-                             tIt.precoItem = spPrecoItem,
-                             tIt.descricaoItem = spDescricao,
-                             tIt.imagemUrl = spImagemUrl WHERE tIt.idItem = spIdItem;
+                              tIt.precoItem = spPrecoItem,
+                              tIt.descricaoItem = spDescricao,
+                              tIt.imagemUrl = spImagemUrl WHERE tIt.idItem = spIdItem;
         SELECT 'idItem alteredo com sucesso' as messagem;
     ELSE
         SELECT 'idItem não existe' as messagem;
@@ -258,15 +278,15 @@ create
     definer = root@localhost procedure spUpdatePagamento(IN spIdPagamento int, IN spIdPedido int, IN spValor float,
                                                          IN spFormaPagamento varchar(30))
 BEGIN
-   IF EXISTS(SELECT 1 FROM tbPagamento WHERE idPagamento = spIdPagamento) THEN
-       UPDATE tbPagamento tP SET tP.idPedido = spIdPedido,
-                                 tP.valor = spValor,
-                                 tP.formaPagamento = spFormaPagamento
-                                WHERE tP.idPagamento= spIdPagamento;
-       SELECT 'Pagamento Alterado com sucesso' as mensagem;
-   ELSE
-       SELECT 'IdPagamento Não existe' as messagem;
-   END IF ;
+    IF EXISTS(SELECT 1 FROM tbPagamento WHERE idPagamento = spIdPagamento) THEN
+        UPDATE tbPagamento tP SET tP.idPedido = spIdPedido,
+                                  tP.valor = spValor,
+                                  tP.formaPagamento = spFormaPagamento
+        WHERE tP.idPagamento= spIdPagamento;
+        SELECT 'Pagamento Alterado com sucesso' as mensagem;
+    ELSE
+        SELECT 'IdPagamento Não existe' as messagem;
+    END IF ;
 END;
 
 create
@@ -296,7 +316,7 @@ BEGIN
                                      tPI2.itemId = spItemId,
                                      tPI2.quantidade = spQuantidade,
                                      tPI2.subtotal = spSubTotal
-                                    WHERE tPI2.idPedidoItem = spIdPedidoItem;
+        WHERE tPI2.idPedidoItem = spIdPedidoItem;
         SELECT 'idPedidoItem alterado com sucesso' as mensagem;
     ELSE
         SELECT 'idPedidoItem não existente' as mensagem;
@@ -307,15 +327,15 @@ create
     definer = root@localhost procedure spUpdatePedidosItem(IN spIdPedidoItem int, IN spIdPedido int, IN spIdItem int,
                                                            IN spQuantidade int, IN spSubTotal float)
 BEGIN
-   IF EXISTS(SELECT 1 FROM tbPedidoItem tPI WHERE tPI.idPedidoItem = spIdPedidoItem) THEN
-       UPDATE tbPedidoItem tPII SET tPII.pedidoIdItem = spIdPedido,
-                                    tPII.itemId = spIdItem,
-                                    tPII.quantidade = spQuantidade,
-                                    tPII.subtotal = spSubTotal WHERE   tPII.idPedidoItem = spIdPedidoItem;
-       SELECT 'PedidoItem alterado com sucesso' as messagem;
-   ELSE
-       SELECT 'idPedidoItem não existe' as messagem;
-   end if ;
+    IF EXISTS(SELECT 1 FROM tbPedidoItem tPI WHERE tPI.idPedidoItem = spIdPedidoItem) THEN
+        UPDATE tbPedidoItem tPII SET tPII.pedidoIdItem = spIdPedido,
+                                     tPII.itemId = spIdItem,
+                                     tPII.quantidade = spQuantidade,
+                                     tPII.subtotal = spSubTotal WHERE   tPII.idPedidoItem = spIdPedidoItem;
+        SELECT 'PedidoItem alterado com sucesso' as messagem;
+    ELSE
+        SELECT 'idPedidoItem não existe' as messagem;
+    end if ;
 END;
 
 create

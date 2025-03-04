@@ -13,8 +13,8 @@
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="text" id="username" class="form-control form-control-lg"
-              placeholder="Enter a valid username" formControlName="username"/>
-            <label class="form-label" for="username">Username</label>
+              placeholder="digite um nome de usuário" formControlName="username"/>
+            <label class="form-label" for="username">usuário</label>
             @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
               <div class="text-danger">Nome inválido!</div>
             }
@@ -22,8 +22,8 @@
 
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="email" id="email" class="form-control form-control-lg"
-              placeholder="Enter a valid email address" formControlName="email"/>
-            <label class="form-label" for="email">Email address</label>
+              placeholder="digite seu endereço de email válido" formControlName="email"/>
+            <label class="form-label" for="email">Email</label>
             @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
               <div class="text-danger">Email inválido!</div>
             }
@@ -31,8 +31,8 @@
 
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="tel" id="telefone" class="form-control form-control-lg"
-              placeholder="Enter phone number" formControlName="telefone"/>
-            <label class="form-label" for="telefone">Phone number</label>
+              placeholder="Digite seu telefone" formControlName="telefone"/>
+            <label class="form-label" for="telefone">Telefone</label>
             @if (registerForm.get('telefone')?.invalid && registerForm.get('telefone')?.touched) {
               <div class="text-danger">Telefone inválido!</div>
             }
@@ -40,8 +40,8 @@
 
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="text" id="address" class="form-control form-control-lg"
-              placeholder="Enter a valid address" formControlName="address"/>
-            <label class="form-label" for="address">Address</label>
+              placeholder="Digite seu endereço" formControlName="address"/>
+            <label class="form-label" for="address">Endereço</label>
             @if (registerForm.get('address')?.invalid && registerForm.get('address')?.touched) {
               <div class="text-danger">Endereco inválido!</div>
             }

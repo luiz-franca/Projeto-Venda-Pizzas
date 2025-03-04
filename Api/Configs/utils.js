@@ -5,9 +5,11 @@ const acessEnvs = {
     hostAcess: process.env.DB_HOST,
     passwordAcess: process.env.DB_PASSWORD,
     databaseAcess: process.env.DB_NAME,
-    portaAcess: process.env.PORT
+    portaAcess: process.env.PORT_ACESS
 }
 
+console.log(acessEnvs
+)
 function handleDatabaseErro(erro){
     const errorMessages = {
         1045: 'Erro de autenticação: Usuário ou senha inválidos.',
