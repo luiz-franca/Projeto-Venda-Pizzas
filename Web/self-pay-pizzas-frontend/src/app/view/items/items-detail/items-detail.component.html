@@ -8,15 +8,16 @@
       </div>
       <div class="modal-body">
         <div class="cart">
-          <div class="cart--item">
-            <div class="d-flex align-items-center mb-3">
-              <div class="mx-2"><strong>Status do pedido: </strong>{{statusPedido}}</div>
-            </div>
+          <div class="d-flex align-items-center mb-3">
+            <div class="mx-2"><strong>Status do pedido: </strong>{{statusPedido}}</div>
+          </div>
+          <div class="cart--item mx-5">
             @for (pedido of item; track $index) {
               <div class="d-flex align-items-center mb-3">
                 <div class="mx-2">{{pedido.quantidade}}</div>
                 <img src="images/pizza3.png" class="me-3" style="width: 50px; height: 50px;">
-                <div class="flex-grow-1">
+                <div class="mx-2">{{pedido.nomeItem}}</div>
+                <div class="d-flex">
                   <div class="cart--item-nome">{{pedido.valorTotal | currency:'BRL'}}</div>
                 </div>
               </div>
@@ -46,5 +47,5 @@
 
 <!-- Botão para abrir o modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pizzaOrderModal">
-  Ver Carrinho
+  Ver Pedido
 </button>

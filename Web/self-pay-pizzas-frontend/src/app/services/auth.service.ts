@@ -50,10 +50,14 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('usuarioLogado');
     localStorage.removeItem('token');
-    localStorage.removeItem('funcionarioLogado');
-    localStorage.removeItem('tokenAdmin');
     this.router.navigate(['/auth/login']);
   }
+
+  logoutAdmin():void{
+    localStorage.removeItem('funcionarioLogado');
+    localStorage.removeItem('tokenAdmin');
+  }
+
 
   getClientes():Observable<any>{
     return this.http.get<any>(`${this.apiUrl}/clientes`);

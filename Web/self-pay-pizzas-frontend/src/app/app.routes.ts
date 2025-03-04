@@ -18,6 +18,7 @@ import { ItemsComponent } from './view/items/items.component';
 export const routes: Routes = [
   { path:"", canActivate:[authGuard],
     children: [
+      { path:"", component: ItemsComponent },
       { path:"items", component: ItemsComponent },
       { path:"dashboard", component: DashboardComponent },
       { path:"orders", component: OrdersComponent },
@@ -31,6 +32,5 @@ export const routes: Routes = [
   { path:"auth/login", component: LoginComponent },
   { path:"auth/admin", component: AdminComponent },
   { path:"auth/customers", component: LoginCustomersComponent },
-  { path:"auth/register", component: RegisterComponent },
-  { path: "**", component: LoginComponent}
+  { path:"auth/register", component: RegisterComponent }
 ];
