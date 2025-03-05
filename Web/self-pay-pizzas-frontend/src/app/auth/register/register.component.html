@@ -13,7 +13,7 @@
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="text" id="username" class="form-control form-control-lg"
-              placeholder="Enter a valid username" formControlName="username"/>
+              placeholder="Insira um usuário" formControlName="username"/>
             <label class="form-label" for="username">Usuário</label>
             @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
               <div class="text-danger">Nome inválido!</div>
@@ -22,7 +22,7 @@
 
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="email" id="email" class="form-control form-control-lg"
-              placeholder="Enter a valid email address" formControlName="email"/>
+              placeholder="Insira um e-mail válido" formControlName="email"/>
             <label class="form-label" for="email">E-mail</label>
             @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
               <div class="text-danger">Email inválido!</div>
@@ -31,17 +31,26 @@
 
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="text" id="login" class="form-control form-control-lg"
-              placeholder="Enter a valid login" formControlName="login"/>
+              placeholder="Insira um login" formControlName="login"/>
             <label class="form-label" for="login">Login</label>
             @if (registerForm.get('login')?.invalid && registerForm.get('login')?.touched) {
               <div class="text-danger">Login inválido!</div>
             }
           </div>
 
+          <div data-mdb-input-init class="form-outline mb-1">
+            <input type="text" id="login" class="form-control form-control-lg"
+              placeholder="Insira um código de funcionário válido " formControlName="customerCode"/>
+            <label class="form-label" for="customerCode">Código de Funcionário</label>
+            @if (registerForm.get('customerCode')?.invalid && registerForm.get('login')?.touched) {
+              <div class="text-danger">Código inválido!</div>
+            }
+          </div>
+
           <!-- Password input -->
           <div data-mdb-input-init class="form-outline mb-1">
             <input type="password" id="password" class="form-control form-control-lg"
-              placeholder="Enter password" formControlName="password"/>
+              placeholder="Insira uma senha" formControlName="password"/>
             <label class="form-label" for="password">Senha</label>
             @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
               <div class="text-danger">A senha deve ter pelo menos 6 caracteres.</div>

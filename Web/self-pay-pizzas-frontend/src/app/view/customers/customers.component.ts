@@ -24,7 +24,7 @@ export class CustomersComponent{
     nome!: string;
     statusCompra!: string;
     itemOrder!: any[];
-    allItemOrder!: any[];
+    pedidos!: any[];
     count!: number;
     swal!: SweetalertUtil;
     constructor(
@@ -36,7 +36,7 @@ export class CustomersComponent{
       this.quantidade = 0;
       this.count = 0;
       this.itemOrder = [];
-      this.allItemOrder = [];
+      this.pedidos = [];
       this.pedidosFinalizados = [];
       this.valorTotal = 0;
       this.valorTotal = +(this.valorTotal * this.quantidade).toFixed(2);
@@ -119,8 +119,8 @@ export class CustomersComponent{
   getItemOrder() {
     this.ordersService.getItemOrder().subscribe({
       next: (res: any) => {
-        this.allItemOrder = res.data;
-        this.allItemOrder.forEach(element => {
+        this.pedidos = res.data;
+        this.pedidos.forEach(element => {
           this.getItemOrderNameById(element.idPedidoItem);
         });
       },error:(err:Error)=>{
@@ -151,7 +151,6 @@ export class CustomersComponent{
       this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
     }
   }
-
 
   payment(valorComDesconto:number, pedidos: any[]){
     this.pedidosFinalizados.push(pedidos);

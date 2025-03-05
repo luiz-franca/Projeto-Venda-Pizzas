@@ -4,12 +4,11 @@ import {FormBuilder,FormGroup,FormsModule,ReactiveFormsModule,Validators} from '
 import {RouterModule} from '@angular/router';
 import {ClienteInfoCard} from '../../dto/cliente-info-card';
 import {ItemDto} from '../../dto/item.dto';
+import {OrdersDto} from '../../dto/orders.dto';
 import {PaymentService} from '../../services/payment.service';
+import {SweetalertUtil} from '../../util/sweetalert.util';
 import {OrdersService} from './../../services/orders.service';
 import {StockService} from './../../services/stock.service';
-import { OrdersDto } from '../../dto/orders.dto';
-import { StockDto } from '../../dto/stock.dto';
-import { SweetalertUtil } from '../../util/sweetalert.util';
 
 @Component({
   selector: 'app-payment',
@@ -38,6 +37,8 @@ export class PaymentComponent {
   paymentForm: FormGroup;
   clienteInfo!: ClienteInfoCard;
   swal!: SweetalertUtil;
+  itemOrder!: any[];
+  nome!:string;
 
   constructor(
   private paymentService: PaymentService,
@@ -78,9 +79,9 @@ export class PaymentComponent {
     let usuarioLogado = localStorage.getItem('usuarioLogado') || '{}';
     let usuarioObj = JSON.parse(usuarioLogado);
     this.idCliente = usuarioObj[0].idCliente;
-    let nome = usuarioObj[0].nomeCliente;
+    this.nome = usuarioObj[0].nomeCliente;
 
-    this.getOrderById(this.idCliente);
+    this.getItemOrder();
     this.quantidade = 1;
     this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
     this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
@@ -93,23 +94,41 @@ export class PaymentComponent {
     });
   }
 
-  getOrderById(id:number){
-    this.ordersService.getOrderById(id).subscribe({
-      next: (res:any) => {
-        this.pedidos = res.data;
-        this.calcularTotal(this.pedidos);
-      }, error: ()=>{
-        this.pedidos = [];
+  getItemOrder() {
+    this.ordersService.getItemOrder().subscribe({
+      next: (res: any) => {
+        this.itemOrder = res.data;
+        this.itemOrder.forEach((element:any) => {
+          this.getItemOrderNameById(element.idPedidoItem);
+        });
+      },error:(err:Error)=>{
+        this.swal.erroItem(`Erro ao consultar os itens de uma ordem: ${err.cause}`)
       }
-    })
+    });
   }
 
-  calcularTotal(pedidos:any[]){
-    pedidos.forEach(element => {
-      this.valorTotal += element.valorTotal;
+  getItemOrderNameById(id: number) {
+    this.ordersService.getItemOrderNameById(id).subscribe({
+      next: (res: any) => {
+        const item = res.data[0];
+        console.log("nome",this.nome)
+        if (item && item.nomeCliente === this.nome) {
+          this.pedidos.push(item);
+          this.calcularTotal(item.valorTotal);
+        }
+      },
+      error: (err:Error) => {
+        this.swal.erroItem(`Erro ao consultar as itens das ordens por nome: ${err.cause}`)
+      }
     });
-    this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
-    this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
+  }
+
+  calcularTotal(valorTotal: number) {
+    if (valorTotal !== undefined) {
+      this.valorTotal += valorTotal;
+      this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
+      this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
+    }
   }
 
   onPaymentMethodChange(): void {
@@ -213,6 +232,28 @@ export class PaymentComponent {
     this.efetuarPagamento(idPedido, valor, formaPagamento);
     this.voltar();
     this.swal.carregandoDados("Efetuando pagamento","Pagamento feito com sucesso.");
+  }
+
+  copyToClipboard() {
+    let copyText = document.getElementById("pixKey") as HTMLElement;
+    navigator.clipboard.writeText(copyText.innerHTML);
+  }
+
+  getGroupedItems(items: any[]) {
+    const grouped = items.reduce((acc, item) => {
+      const existingItem = acc.find((i: any) => i.nomeItem === item.nomeItem);
+
+      if (existingItem) {
+        existingItem.quantidade += item.quantidade;
+        existingItem.valorTotal += item.valorTotal;
+      } else {
+        acc.push({ ...item });
+      }
+
+      return acc;
+    }, []);
+
+    return grouped;
   }
 
 }

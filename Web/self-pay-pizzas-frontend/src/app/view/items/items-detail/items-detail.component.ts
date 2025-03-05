@@ -1,10 +1,10 @@
 import { Component,Input} from '@angular/core';
-import {CurrencyPipe,SlicePipe} from '@angular/common';
+import {CurrencyPipe} from '@angular/common';
 
 @Component({
   selector: 'app-items-detail',
   standalone: true,
-  imports: [CurrencyPipe,SlicePipe],
+  imports: [CurrencyPipe],
   templateUrl: './items-detail.component.html',
   styleUrl: './items-detail.component.css'
 })
@@ -13,7 +13,6 @@ export class ItemsDetailComponent {
   valorTotal!:number;
   desconto!: number;
   valorComDesconto!:number;
-  pedidos!: any[];
   quantidade!: number;
   @Input() item: any[] = [];
 
@@ -36,6 +35,23 @@ export class ItemsDetailComponent {
     });
     this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
     this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
+  }
+
+  getGroupedItems(items: any[]) {
+    const grouped = items.reduce((acc, item) => {
+      const existingItem = acc.find((i: any) => i.nomeItem === item.nomeItem);
+
+      if (existingItem) {
+        existingItem.quantidade += item.quantidade;
+        existingItem.valorTotal += item.valorTotal;
+      } else {
+        acc.push({ ...item });
+      }
+
+      return acc;
+    }, []);
+
+    return grouped;
   }
 
 }
