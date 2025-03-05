@@ -88,7 +88,7 @@ export class OrdersDetailsComponent implements OnChanges{
   }
 
   getOrderById(quantidade:number){
-    this.ordersService.getItemOrderName().subscribe({
+    this.ordersService.getOrder().subscribe({
       next: (res) => {
         this.pedidos = res.data;
         this.addLogOrder(+this.adminLogado,this.pedidos[this.pedidos.length - 1].idPedido,"em producao");

@@ -1,9 +1,9 @@
 import {CurrencyPipe,SlicePipe} from '@angular/common';
 import {Component} from '@angular/core';
 import {ItemDto} from '../../dto/item.dto';
+import {SweetalertUtil} from '../../util/sweetalert.util';
 import {OrdersUpdateService} from './../../services/order-update.service';
 import {OrdersService} from './../../services/orders.service';
-import { SweetalertUtil } from '../../util/sweetalert.util';
 
 @Component({
   selector: 'app-customers',
@@ -49,7 +49,6 @@ export class CustomersComponent{
       this.idCliente = usuarioObj[0].idCliente;
       this.nome = usuarioObj[0].nomeCliente;
 
-      this.getItem();
       this.getItemOrder();
       this.quantidade = 1;
       this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
@@ -61,6 +60,10 @@ export class CustomersComponent{
       });
       this.statusCompra = localStorage.getItem('compra') || "";
       this.ordersUpdateService.getPedidosUpdatedListener().subscribe((pedidos: any[]) => {
+        this.itemOrder = [];
+        this.valorTotal = 0;
+        this.desconto = 0;
+        this.valorComDesconto = 0;
         this.getItemOrder();
       });
     }
@@ -70,22 +73,6 @@ export class CustomersComponent{
     pedido.style.display = "none";
   }
 
-  getGroupedItems(items: any[]) {
-    const grouped = items.reduce((acc, item) => {
-      const existingItem = acc.find((i: any) => i.nomeItem === item.nomeItem);
-
-      if (existingItem) {
-        existingItem.quantidade += item.quantidade;
-        existingItem.valorTotal += item.valorTotal;
-      } else {
-        acc.push({ ...item });
-      }
-
-      return acc;
-    }, []);
-
-    return grouped;
-  }
 
   addItemToOrder(pedidoIdItem:number, itemId:number, quantidade:number, subtotal:number){
     this.ordersService.addItemToOrder(pedidoIdItem, itemId, quantidade, subtotal).subscribe({
@@ -105,22 +92,11 @@ export class CustomersComponent{
     this.statusCompra = localStorage.getItem('compra') || "";
   }
 
-
-  getItem(){
-    this.ordersService.getItem().subscribe({
-      next: (res) => {
-        this.item = res.data;
-      },error:(err:Error)=>{
-        this.swal.erroItem(`Erro ao consultar os itens: ${err.cause}`)
-      }
-    })
-  }
-
   getItemOrder() {
     this.ordersService.getItemOrder().subscribe({
       next: (res: any) => {
         this.pedidos = res.data;
-        this.pedidos.forEach(element => {
+        this.pedidos.forEach((element:any) => {
           this.getItemOrderNameById(element.idPedidoItem);
         });
       },error:(err:Error)=>{
@@ -159,6 +135,23 @@ export class CustomersComponent{
     pedido.style.display = "none";
     let pagamento = document.getElementById('payment') as HTMLElement;
     pagamento.style.display = "block";
+  }
+
+  getGroupedItems(items: any[]) {
+    const grouped = items.reduce((acc, item) => {
+      const existingItem = acc.find((i: any) => i.nomeItem === item.nomeItem);
+
+      if (existingItem) {
+        existingItem.quantidade += item.quantidade;
+        existingItem.valorTotal += item.valorTotal;
+      } else {
+        acc.push({ ...item });
+      }
+
+      return acc;
+    }, []);
+
+    return grouped;
   }
 
 }

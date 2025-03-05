@@ -111,7 +111,6 @@ export class PaymentComponent {
     this.ordersService.getItemOrderNameById(id).subscribe({
       next: (res: any) => {
         const item = res.data[0];
-        console.log("nome",this.nome)
         if (item && item.nomeCliente === this.nome) {
           this.pedidos.push(item);
           this.calcularTotal(item.valorTotal);
