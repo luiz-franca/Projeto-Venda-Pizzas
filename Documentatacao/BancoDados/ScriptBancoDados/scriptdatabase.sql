@@ -20,7 +20,12 @@ create table tbEstoque
 
 create table tbItem
 (
-    primary key (idItem)
+    idItem        int auto_increment
+        primary key,
+    nomeItem      varchar(60)  not null,
+    precoItem     float        not null,
+    descricaoItem text         null,
+    imagemUrl     varchar(500) null
 );
 
 create table tbItemEstoque
@@ -161,7 +166,7 @@ create
 BEGIN
     IF EXISTS(SELECT 1 FROM tbPedido WHERE idPedido = spIdPedido) THEN
         INSERT INTO tbPagamento(idPedido, valor, formaPagamento)
-        VALUES (spIdPedido,spValor,spFormaPagamento);
+            VALUES (spIdPedido,spValor,spFormaPagamento);
         SELECT 'Pagamento adicionado' AS mensagem;
     ELSE
         SELECT 'Pagamento não foi adicionado' AS mensagem;
@@ -174,11 +179,11 @@ create
                                                      IN spSenhaAdmin varchar(60))
 BEGIN
 
-    DECLARE checkId INT;
+   DECLARE checkId INT;
 
-    SELECT tA.idAdmin INTO checkId FROM tbAdmin tA WHERE tA.idAdmin = spIdAmin;
+   SELECT tA.idAdmin INTO checkId FROM tbAdmin tA WHERE tA.idAdmin = spIdAmin;
 
-    IF checkId IS NOT NULL THEN
+   IF checkId IS NOT NULL THEN
 
         UPDATE tbAdmin
 
@@ -194,11 +199,11 @@ BEGIN
 
         SELECT 'Alteração do Admin feita com sucesso' AS mensagem;
 
-    ELSE
+   ELSE
 
-        SELECT 'ID do Admin não existe' AS mensagem;
+       SELECT 'ID do Admin não existe' AS mensagem;
 
-    END IF;
+   END IF;
 
 END;
 
@@ -265,9 +270,9 @@ create
 BEGIN
     IF EXISTS(SELECT 1 FROM tbItem tI WHERE tI.idItem= spIdItem) THEN
         UPDATE tbItem tIt SET tIt.nomeItem = spNomeItem,
-                              tIt.precoItem = spPrecoItem,
-                              tIt.descricaoItem = spDescricao,
-                              tIt.imagemUrl = spImagemUrl WHERE tIt.idItem = spIdItem;
+                             tIt.precoItem = spPrecoItem,
+                             tIt.descricaoItem = spDescricao,
+                             tIt.imagemUrl = spImagemUrl WHERE tIt.idItem = spIdItem;
         SELECT 'idItem alteredo com sucesso' as messagem;
     ELSE
         SELECT 'idItem não existe' as messagem;
@@ -278,15 +283,15 @@ create
     definer = root@localhost procedure spUpdatePagamento(IN spIdPagamento int, IN spIdPedido int, IN spValor float,
                                                          IN spFormaPagamento varchar(30))
 BEGIN
-    IF EXISTS(SELECT 1 FROM tbPagamento WHERE idPagamento = spIdPagamento) THEN
-        UPDATE tbPagamento tP SET tP.idPedido = spIdPedido,
-                                  tP.valor = spValor,
-                                  tP.formaPagamento = spFormaPagamento
-        WHERE tP.idPagamento= spIdPagamento;
-        SELECT 'Pagamento Alterado com sucesso' as mensagem;
-    ELSE
-        SELECT 'IdPagamento Não existe' as messagem;
-    END IF ;
+   IF EXISTS(SELECT 1 FROM tbPagamento WHERE idPagamento = spIdPagamento) THEN
+       UPDATE tbPagamento tP SET tP.idPedido = spIdPedido,
+                                 tP.valor = spValor,
+                                 tP.formaPagamento = spFormaPagamento
+                                WHERE tP.idPagamento= spIdPagamento;
+       SELECT 'Pagamento Alterado com sucesso' as mensagem;
+   ELSE
+       SELECT 'IdPagamento Não existe' as messagem;
+   END IF ;
 END;
 
 create
@@ -316,7 +321,7 @@ BEGIN
                                      tPI2.itemId = spItemId,
                                      tPI2.quantidade = spQuantidade,
                                      tPI2.subtotal = spSubTotal
-        WHERE tPI2.idPedidoItem = spIdPedidoItem;
+                                    WHERE tPI2.idPedidoItem = spIdPedidoItem;
         SELECT 'idPedidoItem alterado com sucesso' as mensagem;
     ELSE
         SELECT 'idPedidoItem não existente' as mensagem;
@@ -327,15 +332,15 @@ create
     definer = root@localhost procedure spUpdatePedidosItem(IN spIdPedidoItem int, IN spIdPedido int, IN spIdItem int,
                                                            IN spQuantidade int, IN spSubTotal float)
 BEGIN
-    IF EXISTS(SELECT 1 FROM tbPedidoItem tPI WHERE tPI.idPedidoItem = spIdPedidoItem) THEN
-        UPDATE tbPedidoItem tPII SET tPII.pedidoIdItem = spIdPedido,
-                                     tPII.itemId = spIdItem,
-                                     tPII.quantidade = spQuantidade,
-                                     tPII.subtotal = spSubTotal WHERE   tPII.idPedidoItem = spIdPedidoItem;
-        SELECT 'PedidoItem alterado com sucesso' as messagem;
-    ELSE
-        SELECT 'idPedidoItem não existe' as messagem;
-    end if ;
+   IF EXISTS(SELECT 1 FROM tbPedidoItem tPI WHERE tPI.idPedidoItem = spIdPedidoItem) THEN
+       UPDATE tbPedidoItem tPII SET tPII.pedidoIdItem = spIdPedido,
+                                    tPII.itemId = spIdItem,
+                                    tPII.quantidade = spQuantidade,
+                                    tPII.subtotal = spSubTotal WHERE   tPII.idPedidoItem = spIdPedidoItem;
+       SELECT 'PedidoItem alterado com sucesso' as messagem;
+   ELSE
+       SELECT 'idPedidoItem não existe' as messagem;
+   end if ;
 END;
 
 create
@@ -343,4 +348,3 @@ create
 BEGIN
     SELECT * FROM vwPedido pe WHERE pe.idClient = spIdPedido;
 END;
-
