@@ -32,7 +32,7 @@ export class RegisterComponent {
         if(customerCode === "adm012025"){
           this.authService.register(username,email,login, password).subscribe({
             next: () => {
-              this.router.navigate(['/admin']);
+              this.router.navigate(['auth/admin']);
             },
             error: () => {
               this.errorMessage = 'Credenciais inválidas!';

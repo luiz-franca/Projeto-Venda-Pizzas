@@ -91,7 +91,8 @@ export class OrdersDetailsComponent implements OnChanges{
     this.ordersService.getOrder().subscribe({
       next: (res) => {
         this.pedidos = res.data;
-        this.addLogOrder(+this.adminLogado,this.pedidos[this.pedidos.length - 1].idPedido,"em producao");
+        this.adminLogado = "2";
+        this.addLogOrder(+this.adminLogado,this.pedidos[this.pedidos.length - 1].idPedido,"em_preparação");
         let meuPedido = this.pedidos[this.pedidos.length - 1];
         this.addItemToOrder(meuPedido.idPedido,+this.id, quantidade,meuPedido.valorTotal);
         this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
