@@ -51,6 +51,7 @@ export class PaymentComponent {
     this.pedidos = [];
     this.item = [];
     this.stockList = [];
+    this.pedidosFinalizados = [];
     this.quantidade = 0;
     this.valorTotal = 0;
     this.valorTotal = +(this.valorTotal * this.quantidade).toFixed(2);
