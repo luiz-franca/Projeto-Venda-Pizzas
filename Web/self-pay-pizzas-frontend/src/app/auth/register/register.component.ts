@@ -18,11 +18,11 @@ export class RegisterComponent {
 
     constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
       this.registerForm = this.fb.group({
-        username: ['', [Validators.required, Validators.maxLength(20)]],
+        username: ['', [Validators.required, Validators.maxLength(30)]],
         email: ['', [Validators.required, Validators.email]],
         login: ['', [Validators.required, Validators.maxLength(10)]],
         customerCode: ['', [Validators.required, Validators.maxLength(10)]],
-        password: ['', [Validators.required, Validators.maxLength(8)]],
+        password: ['', [Validators.required, Validators.maxLength(8), Validators.minLength(6)]],
       });
     }
 

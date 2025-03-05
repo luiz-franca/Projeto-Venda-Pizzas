@@ -13,15 +13,15 @@
 
 
           <div class="form-outline mb-4">
-            <input type="email" id="email" class="form-control form-control-lg"
-              placeholder="Insira seu email" formControlName="email" />
-            <label class="form-label" for="email">E-mail</label>
-            @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-              <div class="text-danger">Email inválido!</div>
+            <input type="text" id="usuario" class="form-control form-control-lg"
+              placeholder="Insira seu usuário" formControlName="usuario" />
+            <label class="form-label" for="Usuário">Usuário</label>
+            @if (loginForm.get('usuario')?.invalid && loginForm.get('usuario')?.touched) {
+              <div class="text-danger">Usuário inválido!</div>
             }
           </div>
 
-        
+
           <div class="form-outline mb-3">
             <input type="password" id="password" class="form-control form-control-lg"
               placeholder="Insira sua senha" formControlName="password" />
