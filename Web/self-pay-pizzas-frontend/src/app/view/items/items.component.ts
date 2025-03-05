@@ -57,7 +57,6 @@ export class ItemsComponent {
     }
 
     adicionarPedido(id:number):number{
-      console.log('oi')
       this.id = `${id}`;
       let pedido = document.getElementById('orders-details') as HTMLElement;
       pedido.style.display = "block";

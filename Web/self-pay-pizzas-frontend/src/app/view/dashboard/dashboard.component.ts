@@ -41,7 +41,6 @@ export class DashboardComponent implements AfterViewInit{
     private stockService: StockService,
     private ordersService: OrdersService
   ){
-    this.bootstrap.startBootstrap();
     this.customers = [];
     this.employees = [];
     this.stock = [];
@@ -54,6 +53,7 @@ export class DashboardComponent implements AfterViewInit{
     this.swal = new SweetalertUtil();
     this.chart = new ChartUtil();
     this.bootstrap = new BootstrapUtil();
+    this.bootstrap.startBootstrap();
     this.column = [
       {field:"id", header: "ID"},
       {field:"nome", header: "Nome"},
@@ -182,7 +182,7 @@ export class DashboardComponent implements AfterViewInit{
   }
 
   logout(){
-    this.authService.logout();
+    this.authService.logoutAdmin();
   }
 
   deleteAdmins(id: number){

@@ -62,6 +62,10 @@ export class OrdersService {
     return this.http.get<any>(`${this.apiUrl}/pedidos-item-nomes/${id}`);
   }
 
+  getItemOrderName(){
+    return this.http.get<any>(`${this.apiUrl}/pedidos-item-nomes`);
+  }
+
   getItemOrder():Observable<any>{
     return this.http.get<any>(`${this.apiUrl}/pedidos-item`);
   }

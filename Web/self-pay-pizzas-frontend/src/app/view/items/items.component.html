@@ -42,7 +42,6 @@
     <div class="pedidos-area">
 
     </div>
-    <!-- <h2 class="m-3">Pizzas - Sabores</h2> -->
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="m-3 h2">Pizzas - Sabores</h1>
     </div>
@@ -50,7 +49,6 @@
       @for (item of itens; track $index) {
 
           <div class="pizza-item">
-              <!-- <a [routerLink]="['/orders',buscarOrderPorId(item.id)]"> -->
               <a (click)="adicionarPedido(item.idItem)"
               [attr.disabled]="statusCompra =='finalizada'"
               [ngStyle]="{ 'pointer-events': statusCompra =='finalizada' ? 'none' : 'auto', 'opacity': statusCompra =='finalizada' ? '0.5' : '1' }"

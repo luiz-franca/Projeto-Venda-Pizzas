@@ -82,19 +82,20 @@ export class OrdersDetailsComponent implements OnChanges{
         this.pedido = res.data[0];
         this.precoItem = this.pedido.precoItem;
       }, error: (err: Error)=>{
-    this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err}`)
       }
     })
   }
 
-  getOrderById(id:number,quantidade:number){
-    this.ordersService.getOrderById(id).subscribe({
+  getOrderById(quantidade:number){
+    this.ordersService.getOrder().subscribe({
       next: (res) => {
         this.pedidos = res.data;
         this.addLogOrder(+this.adminLogado,this.pedidos[this.pedidos.length - 1].idPedido,"em producao");
         let meuPedido = this.pedidos[this.pedidos.length - 1];
         this.addItemToOrder(meuPedido.idPedido,+this.id, quantidade,meuPedido.valorTotal);
         this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
+        this.getOrders();
       }, error: (err: Error)=>{
         this.swal.erroItem(`Erro. Causa: ${err}`)
       }
@@ -134,8 +135,7 @@ export class OrdersDetailsComponent implements OnChanges{
   addOrder(idClient:number, dataPedido:string, valorTotal:number, quantidade:number,statusPedido:string){
     this.ordersService.addOrder(idClient, dataPedido, valorTotal, statusPedido, quantidade).subscribe({
       next: (res:any)=>{
-        this.getOrderById(this.idCliente, quantidade);
-        this.getOrders();
+        this.getOrderById(quantidade);
       }, error: (err: Error)=>{
         this.swal.erroItem(`Erro. Causa: ${err}`)
       }

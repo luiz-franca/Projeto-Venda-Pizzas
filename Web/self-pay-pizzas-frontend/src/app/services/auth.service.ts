@@ -43,6 +43,10 @@ export class AuthService {
     );
   }
 
+  getAllCustomers(){
+    return this.http.get<string>(`${this.apiUrl}/clientes`)
+  }
+
   isLoggedIn(): boolean {
     return (!!localStorage.getItem('token') && !!localStorage.getItem('usuarioLogado')) || (!!localStorage.getItem('tokenAdmin') && !!localStorage.getItem('funcionarioLogado'));
   }
@@ -50,10 +54,15 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('usuarioLogado');
     localStorage.removeItem('token');
+    this.router.navigate(['/auth/login']);
+  }
+
+  logoutAdmin():void{
     localStorage.removeItem('funcionarioLogado');
     localStorage.removeItem('tokenAdmin');
     this.router.navigate(['/auth/login']);
   }
+
 
   getClientes():Observable<any>{
     return this.http.get<any>(`${this.apiUrl}/clientes`);

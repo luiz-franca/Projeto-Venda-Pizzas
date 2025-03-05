@@ -1,7 +1,7 @@
 import {CurrencyPipe,SlicePipe} from '@angular/common';
 import {Component} from '@angular/core';
 import {ItemDto} from '../../dto/item.dto';
-import {OrdersDto} from './../../dto/orders.dto';
+import {SweetalertUtil} from '../../util/sweetalert.util';
 import {OrdersUpdateService} from './../../services/order-update.service';
 import {OrdersService} from './../../services/orders.service';
 
@@ -17,7 +17,6 @@ export class CustomersComponent{
     valorTotal!:number;
     desconto!: number;
     item: ItemDto[];
-    pedidos!: OrdersDto[];
     pedidosFinalizados!: any[];
     idPedido!: any;
     valorComDesconto!:number;
@@ -25,16 +24,19 @@ export class CustomersComponent{
     nome!: string;
     statusCompra!: string;
     itemOrder!: any[];
-    allItemOrder!: any[];
+    pedidos!: any[];
+    count!: number;
+    swal!: SweetalertUtil;
     constructor(
       private ordersService:OrdersService,
       private ordersUpdateService: OrdersUpdateService,
     ){
+      this.swal = new SweetalertUtil();
       this.item = [];
-      this.pedidos = [];
       this.quantidade = 0;
+      this.count = 0;
       this.itemOrder = [];
-      this.allItemOrder = [];
+      this.pedidos = [];
       this.pedidosFinalizados = [];
       this.valorTotal = 0;
       this.valorTotal = +(this.valorTotal * this.quantidade).toFixed(2);
@@ -47,8 +49,6 @@ export class CustomersComponent{
       this.idCliente = usuarioObj[0].idCliente;
       this.nome = usuarioObj[0].nomeCliente;
 
-      this.getOrderById(this.idCliente);
-      this.getItem();
       this.getItemOrder();
       this.quantidade = 1;
       this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
@@ -59,9 +59,12 @@ export class CustomersComponent{
         this.idPedido = element['insertId'];
       });
       this.statusCompra = localStorage.getItem('compra') || "";
-      this.ordersUpdateService.getPedidosUpdatedListener().subscribe((pedidos: OrdersDto[]) => {
-        this.pedidos = pedidos;  // Atualiza a lista de pedidos
-        this.calcularTotal(this.pedidos);
+      this.ordersUpdateService.getPedidosUpdatedListener().subscribe((pedidos: any[]) => {
+        this.itemOrder = [];
+        this.valorTotal = 0;
+        this.desconto = 0;
+        this.valorComDesconto = 0;
+        this.getItemOrder();
       });
     }
 
@@ -70,69 +73,17 @@ export class CustomersComponent{
     pedido.style.display = "none";
   }
 
-  aumentarQuantidade(quantidade: number, valor: number, indice: number) {
-    // Acessa diretamente o item pelo índice na lista 'pedidos'
-    const pedido = this.pedidos[indice];
-
-    if (pedido) {
-      // Aumenta a quantidade
-      pedido.quantidade += 1;
-
-      // Recalcula o valor total do pedido com a nova quantidade
-      const valorUnitario = pedido.valorTotal / quantidade;
-      pedido.valorTotal = +(valorUnitario * pedido.quantidade).toFixed(2);
-
-      // Atualiza o valor total geral (soma de todos os valores dos pedidos)
-      this.valorTotal = this.pedidos.reduce((total, pedido) => total + pedido.valorTotal, 0);
-
-      // Atualiza o valor com desconto
-      this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
-      this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
-    }
-  }
-
-  diminuirQuantidade(quantidade: number, valor: number, indice: number) {
-    // Acessa diretamente o item pelo índice na lista 'pedidos'
-    const pedido = this.pedidos[indice];
-
-    if (pedido && pedido.quantidade > 1) {
-      // Diminui a quantidade
-      pedido.quantidade -= 1;
-
-      // Recalcula o valor total do pedido com a nova quantidade
-      const valorUnitario = pedido.valorTotal / quantidade;
-      pedido.valorTotal = +(valorUnitario * pedido.quantidade).toFixed(2);
-
-      // Atualiza o valor total geral (soma de todos os valores dos pedidos)
-      this.valorTotal = this.pedidos.reduce((total, pedido) => total + pedido.valorTotal, 0);
-
-      // Atualiza o valor com desconto
-      this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
-      this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
-    }
-  }
-
-
 
   addItemToOrder(pedidoIdItem:number, itemId:number, quantidade:number, subtotal:number){
-    console.log(this.idPedido)
-    if(this.idPedido === undefined){
-      this.ordersService.addItemToOrder(pedidoIdItem, itemId, quantidade, subtotal).subscribe({
-        next: (res:any)=>{
-          // console.log(res);
-          localStorage.setItem('novoPedido', JSON.stringify(res.data));
-          localStorage.setItem('compra','finalizada')
-          this.statusCompra = localStorage.getItem('compra') || "";
-          // this.getOrderById(this.idCliente);
-        }
-      })
-    }else{
-      this.ordersService.updateItemToOrder(10, pedidoIdItem, itemId, quantidade, subtotal).subscribe({
-        next: (res:any)=>{
-          // console.log(res);
-        }
-      })
-    }
+    this.ordersService.addItemToOrder(pedidoIdItem, itemId, quantidade, subtotal).subscribe({
+      next: (res:any)=>{
+        localStorage.setItem('novoPedido', JSON.stringify(res.data));
+        localStorage.setItem('compra','finalizada')
+        this.statusCompra = localStorage.getItem('compra') || "";
+      }, error:(err:Error)=>{
+        this.swal.erroItem(`Erro ao adicionar um item a ordem: ${err.cause}`)
+      }
+    })
     this.voltar();
   }
 
@@ -141,64 +92,66 @@ export class CustomersComponent{
     this.statusCompra = localStorage.getItem('compra') || "";
   }
 
-
-  getItem(){
-    this.ordersService.getItem().subscribe({
-      next: (res) => {
-        // console.log("item", res.data)
-        this.item = res.data;
-      }
-    })
-  }
-
-  getItemOrder(){
+  getItemOrder() {
     this.ordersService.getItemOrder().subscribe({
-      next: (res) => {
-        this.allItemOrder = res.data;
-        this.getItemOrderNameById(this.allItemOrder[this.allItemOrder.length - 1].idPedidoItem);
-      }
-    })
-  }
-
-  getOrderById(id:number){
-    this.ordersService.getOrderById(id).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         this.pedidos = res.data;
-        this.calcularTotal(this.pedidos);
-      }, error: ()=>{
-        this.pedidos = [];
-        console.log("Não existe pedidos");
+        this.pedidos.forEach((element:any) => {
+          this.getItemOrderNameById(element.idPedidoItem);
+        });
+      },error:(err:Error)=>{
+        this.swal.erroItem(`Erro ao consultar os itens de uma ordem: ${err.cause}`)
       }
-    })
-  }
-
-  getItemOrderNameById(id:number){
-    this.ordersService.getItemOrderNameById(id).subscribe({
-      next: (res) => {
-        this.itemOrder = res.data;
-      }, error: ()=>{
-        console.log("erro");
-      }
-    })
-  }
-
-  calcularTotal(pedidos:any[]){
-    pedidos.forEach(element => {
-      this.valorTotal += element.valorTotal;
     });
-    // this.valorTotal = +(this.valorTotal * this.quantidade).toFixed(2);
-    this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
-    this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
+  }
+
+  getItemOrderNameById(id: number) {
+    this.ordersService.getItemOrderNameById(id).subscribe({
+      next: (res: any) => {
+        const item = res.data[0];
+        if (item && item.nomeCliente === this.nome) {
+          this.itemOrder.push(item);
+          this.calcularTotal(item.valorTotal);
+        }
+      },
+      error: (err:Error) => {
+        this.swal.erroItem(`Erro ao consultar as itens das ordens por nome: ${err.cause}`)
+      }
+    });
+  }
+
+  calcularTotal(valorTotal: number) {
+    if (valorTotal !== undefined) {
+      this.valorTotal += valorTotal;
+      this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
+      this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
+    }
   }
 
   payment(valorComDesconto:number, pedidos: any[]){
     this.pedidosFinalizados.push(pedidos);
-    console.log(this.pedidosFinalizados);
     this.ordersUpdateService.setPedidosFinalizados(this.pedidosFinalizados);
     let pedido = document.getElementById('customers') as HTMLElement;
     pedido.style.display = "none";
     let pagamento = document.getElementById('payment') as HTMLElement;
     pagamento.style.display = "block";
+  }
+
+  getGroupedItems(items: any[]) {
+    const grouped = items.reduce((acc, item) => {
+      const existingItem = acc.find((i: any) => i.nomeItem === item.nomeItem);
+
+      if (existingItem) {
+        existingItem.quantidade += item.quantidade;
+        existingItem.valorTotal += item.valorTotal;
+      } else {
+        acc.push({ ...item });
+      }
+
+      return acc;
+    }, []);
+
+    return grouped;
   }
 
 }
