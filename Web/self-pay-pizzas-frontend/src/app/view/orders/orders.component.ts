@@ -117,7 +117,6 @@ export class OrdersComponent {
         this.calcularTotal(this.pedidos);
       }, error: ()=>{
         this.pedidos = [];
-        console.log("Não existe pedidos");
       }
     })
   }

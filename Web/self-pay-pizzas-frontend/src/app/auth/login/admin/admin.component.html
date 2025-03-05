@@ -11,20 +11,20 @@
             <p class="text-center fw-bold mx-3 mb-0">Acesse sua conta</p>
           </div>
 
-          <!-- Email input -->
+
           <div class="form-outline mb-4">
             <input type="email" id="email" class="form-control form-control-lg"
-              placeholder="Digite seu email" formControlName="email" />
+              placeholder="Insira seu email" formControlName="email" />
             <label class="form-label" for="email">E-mail</label>
             @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
               <div class="text-danger">Email inválido!</div>
             }
           </div>
 
-          <!-- Password input -->
+        
           <div class="form-outline mb-3">
             <input type="password" id="password" class="form-control form-control-lg"
-              placeholder="Digite sua senha" formControlName="password" />
+              placeholder="Insira sua senha" formControlName="password" />
             <label class="form-label" for="password">Senha</label>
             @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
               <div class="text-danger">A senha deve ter pelo menos 6 caracteres.</div>

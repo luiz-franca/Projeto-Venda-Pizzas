@@ -7,50 +7,50 @@
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-          <div class="divider d-flex align-items-center my-4">
+          <div class="divider d-flex align-items-center my-2">
             <p class="text-center fw-bold mx-3 mb-0">Crie sua conta</p>
           </div>
-          <!-- Email input -->
-          <div data-mdb-input-init class="form-outline mb-1">
-            <input type="text" id="username" class="form-control form-control-lg"
-              placeholder="Insira um usuário" formControlName="username"/>
+
+          <div data-mdb-input-init class="form-outline">
+            <input type="text" id="username" class="form-control "
+              placeholder="Insira seu nome completo" formControlName="username"/>
             <label class="form-label" for="username">Usuário</label>
             @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
               <div class="text-danger">Nome inválido!</div>
             }
           </div>
 
-          <div data-mdb-input-init class="form-outline mb-1">
-            <input type="email" id="email" class="form-control form-control-lg"
-              placeholder="Insira um e-mail válido" formControlName="email"/>
+          <div data-mdb-input-init class="form-outline">
+            <input type="email" id="email" class="form-control "
+              placeholder="Insira seu e-mail" formControlName="email"/>
             <label class="form-label" for="email">E-mail</label>
             @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
               <div class="text-danger">Email inválido!</div>
             }
           </div>
 
-          <div data-mdb-input-init class="form-outline mb-1">
-            <input type="text" id="login" class="form-control form-control-lg"
-              placeholder="Insira um login" formControlName="login"/>
+          <div data-mdb-input-init class="form-outline">
+            <input type="text" id="login" class="form-control "
+              placeholder="Insira seu nome de login" formControlName="login"/>
             <label class="form-label" for="login">Login</label>
             @if (registerForm.get('login')?.invalid && registerForm.get('login')?.touched) {
               <div class="text-danger">Login inválido!</div>
             }
           </div>
 
-          <div data-mdb-input-init class="form-outline mb-1">
-            <input type="text" id="login" class="form-control form-control-lg"
-              placeholder="Insira um código de funcionário válido " formControlName="customerCode"/>
+          <div data-mdb-input-init class="form-outline">
+            <input type="text" id="login" class="form-control "
+              placeholder="Insira seu código de funcionário" formControlName="customerCode"/>
             <label class="form-label" for="customerCode">Código de Funcionário</label>
             @if (registerForm.get('customerCode')?.invalid && registerForm.get('login')?.touched) {
               <div class="text-danger">Código inválido!</div>
             }
           </div>
 
-          <!-- Password input -->
-          <div data-mdb-input-init class="form-outline mb-1">
-            <input type="password" id="password" class="form-control form-control-lg"
-              placeholder="Insira uma senha" formControlName="password"/>
+          
+          <div data-mdb-input-init class="form-outline">
+            <input type="password" id="password" class="form-control "
+              placeholder="Insira sua senha" formControlName="password"/>
             <label class="form-label" for="password">Senha</label>
             @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
               <div class="text-danger">A senha deve ter pelo menos 6 caracteres.</div>
@@ -61,13 +61,13 @@
             <div class="text-danger">{{ errorMessage }}</div>
           }
 
-          <div class="text-center text-lg-start pt-2">
+          <div class="text-center text-lg-start">
             <button type="submit" class="btn btn-danger btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;" [disabled]="registerForm.invalid">Cadastrar</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">É cliente? <a routerLink="/auth/customers"
+            <p class="small fw-bold mt-1">É cliente? <a routerLink="/auth/customers"
                 class="link-danger">Entrar</a></p>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Tela de login <a routerLink="/auth/login"
-              class="link-danger">Entrar</a></p>
+            <p class="small fw-bold">Tela de login <a routerLink="/auth/login"
+              class="link-danger">Acessar</a></p>
           </div>
 
         </form>
