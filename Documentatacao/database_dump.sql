@@ -29,7 +29,7 @@ CREATE TABLE `tbAdmin` (
   `loginAdmin` varchar(40) NOT NULL,
   `senhaAdmin` varchar(60) NOT NULL,
   PRIMARY KEY (`idAdmin`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `tbAdmin` (
 
 LOCK TABLES `tbAdmin` WRITE;
 /*!40000 ALTER TABLE `tbAdmin` DISABLE KEYS */;
-INSERT INTO `tbAdmin` VALUES (1,'gustavo','joao@example.com1','joao123','$2b$10$OVvVLzL9Dp5283DrkIO5nOzSZavxpmxZ68K/xAgqS7NiclIpQxvPe'),(2,'gustavo','joao@example.com1','joao123','$2b$10$eU.Pyvkqdo6iMK5KdrEtnOSCaA7/lPxM2Dpjy/PB3vd9GSvIL/YNu'),(3,'gustavo','joao@example.com1','joao123','$2b$10$f7VHQcKJsGtTpf1lwdBVPuik1U.s28gAgS7itmthxG299y0a/3cCC'),(4,'gustavo','joao@example.com','joao123','$2b$10$eMcDNQ9lzAIOjOZ64PYQi.JMHXk7wB12Hxfe.0d5xkd0jXP8vLoNm');
+INSERT INTO `tbAdmin` VALUES (1,'gustavo','joao@example.com1','joao123','$2b$10$OVvVLzL9Dp5283DrkIO5nOzSZavxpmxZ68K/xAgqS7NiclIpQxvPe'),(2,'gustavo','joao@example.com1','joao123','$2b$10$eU.Pyvkqdo6iMK5KdrEtnOSCaA7/lPxM2Dpjy/PB3vd9GSvIL/YNu'),(3,'gustavo','joao@example.com1','joao123','$2b$10$f7VHQcKJsGtTpf1lwdBVPuik1U.s28gAgS7itmthxG299y0a/3cCC'),(4,'gustavo','joao@example.com','joao123','$2b$10$eMcDNQ9lzAIOjOZ64PYQi.JMHXk7wB12Hxfe.0d5xkd0jXP8vLoNm'),(5,'gustavo','gustavo@gmail.com','gustavo','$2b$10$jN.CYrvKqyPzlR.gwzcU5OY/.IqNSJ3d0WAk7bOd2lHUEwLpi8kGW'),(6,'gustavo','gustavo@gmail.com','gustavo','$2b$10$jb9Z1FJ5DkjeehARhnJU8uUQnr7Glv2YQ7/Wk9.JUC0T4.LGRATo6'),(7,'gustv','gustavo@gmail.com','gustav','$2b$10$hbmn3B9gsfmBGqdeJS37yOJJE0dcDhrRia4MN1v2ocaAvAnTnboxS'),(8,'gustavo1','gustavo@gmail.com','gustavo1','$2b$10$EGT2QwiLYi.8S6OJ8I/QcOnMNiDNXvzZUqAppr/szRBtcbh8Mxn1K');
 /*!40000 ALTER TABLE `tbAdmin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +56,7 @@ CREATE TABLE `tbCliente` (
   `endereco` varchar(40) NOT NULL,
   `email` varchar(40) NOT NULL,
   PRIMARY KEY (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +65,7 @@ CREATE TABLE `tbCliente` (
 
 LOCK TABLES `tbCliente` WRITE;
 /*!40000 ALTER TABLE `tbCliente` DISABLE KEYS */;
-INSERT INTO `tbCliente` VALUES (1,'João Silva','123456789','Rua Exemplo, 123','joao@example.com'),(2,'gustavo','123141','dasda','gustavo@gmail.ciom'),(3,'Debora Larysasa','12341231','dasdasd','deby@debora.com'),(4,'João Silva','123456789','Rua Exemplo, 123','joao@example.com'),(5,'aslan test','123456','casa de tete','aslan@teste'),(6,'marcilio','84991383819','rua nova conquista','freitas.marcilio33@gmail.com'),(7,'junior','84991383819','rua nova conquista','junior@email.com'),(8,'dev','8499999999','rua nova conquista','dev@email.com'),(9,'novato','8491889878','rua dos chinas, 123','novato@email.com'),(10,'cliente','8499898799','rua do cliente','cliente@email.com'),(11,'teste','8491999499','rua do fulano','teste@email.com'),(12,'maria','84998989899','rua da maria','maria@email.com'),(13,'bruno','84991383819','rua do bruno','bruno@email.com'),(14,'outro','84979797989','rua do outro','outro@email.com'),(15,'gustavo','84999988888','rua nova teste,68','gustavo@email.com'),(16,'novoteste','84999999999','rua do fulano','novoteste@email.com'),(17,'breno','8491999499','rua nova conquista','breno@email.com'),(18,'aslan','1234','1234565','aslan@gmail.com');
+INSERT INTO `tbCliente` VALUES (1,'João Silva','123456789','Rua Exemplo, 123','joao@example.com'),(2,'gustavo','123141','dasda','gustavo@gmail.ciom'),(3,'Debora Larysasa','12341231','dasdasd','deby@debora.com'),(4,'João Silva','123456789','Rua Exemplo, 123','joao@example.com'),(5,'aslan test','123456','casa de tete','aslan@teste'),(6,'marcilio','84991383819','rua nova conquista','freitas.marcilio33@gmail.com'),(7,'junior','84991383819','rua nova conquista','junior@email.com'),(8,'dev','8499999999','rua nova conquista','dev@email.com'),(9,'novato','8491889878','rua dos chinas, 123','novato@email.com'),(10,'cliente','8499898799','rua do cliente','cliente@email.com'),(11,'teste','8491999499','rua do fulano','teste@email.com'),(12,'maria','84998989899','rua da maria','maria@email.com'),(13,'bruno','84991383819','rua do bruno','bruno@email.com'),(14,'outro','84979797989','rua do outro','outro@email.com'),(15,'gustavo','84999988888','rua nova teste,68','gustavo@email.com'),(16,'novoteste','84999999999','rua do fulano','novoteste@email.com'),(17,'breno','8491999499','rua nova conquista','breno@email.com'),(18,'aslan','1234','1234565','aslan@gmail.com'),(19,'lucky','12312415','ruta testa','lucky@gmail.com'),(20,'gustavp','123141','dasda','teste@gmail.com'),(21,'testea1','123415','rua dos testes','dasdasd@gmaicl.om'),(22,'asla bebe','123456','teste brasil','bebe@gmail.com');
 /*!40000 ALTER TABLE `tbCliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +90,7 @@ CREATE TABLE `tbEstoque` (
 
 LOCK TABLES `tbEstoque` WRITE;
 /*!40000 ALTER TABLE `tbEstoque` DISABLE KEYS */;
-INSERT INTO `tbEstoque` VALUES (1,'Parafuso',100);
+INSERT INTO `tbEstoque` VALUES (1,'Parafuso',99);
 /*!40000 ALTER TABLE `tbEstoque` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,7 +136,7 @@ CREATE TABLE `tbItemEstoque` (
   KEY `idEstoque` (`idEstoque`),
   CONSTRAINT `tbItemEstoque_ibfk_1` FOREIGN KEY (`idItem`) REFERENCES `tbItem` (`idItem`),
   CONSTRAINT `tbItemEstoque_ibfk_2` FOREIGN KEY (`idEstoque`) REFERENCES `tbEstoque` (`idEstoque`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,7 +196,7 @@ CREATE TABLE `tbLogPedido` (
   KEY `idAdmin` (`idAdmin`),
   CONSTRAINT `fk_pedido_logpedido` FOREIGN KEY (`idPedido`) REFERENCES `tbPedido` (`idPedido`) ON DELETE CASCADE,
   CONSTRAINT `tbLogPedido_ibfk_1` FOREIGN KEY (`idAdmin`) REFERENCES `tbAdmin` (`idAdmin`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,6 +205,7 @@ CREATE TABLE `tbLogPedido` (
 
 LOCK TABLES `tbLogPedido` WRITE;
 /*!40000 ALTER TABLE `tbLogPedido` DISABLE KEYS */;
+INSERT INTO `tbLogPedido` VALUES (1,2,11,'em_preparação','2025-03-06 09:16:10'),(2,2,12,'em_preparação','2025-03-06 09:16:15'),(3,2,13,'em_preparação','2025-03-06 09:16:19'),(4,2,14,'em_preparação','2025-03-06 09:16:29');
 /*!40000 ALTER TABLE `tbLogPedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +225,7 @@ CREATE TABLE `tbPagamento` (
   PRIMARY KEY (`idPagamento`),
   KEY `fk_idPedido_pagamento` (`idPedido`),
   CONSTRAINT `fk_idPedido_pagamento` FOREIGN KEY (`idPedido`) REFERENCES `tbPedido` (`idPedido`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,6 +234,7 @@ CREATE TABLE `tbPagamento` (
 
 LOCK TABLES `tbPagamento` WRITE;
 /*!40000 ALTER TABLE `tbPagamento` DISABLE KEYS */;
+INSERT INTO `tbPagamento` VALUES (1,3,18.17,'dinheiro','2025-03-05 18:31:57');
 /*!40000 ALTER TABLE `tbPagamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,10 +251,11 @@ CREATE TABLE `tbPedido` (
   `dataPedido` datetime DEFAULT CURRENT_TIMESTAMP,
   `valorTotal` float NOT NULL,
   `statusPedido` enum('pendente','em_preparação','saiu_para_entrega','entregue','cancelado') NOT NULL,
+  `quantidade` int DEFAULT NULL,
   PRIMARY KEY (`idPedido`),
   KEY `fk_idclient` (`idClient`),
   CONSTRAINT `fk_idclient` FOREIGN KEY (`idClient`) REFERENCES `tbCliente` (`idCliente`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,6 +264,7 @@ CREATE TABLE `tbPedido` (
 
 LOCK TABLES `tbPedido` WRITE;
 /*!40000 ALTER TABLE `tbPedido` DISABLE KEYS */;
+INSERT INTO `tbPedido` VALUES (2,1,'2025-03-05 18:15:07',20.19,'pendente',1),(3,21,'2025-03-06 07:16:10',20.19,'saiu_para_entrega',1),(4,21,'2025-03-06 07:16:10',20.19,'saiu_para_entrega',1),(5,21,'2025-03-06 07:16:10',20.19,'saiu_para_entrega',1),(6,22,'2025-03-06 07:33:52',20.19,'saiu_para_entrega',11),(7,21,'2025-03-06 07:16:10',17.45,'saiu_para_entrega',1),(8,21,'2025-03-06 07:16:10',17.45,'saiu_para_entrega',1),(9,21,'2025-03-06 07:16:10',18.55,'saiu_para_entrega',1),(10,21,'2025-03-06 07:16:10',21.43,'saiu_para_entrega',1),(11,22,'2025-03-06 07:33:52',20.19,'saiu_para_entrega',112),(12,22,'2025-03-06 07:33:52',21.43,'saiu_para_entrega',1),(13,22,'2025-03-06 07:33:52',18.55,'saiu_para_entrega',1),(14,22,'2025-03-06 07:33:52',1,'saiu_para_entrega',3);
 /*!40000 ALTER TABLE `tbPedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,7 +286,7 @@ CREATE TABLE `tbPedidoItem` (
   KEY `fk_tbPedidoItem_pedido` (`pedidoIdItem`),
   CONSTRAINT `fk_tbPedidoItem_item` FOREIGN KEY (`itemId`) REFERENCES `tbItem` (`idItem`),
   CONSTRAINT `fk_tbPedidoItem_pedido` FOREIGN KEY (`pedidoIdItem`) REFERENCES `tbPedido` (`idPedido`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,6 +295,7 @@ CREATE TABLE `tbPedidoItem` (
 
 LOCK TABLES `tbPedidoItem` WRITE;
 /*!40000 ALTER TABLE `tbPedidoItem` DISABLE KEYS */;
+INSERT INTO `tbPedidoItem` VALUES (1,3,1,1,20.19),(2,4,1,1,20.19),(3,5,1,1,20.19),(4,6,1,1,20.19),(5,7,3,1,17.45),(6,8,3,1,17.45),(7,9,6,1,18.55),(8,10,5,1,21.43),(9,11,4,1,19.77),(10,12,5,1,21.43),(11,13,6,1,18.55),(12,14,6,2,37.1);
 /*!40000 ALTER TABLE `tbPedidoItem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +322,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
 /*!50001 SET character_set_client      = utf8mb4 */;
 /*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `vwpedido` AS select `pe`.`idClient` AS `idClient`,`tc`.`nomeCliente` AS `nomeCliente` from (`dbselfpaypizzas`.`tbpedido` `pe` join `dbselfpaypizzas`.`tbcliente` `tc` on((0 <> `tc`.`idCliente`))) */;
@@ -334,4 +339,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-05  5:04:40
+-- Dump completed on 2025-03-06  8:48:42
