@@ -1,10 +1,10 @@
 import { Component,Input} from '@angular/core';
-import {CurrencyPipe} from '@angular/common';
+import {CurrencyPipe, TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-items-detail',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe,TitleCasePipe],
   templateUrl: './items-detail.component.html',
   styleUrl: './items-detail.component.css'
 })
@@ -14,6 +14,7 @@ export class ItemsDetailComponent {
   desconto!: number;
   valorComDesconto!:number;
   quantidade!: number;
+  nomeCliente!:string;
   @Input() item: any[] = [];
 
   constructor(){
@@ -24,6 +25,7 @@ export class ItemsDetailComponent {
 
   ngOnInit(){
     this.statusPedido = this.item[0].statusPedido;
+    this.nomeCliente = this.item[0].nomeCliente;
     this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
     this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
     this.calcularTotal(this.item);

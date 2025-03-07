@@ -9,6 +9,7 @@ import {PaymentService} from '../../services/payment.service';
 import {SweetalertUtil} from '../../util/sweetalert.util';
 import {OrdersService} from './../../services/orders.service';
 import {StockService} from './../../services/stock.service';
+import { OrdersUpdateService } from './../../services/order-update.service';
 
 @Component({
   selector: 'app-payment',
@@ -47,6 +48,7 @@ export class PaymentComponent {
   private ordersService: OrdersService,
   private stockService: StockService,
   private fb: FormBuilder,
+  private ordersUpdateService: OrdersUpdateService,
 ){
     this.pedidos = [];
     this.item = [];
@@ -95,6 +97,13 @@ export class PaymentComponent {
     this.paymentForm.get('paymentMethod')?.valueChanges.subscribe(value => {
       this.paymentMethod = value;
       this.onPaymentMethodChange();
+    });
+    this.ordersUpdateService.getPedidosUpdatedListener().subscribe((pedidos: any[]) => {
+      this.itemOrder = [];
+      this.valorTotal = 0;
+      this.desconto = 0;
+      this.valorComDesconto = 0;
+      this.getItemOrder();
     });
   }
 

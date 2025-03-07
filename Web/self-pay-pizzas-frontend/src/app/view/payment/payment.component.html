@@ -14,14 +14,16 @@
                 </strong>
               </label>
               <hr>
-              <ul class="mb-3">
+              <ul class="mb-3 d-grid" style="grid-template-columns: repeat(3, 1fr);">
                 @for (pedido of getGroupedItems(pedidos); track $index) {
-                  <li style="list-style:none;" >{{pedido.quantidade}} - {{pedido.nomeItem}} - {{pedido.valorTotal | currency:'BRL'}}</li>
+                  <li style="list-style:none;" >{{pedido.quantidade}}</li>
+                  <li style="list-style:none;">{{pedido.nomeItem}}</li>
+                  <li style="list-style:none;">{{pedido.valorTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR'}}</li>
                 }
               </ul>
               <hr>
 
-              <h5>{{valorComDesconto | currency:'BRL' }}</h5>
+              <h5 class="text-center">{{valorComDesconto | currency:'BRL':'symbol':'1.2-2':'pt-BR' }} (-10%)</h5>
 
               <div class="mb-3">
                 <label class="form-label">
