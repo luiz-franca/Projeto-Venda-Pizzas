@@ -82,7 +82,7 @@ export class OrdersDetailsComponent implements OnChanges{
         this.pedido = res.data[0];
         this.precoItem = this.pedido.precoItem;
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -98,7 +98,7 @@ export class OrdersDetailsComponent implements OnChanges{
         this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
         this.getOrders();
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -108,7 +108,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         localStorage.setItem('novoPedido', JSON.stringify(res.data));
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -138,7 +138,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         this.getOrderById(quantidade);
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
     this.voltar();
@@ -149,7 +149,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next:()=>{
         this.swal.carregandoDados("Adicionando novo item ao pedido","Item adicionado ao pedido.");
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -160,7 +160,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         //
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }

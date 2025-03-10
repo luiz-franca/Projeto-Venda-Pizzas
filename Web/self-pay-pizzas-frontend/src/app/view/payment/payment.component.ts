@@ -7,9 +7,9 @@ import {ItemDto} from '../../dto/item.dto';
 import {OrdersDto} from '../../dto/orders.dto';
 import {PaymentService} from '../../services/payment.service';
 import {SweetalertUtil} from '../../util/sweetalert.util';
+import {OrdersUpdateService} from './../../services/order-update.service';
 import {OrdersService} from './../../services/orders.service';
 import {StockService} from './../../services/stock.service';
-import { OrdersUpdateService } from './../../services/order-update.service';
 
 @Component({
   selector: 'app-payment',
@@ -115,7 +115,7 @@ export class PaymentComponent {
           this.getItemOrderNameById(element.idPedidoItem);
         });
       },error:(err:Error)=>{
-        this.swal.erroItem(`Erro ao consultar os itens de uma ordem: ${err.cause}`)
+        this.swal.erroItem(`Erro ao consultar os itens de uma ordem: ${err.message}`);
       }
     });
   }
@@ -139,7 +139,7 @@ export class PaymentComponent {
         }
       },
       error: (err:Error) => {
-        this.swal.erroItem(`Erro ao consultar as itens das ordens por nome: ${err.cause}`)
+        this.swal.erroItem(`Erro ao consultar as itens das ordens por nome: ${err.message}`);
       }
     });
   }
@@ -235,6 +235,9 @@ export class PaymentComponent {
           this.getStockById(element);
         });
         this.setUpdateOrder();
+      },
+      error: (err:Error) => {
+        this.swal.erroItem(`Erro ao efeturar pagamento: ${err.message}`);
       }
     })
   }
