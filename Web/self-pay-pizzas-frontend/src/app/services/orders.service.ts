@@ -42,6 +42,10 @@ export class OrdersService {
     });
   }
 
+  deleteOrder(id: number){
+    return this.http.delete<any>(`${this.apiUrl}/pedidos/${id}`)
+  }
+
   getOrder(){
     return this.http.get<any>(`${this.apiUrl}/pedidos`);
   }
@@ -68,6 +72,10 @@ export class OrdersService {
 
   getItemOrder():Observable<any>{
     return this.http.get<any>(`${this.apiUrl}/pedidos-item`);
+  }
+
+  deleteOrderItem(id:number){
+    return this.http.delete<any>(`${this.apiUrl}/pedido-item/${id}`);
   }
 
   getItem(){

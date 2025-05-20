@@ -44,6 +44,7 @@ export class ItemsComponent {
       this.stockService.getItems().subscribe({
         next: (res:any)=>{
           this.itens = res.data;
+          localStorage.getItem('pedidos');
         }
       });
     }

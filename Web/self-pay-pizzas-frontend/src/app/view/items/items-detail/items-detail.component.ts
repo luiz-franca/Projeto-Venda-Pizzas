@@ -50,7 +50,6 @@ export class ItemsDetailComponent {
 
       return acc;
     }, []);
-
     return grouped;
   }
 

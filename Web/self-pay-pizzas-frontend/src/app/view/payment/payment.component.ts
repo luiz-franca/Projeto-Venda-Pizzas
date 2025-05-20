@@ -7,10 +7,11 @@ import {ItemDto} from '../../dto/item.dto';
 import {OrdersDto} from '../../dto/orders.dto';
 import {PaymentService} from '../../services/payment.service';
 import {SweetalertUtil} from '../../util/sweetalert.util';
-import {OrdersService} from './../../services/orders.service';
+import {OrdersUpdateService} from './../../services/order-update.service';
+import {OrdersService} from './../../services/orders.service'
 import {StockService} from './../../services/stock.service';
 
-@Component({
+@Component(
   selector: 'app-payment',
   standalone: true,
   imports: [RouterModule,CommonModule,FormsModule,ReactiveFormsModule],
@@ -224,13 +225,34 @@ export class PaymentComponent {
     })
   }
 
+<<<<<<< Updated upstream
   onSubmit(idPedido:number, valor:number, formaPagamento:any){
+=======
+  excluirPedido(id:number){
+    this.ordersService.deleteOrder(id).subscribe({
+
+    })
+  }
+
+  excluirPedidoItem(id:number){
+    this.ordersService.deleteOrderItem(id).subscribe({
+
+    })
+  }
+
+  onSubmit(idPedido: number,valor:number, formaPagamento:any){
+>>>>>>> Stashed changes
     if (this.paymentForm.invalid) {
       return;
     }
+
     this.efetuarPagamento(idPedido, valor, formaPagamento);
+    this.pedidosFinalizados.forEach(element =>{
+      this.excluirPedidoItem(element.idPedidoItem)
+    })
+    this.excluirPedido(idPedido);
     this.voltar();
-    this.swal.carregandoDados("Efetuando pagamento","Pagamento feito com sucesso.");
+    this.swal.carregandoDados("Efetuando pagamento","Pagamento feitom sucesso.");
   }
 
   copyToClipboard() {

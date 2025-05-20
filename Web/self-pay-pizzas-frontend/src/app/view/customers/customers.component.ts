@@ -111,6 +111,7 @@ export class CustomersComponent{
         const item = res.data[0];
         if (item && item.nomeCliente === this.nome) {
           this.itemOrder.push(item);
+      
           this.calcularTotal(item.valorTotal);
         }
       },

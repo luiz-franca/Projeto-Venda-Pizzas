@@ -60,6 +60,7 @@ class PedidoModel{
         try {
             const sql = `SELECT * FROM tbPedido tP
                             INNER JOIN tbCliente tC ON tP.idClient = tC.idCliente
+                            inner join tbPedidoItem tPi on tP.idPedido = tPi.pedidoIdItem
                             WHERE tP.idClient = (?);`;
             const response = await queryExecute(sql, [IdParam]);
             const rows = response[0];
@@ -70,6 +71,7 @@ class PedidoModel{
             }
     
             const data = mappedRowUtils(rows, row => ({
+                idPedidoItem: row.idPedidoItem,
                 idPedido: row.idPedido,
                 idClient: row.idClient,
                 nomeCliente: row.nomeCliente,
