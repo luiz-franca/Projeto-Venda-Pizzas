@@ -83,25 +83,6 @@ export class OrdersComponent {
     return id;
   }
 
-  logout(){
-    this.authService.logout();
-  }
-
-  voltar():void{
-    let pedido = document.getElementById('orders-details') as HTMLElement;
-    pedido.style.display = "none";
-  }
-
-  verPedidos(){
-    let pedido = document.getElementById('customers') as HTMLElement;
-    pedido.style.display = "block";
-    this.voltar();
-  }
-
-  verItems(){
-    this.router.navigate(['/items']);
-  }
-
   calcularTotal(pedidos:any[]){
     pedidos.forEach(element => {
       this.valorTotal += element.valorTotal;

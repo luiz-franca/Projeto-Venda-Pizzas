@@ -82,7 +82,7 @@ export class OrdersDetailsComponent implements OnChanges{
         this.pedido = res.data[0];
         this.precoItem = this.pedido.precoItem;
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -91,13 +91,14 @@ export class OrdersDetailsComponent implements OnChanges{
     this.ordersService.getOrder().subscribe({
       next: (res) => {
         this.pedidos = res.data;
-        this.addLogOrder(+this.adminLogado,this.pedidos[this.pedidos.length - 1].idPedido,"em producao");
+        this.adminLogado = "2";
+        this.addLogOrder(+this.adminLogado,this.pedidos[this.pedidos.length - 1].idPedido,"em_preparação");
         let meuPedido = this.pedidos[this.pedidos.length - 1];
         this.addItemToOrder(meuPedido.idPedido,+this.id, quantidade,meuPedido.valorTotal);
         this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
         this.getOrders();
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -107,7 +108,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         localStorage.setItem('novoPedido', JSON.stringify(res.data));
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -137,7 +138,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         this.getOrderById(quantidade);
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
     this.voltar();
@@ -148,7 +149,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next:()=>{
         this.swal.carregandoDados("Adicionando novo item ao pedido","Item adicionado ao pedido.");
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }
@@ -159,7 +160,7 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         //
       }, error: (err: Error)=>{
-        this.swal.erroItem(`Erro. Causa: ${err}`)
+        this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
   }

@@ -8,12 +8,13 @@
       </div>
       <div class="modal-body">
         <div class="cart">
-          <div class="d-flex align-items-center mb-3">
+          <div class="mb-3">
+            <div class="mx-2"><strong>Nome do cliente: </strong>{{nomeCliente | titlecase}}</div>
             <div class="mx-2"><strong>Status do pedido: </strong>{{statusPedido}}</div>
           </div>
           <div class="cart--item mx-5">
             @for (pedido of getGroupedItems(item); track $index) {
-              <div class="d-flex align-items-center mb-3">
+              <div class="d-flex align-items-center mb-3 justify-content-between">
                 <div class="mx-2">{{pedido.quantidade}}</div>
                 <img src="images/pizza3.png" class="me-3" style="width: 50px; height: 50px;">
                 <div class="mx-2">{{pedido.nomeItem}}</div>
@@ -25,7 +26,7 @@
           </div>
         </div>
         <hr>
-        <div class="cart--details">
+        <div class="cart--details m-5">
           <div class="d-flex justify-content-between">
             <span>Subtotal</span>
             <span>{{valorTotal | currency:'BRL'}}</span>

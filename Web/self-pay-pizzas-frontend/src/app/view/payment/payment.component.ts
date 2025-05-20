@@ -40,16 +40,20 @@ export class PaymentComponent {
   swal!: SweetalertUtil;
   itemOrder!: any[];
   nome!:string;
+  pedidosFinalizados!: any[];
+  idPedido!: number;
 
   constructor(
   private paymentService: PaymentService,
   private ordersService: OrdersService,
   private stockService: StockService,
   private fb: FormBuilder,
+  private ordersUpdateService: OrdersUpdateService,
 ){
     this.pedidos = [];
     this.item = [];
     this.stockList = [];
+    this.pedidosFinalizados = [];
     this.quantidade = 0;
     this.valorTotal = 0;
     this.valorTotal = +(this.valorTotal * this.quantidade).toFixed(2);
@@ -83,6 +87,7 @@ export class PaymentComponent {
     this.nome = usuarioObj[0].nomeCliente;
 
     this.getItemOrder();
+    this.getOrder(this.idCliente);
     this.quantidade = 1;
     this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
     this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
@@ -92,6 +97,13 @@ export class PaymentComponent {
     this.paymentForm.get('paymentMethod')?.valueChanges.subscribe(value => {
       this.paymentMethod = value;
       this.onPaymentMethodChange();
+    });
+    this.ordersUpdateService.getPedidosUpdatedListener().subscribe((pedidos: any[]) => {
+      this.itemOrder = [];
+      this.valorTotal = 0;
+      this.desconto = 0;
+      this.valorComDesconto = 0;
+      this.getItemOrder();
     });
   }
 
@@ -103,9 +115,18 @@ export class PaymentComponent {
           this.getItemOrderNameById(element.idPedidoItem);
         });
       },error:(err:Error)=>{
-        this.swal.erroItem(`Erro ao consultar os itens de uma ordem: ${err.cause}`)
+        this.swal.erroItem(`Erro ao consultar os itens de uma ordem: ${err.message}`);
       }
     });
+  }
+
+  getOrder(id:number){
+    this.ordersService.getOrderById(id).subscribe({
+      next: (res: any) => {
+        this.pedidosFinalizados = res.data;
+        this.idPedido = this.pedidosFinalizados[0].idPedido;
+      }
+    })
   }
 
   getItemOrderNameById(id: number) {
@@ -118,7 +139,7 @@ export class PaymentComponent {
         }
       },
       error: (err:Error) => {
-        this.swal.erroItem(`Erro ao consultar as itens das ordens por nome: ${err.cause}`)
+        this.swal.erroItem(`Erro ao consultar as itens das ordens por nome: ${err.message}`);
       }
     });
   }
@@ -197,9 +218,10 @@ export class PaymentComponent {
     })
   }
 
-  setUpdateOrder(list: any[]){
+  setUpdateOrder(){
+    this.getOrder(this.idCliente);
     const date = new Date().toLocaleString('en-CA', { hour12: false }).replace(',', '');
-    list.forEach(element => {
+    this.pedidosFinalizados.forEach(element => {
       this.updateOrder(element.idPedido,element.idClient, date, element.valorTotal, "em_preparação", element.quantidade);
     });
   }
@@ -212,7 +234,10 @@ export class PaymentComponent {
         stockItems.forEach((element:any, index:number) => {
           this.getStockById(element);
         });
-        this.setUpdateOrder(this.pedidos);
+        this.setUpdateOrder();
+      },
+      error: (err:Error) => {
+        this.swal.erroItem(`Erro ao efeturar pagamento: ${err.message}`);
       }
     })
   }
@@ -225,6 +250,7 @@ export class PaymentComponent {
     })
   }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   onSubmit(idPedido:number, valor:number, formaPagamento:any){
 =======
@@ -242,6 +268,9 @@ export class PaymentComponent {
 
   onSubmit(idPedido: number,valor:number, formaPagamento:any){
 >>>>>>> Stashed changes
+=======
+  onSubmit(idPedido: number,valor:number, formaPagamento:any){
+>>>>>>> main
     if (this.paymentForm.invalid) {
       return;
     }

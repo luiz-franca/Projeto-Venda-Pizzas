@@ -16,16 +16,16 @@ export class AdminComponent {
 
     constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
       this.loginForm = this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
+        usuario: ['', [Validators.required]],
         password: ['', [Validators.required, Validators.minLength(6)]],
       });
     }
 
     onSubmit(): void {
       if (this.loginForm.valid) {
-        const { email, password } = this.loginForm.value;
+        const { usuario, password } = this.loginForm.value;
 
-        this.authService.login(email, password).subscribe({
+        this.authService.login(usuario, password).subscribe({
           next: () => {
             this.router.navigate(['/dashboard']);
           },

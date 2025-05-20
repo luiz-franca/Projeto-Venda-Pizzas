@@ -39,7 +39,7 @@
           </div>
 
           <div data-mdb-input-init class="form-outline">
-            <input type="text" id="login" class="form-control "
+            <input type="text" id="customerCode" class="form-control "
               placeholder="Insira seu código de funcionário" formControlName="customerCode"/>
             <label class="form-label" for="customerCode">Código de Funcionário</label>
             @if (registerForm.get('customerCode')?.invalid && registerForm.get('login')?.touched) {
@@ -47,14 +47,20 @@
             }
           </div>
 
-          
+
           <div data-mdb-input-init class="form-outline">
             <input type="password" id="password" class="form-control "
               placeholder="Insira sua senha" formControlName="password"/>
             <label class="form-label" for="password">Senha</label>
-            @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-              <div class="text-danger">A senha deve ter pelo menos 6 caracteres.</div>
+            @if (registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched) {
+              <div class="text-danger">A senha é obrigatória</div>
+            } @else if (registerForm.get('password')?.hasError('minlength') && registerForm.get('password')?.touched) {
+              <div class="text-danger">A senha deve ter pelo menos 6 caracteres</div>
+            } @else if (registerForm.get('password')?.hasError('maxlength') && registerForm.get('password')?.touched) {
+              <div class="text-danger">A senha deve ter no máximo 8 caracteres</div>
             }
+
+
           </div>
 
           @if (errorMessage) {

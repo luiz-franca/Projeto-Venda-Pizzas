@@ -181,10 +181,6 @@ export class DashboardComponent implements AfterViewInit{
     })
   }
 
-  logout(){
-    this.authService.logoutAdmin();
-  }
-
   deleteAdmins(id: number){
     this.customerService.deleteAdmins(id).subscribe({
       next:() =>{
