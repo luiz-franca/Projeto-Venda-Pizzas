@@ -11,7 +11,7 @@ import {OrdersUpdateService} from './../../services/order-update.service';
 import {OrdersService} from './../../services/orders.service'
 import {StockService} from './../../services/stock.service';
 
-@Component(
+@Component({
   selector: 'app-payment',
   standalone: true,
   imports: [RouterModule,CommonModule,FormsModule,ReactiveFormsModule],
@@ -250,10 +250,6 @@ export class PaymentComponent {
     })
   }
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-  onSubmit(idPedido:number, valor:number, formaPagamento:any){
-=======
   excluirPedido(id:number){
     this.ordersService.deleteOrder(id).subscribe({
 
@@ -267,10 +263,6 @@ export class PaymentComponent {
   }
 
   onSubmit(idPedido: number,valor:number, formaPagamento:any){
->>>>>>> Stashed changes
-=======
-  onSubmit(idPedido: number,valor:number, formaPagamento:any){
->>>>>>> main
     if (this.paymentForm.invalid) {
       return;
     }

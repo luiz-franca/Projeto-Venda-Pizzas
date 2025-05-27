@@ -3,14 +3,17 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000/v1';
+  private apiUrl = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private config: ConfigService) {
+    this.apiUrl = this.config.apiUrl;
+  }
 
   login(loginAdmin: string, senhaAdmin: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/admins/login`, { loginAdmin, senhaAdmin })
