@@ -272,8 +272,9 @@ export class PaymentComponent {
       this.excluirPedidoItem(element.idPedidoItem)
     })
     this.excluirPedido(idPedido);
+    this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
     this.voltar();
-    this.swal.carregandoDados("Efetuando pagamento","Pagamento feitom sucesso.");
+    this.swal.carregandoDados("Efetuando pagamento","Pagamento feito sucesso.");
   }
 
   copyToClipboard() {
