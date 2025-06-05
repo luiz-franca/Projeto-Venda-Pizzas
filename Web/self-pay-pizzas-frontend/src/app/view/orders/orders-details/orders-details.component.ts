@@ -28,6 +28,7 @@ export class OrdersDetailsComponent implements OnChanges{
   adminLogado!: string;
   @Input() id!: string;
   swal!: SweetalertUtil;
+  precoAtualizado!: number;
   constructor(
     private active: ActivatedRoute,
     private location: Location,
@@ -50,6 +51,7 @@ export class OrdersDetailsComponent implements OnChanges{
     this.precoItem = this.pedido.precoItem;
     this.dataAtual = new Date().toLocaleString('en-CA', { hour12: false }).replace(',', '');
     this.swal = new SweetalertUtil();
+    this.precoAtualizado = this.precoItem;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -65,7 +67,11 @@ export class OrdersDetailsComponent implements OnChanges{
   }
 
   ngOnInit(){
-
+    let btn = document.getElementById("group-button") as any;
+    
+    btn.addEventListener('mousedown', (dado: any)=> {
+      this.atualizarPreco(dado.target.htmlFor)
+    });
   }
 
   getItem(){
@@ -120,15 +126,15 @@ export class OrdersDetailsComponent implements OnChanges{
   }
 
   aumentarQuantidade(pedido:number){
-    let precoAtual = this.precoItem / this.quantidade;
+    let precoAtual = this.precoAtualizado / this.quantidade;
     this.quantidade += 1;
-    this.precoItem = precoAtual * this.quantidade;
+    this.precoAtualizado = precoAtual * this.quantidade;
   }
 
   diminuirQuantidade(pedido:number){
     if(this.quantidade > 1){
-      let novoPreco = this.precoItem / this.quantidade;
-      this.precoItem -= novoPreco;
+      let novoPreco = this.precoAtualizado / this.quantidade;
+      this.precoAtualizado -= novoPreco;
       this.quantidade -= 1;
     }
   }
@@ -163,5 +169,16 @@ export class OrdersDetailsComponent implements OnChanges{
         this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
     })
+  }
+
+  atualizarPreco(tamanho:string){
+    if(tamanho === "medio"){
+      this.precoAtualizado = this.precoItem * 1.5
+    }else if(tamanho === "grande"){
+      this.precoAtualizado = this.precoItem * 3
+    }else{
+      this.precoAtualizado = this.precoItem
+    }
+    
   }
 }
