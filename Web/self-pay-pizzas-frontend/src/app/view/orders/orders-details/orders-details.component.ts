@@ -29,6 +29,7 @@ export class OrdersDetailsComponent implements OnChanges{
   @Input() id!: string;
   swal!: SweetalertUtil;
   precoAtualizado!: number;
+  tamanhoSelecionado: string = 'grande';
   constructor(
     private active: ActivatedRoute,
     private location: Location,
@@ -51,7 +52,6 @@ export class OrdersDetailsComponent implements OnChanges{
     this.precoItem = this.pedido.precoItem;
     this.dataAtual = new Date().toLocaleString('en-CA', { hour12: false }).replace(',', '');
     this.swal = new SweetalertUtil();
-    this.precoAtualizado = this.precoItem;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -68,7 +68,7 @@ export class OrdersDetailsComponent implements OnChanges{
 
   ngOnInit(){
     let btn = document.getElementById("group-button") as any;
-    
+
     btn.addEventListener('mousedown', (dado: any)=> {
       this.atualizarPreco(dado.target.htmlFor)
     });
@@ -87,6 +87,8 @@ export class OrdersDetailsComponent implements OnChanges{
       next: (res:any)=>{
         this.pedido = res.data[0];
         this.precoItem = this.pedido.precoItem;
+        this.precoAtualizado = this.precoItem;
+        this.atualizarPreco(this.tamanhoSelecionado)
       }, error: (err: Error)=>{
         this.swal.erroItem(`Erro. Causa: ${err.message}`)
       }
@@ -173,12 +175,15 @@ export class OrdersDetailsComponent implements OnChanges{
 
   atualizarPreco(tamanho:string){
     if(tamanho === "medio"){
+      this.tamanhoSelecionado = tamanho
       this.precoAtualizado = this.precoItem * 1.5
     }else if(tamanho === "grande"){
+      this.tamanhoSelecionado = tamanho
       this.precoAtualizado = this.precoItem * 3
     }else{
+      this.tamanhoSelecionado = tamanho
       this.precoAtualizado = this.precoItem
     }
-    
+
   }
 }
