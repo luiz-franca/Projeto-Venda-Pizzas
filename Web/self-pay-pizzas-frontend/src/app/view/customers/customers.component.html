@@ -35,7 +35,7 @@
       </div>
       <hr>
       <div class="d-grid">
-        <button (click)="voltar()" class="btn btn-danger rounded-pill mb-2 p-3">Cancelar a compra</button>
+        <button (click)="cancelarCompra()" class="btn btn-danger rounded-pill mb-2 p-3">Cancelar a compra</button>
         <button [disabled]="statusCompra === 'finalizada'" (click)="payment(valorComDesconto, itemOrder)" class="btn btn-success rounded-pill p-3">Finalizar e Efetuar pagamento</button>
       </div>
     </div>

@@ -29,7 +29,7 @@ export class OrdersDetailsComponent implements OnChanges{
   @Input() id!: string;
   swal!: SweetalertUtil;
   precoAtualizado!: number;
-  tamanhoSelecionado: string = 'grande';
+  tamanhoSelecionado: string = 'pequeno';
   constructor(
     private active: ActivatedRoute,
     private location: Location,

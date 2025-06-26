@@ -50,6 +50,7 @@ export class CustomersComponent{
       this.nome = usuarioObj[0].nomeCliente;
 
       this.getItemOrder();
+      this.getOrderById(this.idCliente)
       this.quantidade = 1;
       this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
       this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
@@ -71,6 +72,46 @@ export class CustomersComponent{
   voltar():void{
     let pedido = document.getElementById('customers') as HTMLElement;
     pedido.style.display = "none";
+  }
+
+  excluirPedido(id: number){
+    this.ordersService.deleteOrder(id).subscribe({
+
+    })
+  }
+
+  excluirPedidoItem(id:number){
+    this.ordersService.deleteOrderItem(id).subscribe({
+
+    })
+  }
+
+   updateOrder(id:number,idClient:number, dataPedido:string, valorTotal:number, statusPedido:string, quantidade:number){
+      this.ordersService.updateOrder(id,idClient, dataPedido, valorTotal, statusPedido, quantidade).subscribe({
+        next: (res:any)=>{
+
+        }
+      })
+    }
+
+    setUpdateOrder(){
+      this.getOrderById(this.idCliente);
+      const date = new Date().toLocaleString('en-CA', { hour12: false }).replace(',', '');
+      this.pedidosFinalizados.forEach(element => {
+        this.updateOrder(element.idPedido,element.idClient, date, element.valorTotal, "em_preparação", element.quantidade);
+      });
+    }
+
+  cancelarCompra():void{
+    let pedido = document.getElementById('customers') as HTMLElement;
+    this.pedidosFinalizados.forEach(element => {
+      this.excluirPedidoItem(element.idPedidoItem)
+    })
+    this.excluirPedido(this.idPedido);
+    this.setUpdateOrder();
+    this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
+    pedido.style.display = "none";
+    this.swal.carregandoDados("Cancelando pedido","Pedido cancelado com sucesso.");
   }
 
 
@@ -111,7 +152,7 @@ export class CustomersComponent{
         const item = res.data[0];
         if (item && item.nomeCliente === this.nome) {
           this.itemOrder.push(item);
-      
+
           this.calcularTotal(item.valorTotal);
         }
       },
@@ -153,6 +194,15 @@ export class CustomersComponent{
     }, []);
 
     return grouped;
+  }
+
+  getOrderById(id:number){
+    this.ordersService.getOrderById(id).subscribe({
+      next:(res:any)=>{
+        this.pedidosFinalizados = res.data;
+        this.idPedido = this.pedidosFinalizados[0].idpedido;
+      }
+    })
   }
 
 }

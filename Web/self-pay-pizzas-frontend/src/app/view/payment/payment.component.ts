@@ -87,7 +87,7 @@ export class PaymentComponent {
     this.nome = usuarioObj[0].nomeCliente;
 
     this.getItemOrder();
-    this.getOrder(this.idCliente);
+    this.getOrderById(this.idCliente);
     this.quantidade = 1;
     this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
     this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
@@ -120,7 +120,7 @@ export class PaymentComponent {
     });
   }
 
-  getOrder(id:number){
+  getOrderById(id:number){
     this.ordersService.getOrderById(id).subscribe({
       next: (res: any) => {
         this.pedidosFinalizados = res.data;
@@ -219,7 +219,7 @@ export class PaymentComponent {
   }
 
   setUpdateOrder(){
-    this.getOrder(this.idCliente);
+    this.getOrderById(this.idCliente);
     const date = new Date().toLocaleString('en-CA', { hour12: false }).replace(',', '');
     this.pedidosFinalizados.forEach(element => {
       this.updateOrder(element.idPedido,element.idClient, date, element.valorTotal, "em_preparação", element.quantidade);
@@ -274,7 +274,7 @@ export class PaymentComponent {
     this.excluirPedido(idPedido);
     this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
     this.voltar();
-    this.swal.carregandoDados("Efetuando pagamento","Pagamento feito sucesso.");
+    this.swal.carregandoDados("Efetuando pagamento","Pagamento feito comsucesso.");
   }
 
   copyToClipboard() {
