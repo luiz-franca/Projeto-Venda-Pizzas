@@ -25,6 +25,7 @@ export class CustomersComponent{
     statusCompra!: string;
     itemOrder!: any[];
     pedidos!: any[];
+    pedidoObj!: any;
     count!: number;
     swal!: SweetalertUtil;
     constructor(
@@ -55,8 +56,8 @@ export class CustomersComponent{
       this.desconto = +((this.valorTotal / 100) * 10).toFixed(2);
       this.valorComDesconto = +(this.valorTotal - this.desconto).toFixed(2);
       let novoPedido = localStorage.getItem('novoPedido') || '{}';
-      let pedidoObj: any = JSON.parse(novoPedido);
-      Object.values(pedidoObj).forEach((element:any) => {
+      this.pedidoObj = JSON.parse(novoPedido);
+      Object.values(this.pedidoObj).forEach((element:any) => {
         this.idPedido = element['insertId'];
       });
       this.statusCompra = localStorage.getItem('compra') || "";
@@ -75,13 +76,14 @@ export class CustomersComponent{
   }
 
   excluirPedido(id: number){
+  
     this.ordersService.deleteOrder(id).subscribe({
 
     })
   }
 
   excluirPedidoItem(id:number){
-    this.ordersService.deleteOrderItem(id).subscribe({
+   this.ordersService.deleteOrderItem(id).subscribe({
 
     })
   }
@@ -103,15 +105,18 @@ export class CustomersComponent{
     }
 
   cancelarCompra():void{
-    let pedido = document.getElementById('customers') as HTMLElement;
-    this.pedidosFinalizados.forEach(element => {
+    this.pedidos.forEach(element => {
       this.excluirPedidoItem(element.idPedidoItem)
     })
+    
     this.excluirPedido(this.idPedido);
-    this.setUpdateOrder();
+      
     this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
-    pedido.style.display = "none";
+    this.getOrderById(this.idCliente);
+
     this.swal.carregandoDados("Cancelando pedido","Pedido cancelado com sucesso.");
+    let pedido = document.getElementById('customers') as HTMLElement;
+    pedido.style.display = "none";
   }
 
 
