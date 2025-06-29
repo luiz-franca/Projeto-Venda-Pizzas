@@ -183,6 +183,8 @@ export class PaymentComponent {
   }
 
   voltar(){
+    this.paymentForm.reset();
+    this.paymentMethod = '';
     let pagamento = document.getElementById('payment') as HTMLElement;
     pagamento.style.display = "none";
   }
@@ -273,6 +275,7 @@ export class PaymentComponent {
     })
     this.excluirPedido(idPedido);
     this.ordersUpdateService.notifyPedidosUpdated(this.pedidos);
+    this.pedidos = [];
     this.voltar();
     this.swal.carregandoDados("Efetuando pagamento","Pagamento feito comsucesso.");
   }
